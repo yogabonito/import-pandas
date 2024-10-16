@@ -1,0 +1,5 @@
+- source: project
+  netlify:
+    - id: 177fc63e-2faf-4ea6-8cc4-f544a368c941
+      url: "https://import-pandas.netlify.app"
+      #url: 'https://sensational-pastelito-cc9fa9.netlify.app'
