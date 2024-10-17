@@ -1,5 +1,3 @@
 # Preface {.unnumbered}
 
-This is a Quarto book about `pandas`. We'll learn about the `Series` and `DataFrame` classes.
-
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+This site is intended to offer valuable information on `pandas`. The content is intended to grow over the next months.

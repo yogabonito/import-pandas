@@ -1,0 +1,8 @@
+# Introduction
+
+After a short introductory chapter, we will get acquainted to
+
+- series (`pd.Series`) and
+- data frames (`pd.DataFrame`)
+
+in this first part.

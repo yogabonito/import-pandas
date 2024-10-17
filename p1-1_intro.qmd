@@ -1,0 +1,3 @@
+# Introduction
+
+Pandas is very popular – for a reason.

@@ -1,0 +1,363 @@
+# The `Series` class in Pandas
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+## Construction and indexing
+
+### Construction using a list
+
+```{python}
+squares_series = pd.Series([1, 4, 9, 16, 25])
+```
+
+```{python}
+squares_series
+```
+
+```{python}
+squares_series.index
+```
+
+```{python}
+list(squares_series.index)
+```
+
+### Indexing with `loc`
+
+#### Indexing a Single Element
+
+```{python}
+squares_series.loc[1]
+```
+
+```{python}
+squares_series.loc[2]
+```
+
+#### Indexing Multiple Elements
+
+```{python}
+squares_series.loc[[1, 2]]
+```
+
+#### Using a Boolean List/Array/Series
+
+```{python}
+squares_series.loc[[False, True, True, False, False]]
+```
+
+```{python}
+squares_series.loc[np.array([False, True, True, False, False])]
+```
+
+```{python}
+squares_series.loc[pd.Series([False, True, True, False, False])]
+```
+
+### Construction using a dictionary (`dict`)
+
+```{python}
+squares_series = pd.Series({1: 1, 2: 4, 3: 9, 4: 16, 5: 25})
+```
+
+```{python}
+squares_series
+```
+
+### Indexing with `loc` (again)
+
+```{python}
+squares_series.iloc[[1, 2]]
+```
+
+### Indexing with `iloc`
+
+```{python}
+squares_series.iloc[[1, 2]]
+```
+
+## Comparisons
+
+```{python}
+squares_series == 16
+```
+
+```{python}
+squares_series >= 16
+```
+
+```{python}
+squares_series < 16
+```
+
+## Combining Boolean Indices
+
+```{python}
+#| error: true
+squares_series == 4 | squares_series == 9
+```
+
+This error is caused by the order in which the above expression is evaluated. `|` has a higher precedence than `==` and thus, `4 | squares_series` gets evaluated first rather than `squares_series == 4` and `squares_series == 9`. To avoid the above error, we have to force Python to evaluate the comparisons first before combining their result using the `|` operator. To this end, we use parentheses.
+
+```{python}
+(squares_series == 4) | (squares_series == 9)
+```
+
+```{python}
+(squares_series >= 4) & (squares_series <= 9)
+```
+
+```{python}
+~(squares_series < 4) & ~(squares_series > 9)
+```
+
+```{python}
+squares_series.loc[(squares_series == 4) | (squares_series == 9)]
+```
+
+## Mapping
+
+### Using a Dictionary (`dict`)
+
+```{python}
+squares_series.map({9: 10, 16: 20})
+```
+
+### Using a Function
+
+```{python}
+def mapping_function(number):
+    if number == 9:
+        return 10
+    elif number == 16:
+        return 20
+    else:
+        return np.nan
+
+squares_series.map(mapping_function)
+```
+
+```{python}
+series_with_missing_values = _
+```
+
+```{python}
+series_with_missing_values
+```
+
+### Using a Lambda Function
+
+```{python}
+squares_series.map(lambda value: value + 1)
+```
+
+```{python}
+squares_series.map(lambda v: 10 if v == 9 else (20 if v == 16 else np.nan))
+```
+
+```{python}
+squares_series.map(lambda x: x >= 16)
+```
+
+## Aggregation
+
+```{python}
+squares_series.sum()
+```
+
+```{python}
+squares_series.mean(), squares_series.median(), squares_series.std()
+```
+
+```{python}
+squares_series.min(), squares_series.max()
+```
+
+## $n$ Smallest/Largest Entries
+
+```{python}
+squares_series.nsmallest(3)
+```
+
+```{python}
+squares_series.nlargest(3)
+```
+
+## Count Values
+
+```{python}
+squares_series.value_counts()
+```
+
+```{python}
+series_with_missing_values.value_counts()
+```
+
+```{python}
+series_with_missing_values.value_counts(dropna=False)
+```
+
+## Check for Missing Values
+
+### Is There *Any* `NaN`?
+
+```{python}
+squares_series.hasnans, series_with_missing_values.hasnans
+```
+
+### How Many `NaN`s?
+
+```{python}
+series_with_missing_values.isna()
+```
+
+```{python}
+series_with_missing_values.isna().sum()
+```
+
+```{python}
+series_with_missing_values.value_counts(dropna=False).loc[np.nan]
+```
+
+### Not `NaN`?
+
+```{python}
+~series_with_missing_values.isna()
+```
+
+```{python}
+(~series_with_missing_values.isna()).sum()
+```
+
+```{python}
+series_with_missing_values.notna().sum()
+```
+
+### Fill `NaN`s?
+
+```{python}
+series_with_missing_values.fillna(0)
+```
+
+```{python}
+series_with_missing_values.fillna(series_with_missing_values.mean())
+```
+
+## Data Type
+
+```{python}
+squares_series.dtype
+```
+
+```{python}
+series_with_missing_values.dtype
+```
+
+```{python}
+pd.Series(["entries", "can", "be", "strings"])
+```
+
+```{python}
+pd.Series(["entries", "can", "be", "strings"]).dtype
+```
+
+### Change Data Type
+
+```{python}
+squares_series.astype("float64")
+```
+
+```{python}
+#| error: true
+series_with_missing_values.astype("int64")
+```
+
+```{python}
+series_with_missing_values.astype("Int64")
+```
+
+## String Operations
+
+```{python}
+bikes_series = pd.Series(["Cube", "canyon", "_Cannondale_", "Canyon", "Cube", "Cervelo ", "cube", "Cervelo"])
+```
+
+```{python}
+bikes_series
+```
+
+```{python}
+bikes_series.value_counts()
+```
+
+```{python}
+bikes_series.map(lambda x: x.replace("_", "").strip().title()).value_counts()
+```
+
+### `str`
+
+```{python}
+bikes_series.str
+```
+
+```{python}
+bikes_series.str.startswith("Can")
+```
+
+```{python}
+bikes_series.str.contains("velo")
+```
+
+```{python}
+bikes_series.str.replace("_", "")
+```
+
+```{python}
+bikes_series.str.replace("_", "").str.strip().str.title()
+```
+
+### Writing Readable Code
+
+The last command consisted of quite a few distinct commands and since we wrote them all in a single line, it is not that easy to read. Wouldn't it be much easier to digest, if each sub-command were written on its own line? Unfortunately, trying this may easily result in an error.
+
+```{python}
+#| error: true
+bikes_series          # <1>
+.str.replace("_", "") # <2>
+.str.strip()          # <3>
+.str.title()          # <4>
+```
+
+1.  take the `Series` object stored in the `bike_series` variable
+2.  gain access to its string operations via `str` and use the `replace` function to remove underscores (i.e., replace `_` with an empty string)
+3.  remove any leading and trailing white space
+4.  make every word start with a capital letter
+
+Why did this happen? TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+
+How can we fix the error while still having each operation on its own line?
+
+```{python}
+bikes_series \
+.str.replace("_", "") \
+.str.strip() \
+.str.title()
+```
+
+```{python}
+(
+    bikes_series
+    .str.replace("_", "")
+    .str.strip()
+    .str.title()
+)
+```
+
+### Data Type for Categorical Data
+
+```{python}
+bikes_series.astype("category")
+```

@@ -1,20 +1,52 @@
 project:
   type: book
+  preview:
+    port: 4848
+    browser: false
 
 book:
-  title: "`pandas`"
+  title: "`import pandas`"
+  subtitle: "In Small Steps to Big Data Understanding"
+  # other ideas for the title:
+  # Crafting Clarity: The Data Wrangling Handbook
+  # From Chaos to Clarity: Your Guide to Data Wrangling
+  # Navigating Noise
+  # Wrangling Wonders
+  # Data Dynamo: Shedding light on Pandas Secrets
+  # Secrets of Data Manipulation with Pandas
   author: "Aleksandar Karakaš"
   date: "2024-10-16"
+  language: "en"
+  version: "0.1.0"
+  # description: ...
+  # favicon: ...
+  # site-url: ...
+  # repo-url: ...
+  # repo-actions: edit,source,issue
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
+    - part: "Introduction" # p1_intro.qmd [TODO: add back file instead of mere title]
+      chapters:
+        #      - p1-1_intro.qmd
+        - p1-2_series.qmd
+  #      - p1-3_df.qmd
+  #  - part: p2_the_fun_stuff.qmd
+  #    chapters:
+  #      - p2-1_visualization.qmd
+  #appendices:
+  #  - p99-appendix-a-installation.qmd
 
 bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    #toc-depth: 3
+    #number-depth: 3
+    code-annotations: select # [below|hover|select], default: below
+    code-summary: "Show code"
+    theme:
+      light: cosmo
+      dark: cyborg
+  ipynb: default
   #pdf:
   #  documentclass: scrreprt

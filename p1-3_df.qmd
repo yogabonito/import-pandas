@@ -1,0 +1,3 @@
+# The `DataFrame` class in Pandas
+
+`pd.DataFrame`

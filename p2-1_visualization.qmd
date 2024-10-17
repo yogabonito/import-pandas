@@ -1,0 +1,11 @@
+# Visualization
+
+Let's see how easy it is to visualize the data contained in a data frame.
+
+## Plotly
+
+Plotly is an awesome package for creating interactive visualizations.
+
+## Altair
+
+Another great package for visualization is Altair.
