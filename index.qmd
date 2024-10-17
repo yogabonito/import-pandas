@@ -1,5 +1,5 @@
 # Preface {.unnumbered}
 
-This is a Quarto book about `pandas`.
+This is a Quarto book about `pandas`. We'll learn about the `Series` and `DataFrame` classes.
 
 To learn more about Quarto books visit <https://quarto.org/docs/books>.
