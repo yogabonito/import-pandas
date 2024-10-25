@@ -28,13 +28,15 @@ book:
     - part: "Introduction" # p1_intro.qmd [TODO: add back file instead of mere title]
       chapters:
         #      - p1-1_intro.qmd
-        - p1-2_series.qmd
-  #      - p1-3_df.qmd
+        - p1-2_series_basics.qmd
+        # - p1-3_series_advanced.qmd
+  #      - p1-4_df.qmd
   #  - part: p2_the_fun_stuff.qmd
   #    chapters:
   #      - p2-1_visualization.qmd
-  #appendices:
-  #  - p99-appendix-a-installation.qmd
+  # appendices:
+  #   - p99-appendix-a-installation.qmd
+  #   - p99-appendix-b-solutions-to-exercises.qmd
 
 bibliography: references.bib
 
@@ -47,6 +49,5 @@ format:
     theme:
       light: cosmo
       dark: cyborg
-  ipynb: default
   #pdf:
   #  documentclass: scrreprt

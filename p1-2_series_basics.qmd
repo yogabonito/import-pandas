@@ -1,0 +1,650 @@
+---
+format:
+  html:
+    other-links:
+      - text: Notebook
+        href: p1-2_series_basics.ipynb
+---
+
+# The `Series` Data Type in Pandas {#sec-series}
+
+Pandas is really useful for analyzing data that is organized in tables. Tables are 2-dimensional. In other words, they have a length (number of rows) and a width (number of columns). Each row represents an observation and each of the values in a row represents some property describing the corresponding observation. For instance, think of a table containing physical activities of different users.
+
+```{python}
+#| echo: false
+#| label: tbl-chapter-1-example-table
+#| tbl-cap: Example table
+import pandas as pd
+pd.DataFrame(
+    {
+        "Activity ID": [1, 25, 39, 101, "..."],
+        "User ID": [42, 22, 1, 42, "..."],
+        "Activity Type": ["run", "hike", "bike", "run", "..."],
+        "Duration in Minutes": [60, 210, 120, 45, "..."]
+    }
+)
+```
+
+In this chapter, we'll start as simple as possible. We'll focus on a single row or a single column. By the end of this chapter, you will know how to
+
+-   represent a row or column in Pandas,
+-   get and set specific elements of a row or column,
+-   check for missing values, and
+-   filter a row or column using simple as well as compound conditions.
+
+Sounds like a good start? Let's make sure everything is installed and then dive straight into our data analysis journey.
+
+## Starting our Pandas Journey
+
+We start by ensuring that we have Pandas installed on our computer. You can find the installation guide in Section \[TODO\].
+
+Once Pandas is installed, we are ready to use it. If we want to access the classes and functions offered by Pandas in a Python file or Jupyter notebook, we need to import it.
+
+```{python}
+import pandas as pd
+```
+
+You can name the imported module anything you like, but people usually call it `pd`. This means we can access Pandas' functionality via this name. Let's do this next!
+
+## Constructing a Series
+
+### Construction with the Default Index {#sec-construct-series-with-list}
+
+To represent a 1-dimensional data structure, such as a column in a table, Pandas provides a data type called `Series`. Let's try to represent the duration column from @tbl-chapter-1-example-table with a `Series` object. We can construct this object by providing a list containing the activity durations measured in minutes.
+
+```{python}
+durations_series = pd.Series([60, 210, 120, 45])
+```
+
+Let's take a closer look at this object.
+
+```{python}
+#| lst-label: lst-series-show-durations_series
+#| lst-cap: Looking at the series object containing durations.
+durations_series
+```
+
+In the right column of the output above, we see that all the durations are now stored in the `Series` object. The left column above represents the index of each value. We can think of these indices as row numbers. Since we did not specify a custom index for our series, the rows are simply numbered starting at `0`. This is the default index.
+
+The final piece of information in @lst-series-show-durations_series indicates the series' data type (`dtype: int64`). This tells us that all values in this `Series` object are integers (i.e., whole numbers).
+
+We can, however, also construct `Series` objects which contain a different data type, for instance, strings. Let's represent the activity type column in @tbl-chapter-1-example-table as a `Series` object. It should contain categories of activities corresponding to the durations in `durations_series`.
+
+```{python}
+activities_series = pd.Series(["run", "hike", "bike", "run"])
+
+activities_series
+```
+
+As before, we have row indices in the left column of the output. The right column, however, now contains text instead of numbers and Pandas can handle that as well. As shown in the output, the data type of this series is `object`. This means that the series may hold any types of values. For instance, the `object` data type would also allow a mix of strings and numbers as values. Later, we will see how to specify a more suitable data type `Series` objects which hold names of categories.
+
+<!-- TODO: link to the section which talks about the dtype "category" (instead of just writing "Later, we will see...") -->
+
+### Construction with a Custom Index
+
+So we know how to represent a *column* in a table – great! As we have seen, each value corresponds to a row and this row is indicated by the index. In the previous examples, these row indices were whole numbers.
+
+But what about representing a single *row*? Each value in a row belongs to a column. Ideally, a column has a descriptive name. Hence, the index of a row should consist of labels which are strings rather than numbers. To achieve that, we initialize a series with the desired index elements in addition to the series' values.
+
+```{python}
+#| lst-label: lst-series-show-row_series
+#| lst-cap: Defining a series representing a row.
+row_series = pd.Series(
+    [1, 42, "run", 60],
+    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+)
+
+row_series
+```
+
+Now we know two ways of constructing a `Series` object – awesome! 🎉️ Let's fix one more tiny thing.
+
+## The Name of a Series
+
+Our series examples comprise the values from @tbl-chapter-1-example-table, however, they still lack one piece of information: the name. Note how the columns in @tbl-chapter-1-example-table have names, such as *Activity Type* or *Duration in Minutes*. These names are missing in our `Series` objects.
+
+Now you may ask, why you would need to store a name in a series when you already have variable names which describe a series' contents. For instance, the variable name `durations_series` already suggests that this variable refers to a series and that this series contains durations. This is true, however, once you pass a series to a function, this name is lost. If a function needs to access the column name, we have to pass it to the function. The simplest way is to store this column name in the series object itself. So let's add a name to the series stored in `durations_series`.
+
+```{python}
+durations_series.name = "Duration in Minutes"
+```
+
+When we now output the series, the name is included.
+
+```{python}
+durations_series
+```
+
+And if we (or any function that receives our series) need to access the series' name, we can do so using the `name` property.
+
+```{python}
+durations_series.name
+```
+
+We have successfully added a name to the `durations_series` series. Alternatively, we could have assigned a name to a series when constructing it. Let's see that in action when constructing our series of activity types again.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+
+activities_series
+```
+
+Our series definitions are complete 🎉️ Let’s now find out what we can actually do with series!
+
+## Comparisons and Boolean Series
+
+### Comparisons
+
+Let's try to check which elements of a series fulfill a condition. For instance, we may ask which activities in `activities_series` involve running. We do this using the equality operator (`==`).
+
+```{python}
+#| lst-label: lst-series-equality
+#| lst-cap: Checking each element of a series for equality.
+activities_series == "run"
+```
+
+The resulting series has the same index as `activities_series` and its values indicate whether the corresponding value `activities_series` fulfills the condition (`True`) or not (`False`). Because only `True` and `False` are present in the resulting series, it has the data type `bool`. We call such a series a *Boolean series*. Later, we will use such series to filter a series or a whole table.
+
+### Exercise Time
+
+#### Exercise a {#sec-exercise-inequality}
+
+We can use other relational operators as well. Try to obtain a Boolean series indicating which activities are *not* running.
+
+```{python}
+#| eval: false
+activities_series  # TODO
+```
+
+You can find the solution in @sec-solution-inequality.
+
+#### Exercise b {#sec-exercise-greater-than}
+
+Which activities lasted for longer than an hour?
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can find the solution in @sec-solution-greater-than.
+
+## `any` and `all` for Boolean Series
+
+How can we check whether there is a run in our `activities_series`? Sure, we can look at the output of @lst-series-equality. There, we will immediately see a `True` value. However, we don't want to look through a whole series – which in practice may be much, much longer – ourselves. Thankfully, there is the `any` method which we can call on the Boolean series.
+
+```{python}
+#| lst-label: lst-series-any
+#| lst-cap: Checking if at least one activity is a run.
+is_run_series = activities_series == "run"
+is_run_series.any()
+```
+
+This confirms that our activities include at least one run.
+
+How can we check whether *all* activities lasted for at least 60 minutes? To this end, we need to determine whether all values in a Boolean series are `True`. We can use the `all` method for that.
+
+```{python}
+#| lst-label: lst-series-all
+#| lst-cap: Checking if all activities lasted for at least one hour.
+(durations_series >= 60).all()
+```
+
+We can see that not all activities lasted for at least one hour.
+
+::: callout-note
+In contrast to @lst-series-any, we did not use an intermediary variable in @lst-series-all. For your own code, you can use either approach.
+:::
+
+Now we have learned how to
+
+-   compare all elements of a series to a value 🎉️ and
+-   how to check whether any or all of the values in a Boolean series are `True` 🎉️🎉️
+
+Next, let's see how to access individual elements of a series.
+
+## Getting Elements of a Series Using `.loc` and Index Labels {#sec-series-get-elements-loc-labels}
+
+### Getting a Single Element
+
+To access a value in a series, we can use the corresponding index label and pass it to the series' `loc` property using square brackets (`[]`). For example, the first element in `durations_series` has the index label `0`, as we can see in @lst-series-show-durations_series.
+
+```{python}
+durations_series.loc[0]
+```
+
+To get an element of `row_series`, we can also use the index label, which in this case is a string (see @lst-series-show-row_series). Let's access the duration stored in `row_series`.
+
+```{python}
+row_series.loc["Activity Duration"]
+```
+
+### Getting Multiple Elements
+
+#### Using a List
+
+We can also access multiple elements at once using `loc`. To indicate that we want multiple elements of a series, we can use a list instead of a single index label.
+
+```{python}
+durations_series.loc[[0, 1]]
+```
+
+```{python}
+row_series.loc[
+    ["Activity Type", "Activity Duration"]
+]
+```
+
+#### Using a Slice
+
+Alternatively, we could use a slice to obtain multiple elements of a series.
+
+```{python}
+durations_series.loc[0:1]
+```
+
+::: callout-warning
+Note that slicing using `loc[start:end]` will always result in all elements from `start` to `end`, including *both* ends of the range. This is in contrast to Python's standard behavior, which does not include the upper bound of a range.
+:::
+
+While including the upper bound of the slice may feel unpythonic at first, it starts to make more sense, once we consider an index consisting of strings. If we want all columns ranging from `"User ID"` to `"Activity Duration"`, we probably want to have the latter included in the result.
+
+```{python}
+row_series.loc[
+    "User ID":"Activity Duration"
+]
+```
+
+To keep the behavior between integer and string indices consistent, indexing using `loc` includes the upper bound of the slice irrespective of the data type of the index.
+
+Now, we have learned how to access elements using `loc` and index labels 🎉️ Let's check out an alternative way to access series elements.
+
+## Getting Elements of a Series Using `.iloc` and Positions {#sec-series-get-elements-iloc-positions}
+
+### **Getting a Single Element**
+
+Imagine, that we want to index the `row_series` series by the *position* of the elements rather than by the index *label*. We can do that using `iloc` instead of `loc`.
+
+```{python}
+row_series.iloc[3]
+```
+
+::: callout-note
+The first element of a series always has the position `0` (not `1`).
+:::
+
+For `durations_series` and `activities_series` the labels equal the position of an element in the series. Hence, it does not matter whether you use `loc` or `iloc` in this case.
+
+```{python}
+durations_series.loc[0] == durations_series.iloc[0]
+```
+
+However, `iloc` can be useful even when dealing with series with a numeric index. Just imagine the following series.
+
+```{python}
+user_series = pd.Series({
+    42: "Aleks", 22: "Barbara", 1: "Carl"
+})
+```
+
+To get the first element, we can write
+
+```{python}
+user_series.iloc[0]
+```
+
+without thinking about the index labels.
+
+### Getting Multiple Elements
+
+#### Using a List
+
+Just as `loc`, the `iloc` property allows us to access multiple elements at once. Again, we can use a list to this end. To get the third and fourth element of `row_series` we can write the following.
+
+```{python}
+row_series.iloc[[2, 3]]
+```
+
+For `durations_series` and `activities_series`, again `loc` or `iloc` yield the same result because their elements are labeled with their position.
+
+```{python}
+durations_series.loc[[0, 1]] == durations_series.iloc[[0, 1]]
+```
+
+#### Using a Slice
+
+The `iloc` also supports slicing, however it differs a little bit from `loc`. Can you spot the difference when looking at the following two snippets?
+
+```{python}
+durations_series.iloc[0:1]
+```
+
+```{python}
+row_series.iloc[1:3]
+```
+
+Exactly, the upper bound of the slice is not included when using `iloc`. Since `iloc` works with positions, the Pandas developers decided it would be most intuitive if it works in the same way as standard Python where the element corresponding to the upper bound of a slice is not returned.
+
+Now we know how to access a single or multiple series elements using `loc` and `iloc` 🎉️ Now let's revisit `loc` to see what may be its most powerful ability.
+
+## Getting Elements of a Series Using `.loc` and a Boolean Array or Series
+
+As we have seen in @sec-series-get-elements-loc-labels, `loc` can use a single index label or a list or slice of index labels. However, we can also use a *Boolean array* instead. By Boolean array we mean a list whose elements are either `True` or `False`. (If you know the `numpy` package, you can think of a `numpy` array consisting only of `True` and `False` values as Boolean array, too.) If we index using a Boolean array, the result will comprise the elements of the indexed series which correspond to the `True` values in the Boolean array. For instance, to get the first two elements, we can use a Boolean array with `True` in the first two positions and False in the remaining positions.
+
+```{python}
+durations_series.loc[
+    [True, True, False, False]
+]
+```
+
+Why is this so powerful? Because we can also use a Boolean series instead of a Boolean array. We have seen that we can obtain a Boolean series using comparisons. (Later, we will learn other ways to generate a Boolean series from a series.)
+
+<!-- TODO: ensure we mention Boolean series when introducing, for instance, logical operators, isin() and mapping -->
+
+In @lst-series-equality, we have generated a Boolean series that indicates which activities involved running. Let's use this Boolean series to obtain only the running activities in `activities_series`.
+
+```{python}
+#| lst-label: lst-series-loc-Boolean-series
+#| lst-cap: Filtering for running activities in `activities_series`.
+activities_series.loc[
+    activities_series == "run"
+]
+```
+
+The index labels of this result indicate that the elements with labels `1` and `2` have been filtered out.
+
+### Exercise Time
+
+#### Exercise a {#sec-exercise-series-loc-with-Boolean-series-1-same-series}
+
+Generate a series which contains only those elements of `durations_series` which are greater than or equal to 60 minutes.
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can find the solution in @sec-solution-series-loc-with-Boolean-series-1-same-series.
+
+#### Exercise b {#sec-exercise-series-loc-with-Boolean-series-2-different-series}
+
+In @lst-series-loc-Boolean-series and the previous exercise, we constructed a Boolean series using the series we wanted to filter. However, we can construct the Boolean series for filtering from a different series as well. Let's assume that the durations in `durations_series` correspond to the activities in `activities_series`. Generate a series which consists of activities which last for longer than 60 minutes!
+
+```{python}
+#| eval: false
+  # TODO
+```
+
+You can find the solution in @sec-solution-series-loc-with-Boolean-series-2-different-series.
+
+Awesome! We now know how to use Boolean arrays and Boolean series to filter a series 🎉️ We can build more complex conditions by applying operations to Boolean series before filtering. Let's check this out!
+
+## Logical Operations with Boolean Series
+
+### Inverting a Boolean Series
+
+We can apply various logical operations to Boolean a series. The simplest one is inverting it. We can achieve this by writing a tilde (`~`) in front of the series we wish to invert.
+
+```{python}
+~(activities_series == "run")
+```
+
+::: callout-warning
+Note that without parentheses, the code above results in an error.
+:::
+
+```{python}
+#| error: true
+~activities_series == "run"  # this will not work
+```
+
+This is because the tilde has a higher precedence in Python than the equality operator. Thus, Python applies `~` to `activities_series`, however, `activities_series` is not a Boolean series and thus, this operation is not defined. To ensure that we first build a Boolean series and *then* invert it, we use parentheses.
+
+::: callout-note
+Instead of `~(activities_series == "run")` we could also write `activities_series != "run"` and the latter would be easier to write and more readable. Inverting will prove invaluable once we build Boolean series without relational operators in later sections.
+:::
+
+<!-- TODO: maybe mention the later sections -->
+
+### Combining two Boolean Series with the Logical OR Operator
+
+Let's say, we are interested in activities which involve running or hiking. To this end, we can generate two Boolean series (one for running and one for hiking) and combine them using an elementwise OR operation. The OR operation is performed using the `|` operator.
+
+```{python}
+#| lst-label: lst-series-combine-logical-or
+#| lst-cap: Using the logical OR operator to find which activities are either `\"run\"` or `\"hike\"`?
+(activities_series == "run") | (activities_series == "hike")
+```
+
+::: callout-warning
+Do not use Python's `or` operator when trying to perform an elementwise OR operation on Boolean series!
+:::
+
+::: callout-warning
+As with inverting, we need to enclose the expressions for generating Boolean with parentheses. Without parentheses, `"run" | activities_series` would be evaluated first due to operator precedence.
+:::
+
+We can use our Boolean series, for instance, to filter `activities_series`.
+
+```{python}
+#| lst-label: lst-series-filter-containing-logical-or
+#| lst-cap: Filtering a series for `\"run\"` and `\"hike\"` activities using the logical or operator.
+activities_series.loc[
+    (activities_series == "run") | (activities_series == "hike")
+]
+```
+
+The resulting series contains only running and hiking activities.
+
+#### Exercise Time {#sec-exercise-series-loc-or-Boolean-series}
+
+Generate a series which contains only those elements of `activities_series` for which the corresponding durations are either less than an hour or greater than three hours.
+
+```{python}
+#| eval: false
+  # TODO
+```
+
+You can find the solution in @sec-solution-series-loc-or-Boolean-series.
+
+### Combining two Boolean Series with the Logical AND Operator
+
+We can also combine Boolean series using the AND operator, which is written as ampersand (`&`) in Pandas. Let's say, we wanted find those activities which lasted for at least an hour and up to three hours.
+
+```{python}
+activities_series.loc[
+    (durations_series >= 60) & (durations_series <= 3 * 60)
+]
+```
+
+::: callout-warning
+Do not use Python's `and` operator when trying to perform an elementwise AND operation on Boolean series!
+:::
+
+::: callout-warning
+As with NOT (`~`) and the OR (`|`) operator, we need to enclose the comparisons for generating Boolean series with parentheses. Without parentheses, `60 & durations_series` would be evaluated first. In summary, all logical operators in Pandas (`~`, `&`, `|`) have a higher operator precedence than relational operators (`==`, `!=`, `<`, `<=`, `>=`, `>`).
+:::
+
+#### Exercise Time {#sec-exercise-series-loc-and-Boolean-series}
+
+Generate a series which contains durations of runs which lasted for longer than 45 minutes!
+
+```{python}
+#| eval: false
+  # TODO
+```
+
+You can find the solution in @sec-solution-series-loc-and-Boolean-series.
+
+## [`.isin`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.isin.html)
+
+Constructing a Boolean series for filtering as shown above can involve quite a bit of typing. Are you ready for a quality of life improvement? Let' revisit @lst-series-combine-logical-or! There, we asked ourselves which activities involve running or hiking. We built the corresponding Boolean series by combining the two conditions using the logical OR operator (`|`). Imagine how the code would look like if we had *ten* conditions instead of two. It would be *very* long and thus, unreadable! What if we could simply pass a list to Pandas containing the activity types we care about? This is exactly what we will do! In @lst-series-isin, we pass such a list to the `isin` method of our series and get the same result as in @lst-series-combine-logical-or.
+
+```{python}
+#| lst-label: lst-series-isin
+#| lst-cap: Using the `isin` method to find which activities are either `\"run\"` or `\"hike\"`? 
+activities_series.isin(["run", "hike"])
+```
+
+We can use this Boolean series to filter for those activities that involve either running or hiking. We do this in the same way as before in @lst-series-filter-containing-logical-or, but this time with less code 🎉️
+
+```{python}
+activities_series.loc[
+    activities_series.isin(["run", "hike"])
+]
+```
+
+Now we have seen many ways to get specific elements of a `Series` object. Next, let's find out how to set them.
+
+## Setting Elements of a Series Using `.loc` and `.iloc`
+
+### Setting a Single Element
+
+If you know which values you want to update in a `Series` object, then updating them is a matter of using correct indexing and the assignment operator (`=`). Let's have a look at an example series.
+
+```{python}
+durations_series
+```
+
+Let's say, we would like to change the first value in `durations_series` to 120 minutes.
+
+```{python}
+durations_series.loc[0] = 120
+
+durations_series
+```
+
+This was easy!
+
+### Exercise Time {#sec-exercise-set-element-using-iloc}
+
+Can you set the same series element back to 60 using the series' `iloc` property instead of `loc`?
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can find the solution in @sec-solution-set-element-using-iloc.
+
+### Setting Multiple Elements
+
+We are not limited to updating a single series element at a time. Let's try to set multiple elements at once, this time using `row_series` as an example.
+
+```{python}
+row_series
+```
+
+Let's say we want to change both the user ID and the duration to 1. To do so, we again have to index correctly and assign the new value.
+
+```{python}
+row_series.loc[["User ID", "Activity Duration"]] = 1
+
+row_series
+```
+
+To assign different values to the selected series elements, we assign a list of values rather than a single value. Let's say we want to set the user ID to 22 and increase the duration to 120.
+
+```{python}
+row_series.loc[["User ID", "Activity Duration"]] = [22, 120]
+
+row_series
+```
+
+### Exercise Time
+
+#### Exercise a {#sec-exercise-set-elements-using-iloc}
+
+Can you set the user ID and duration in `row_series` back to 42 and 60, respectively. Do this using a single assignment operation and using the series' `iloc` property instead of `loc`!
+
+```{python}
+#| eval: false
+row_series  # TODO
+```
+
+You can find the solution in @sec-solution-set-elements-using-iloc.
+
+#### Exercise b {#sec-exercise-clamp-elements}
+
+Let's assume that we want to set an upper bound to the duration of long activities. Change all activity durations in `durations_series` which exceed 180 minutes to 180!
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can find the solution in @sec-solution-clamp-elements.
+
+## Solutions to Exercises
+
+### Solution to @sec-exercise-inequality {#sec-solution-inequality}
+
+```{python}
+activities_series != "run"
+```
+
+### Solution to @sec-exercise-greater-than {#sec-solution-greater-than}
+
+```{python}
+durations_series > 60
+```
+
+### Solution to @sec-exercise-series-loc-with-Boolean-series-1-same-series {#sec-solution-series-loc-with-Boolean-series-1-same-series}
+
+```{python}
+durations_series.loc[durations_series > 60]
+```
+
+### Solution to @sec-exercise-series-loc-with-Boolean-series-2-different-series {#sec-solution-series-loc-with-Boolean-series-2-different-series}
+
+```{python}
+activities_series.loc[
+    durations_series > 60
+]
+```
+
+### Solution to @sec-exercise-series-loc-or-Boolean-series {#sec-solution-series-loc-or-Boolean-series}
+
+```{python}
+activities_series.loc[
+    (durations_series < 60) | (durations_series > 3 * 60)
+]
+```
+
+### Solution to @sec-exercise-series-loc-and-Boolean-series {#sec-solution-series-loc-and-Boolean-series}
+
+```{python}
+durations_series.loc[
+    (activities_series == "run") & (durations_series > 45)
+]
+```
+
+### Solution to @sec-exercise-set-element-using-iloc {#sec-solution-set-element-using-iloc}
+
+```{python}
+durations_series.iloc[0] = 60
+
+durations_series
+```
+
+As explained in @sec-series-get-elements-iloc-positions, `iloc` is equivalent to `loc` in this example.
+
+### Solution to @sec-exercise-set-elements-using-iloc {#sec-solution-set-elements-using-iloc}
+
+```{python}
+row_series.iloc[[1, 3]] = [42, 60]
+
+row_series
+```
+
+### Solution to @sec-exercise-clamp-elements {#sec-solution-clamp-elements}
+
+```{python}
+durations_series.loc[durations_series > 180] = 180
+
+durations_series
+```
+
