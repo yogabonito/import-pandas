@@ -29,7 +29,6 @@ In this chapter, we'll start as simple as possible. We'll focus on a single row 
 
 -   represent a row or column in Pandas,
 -   get and set specific elements of a row or column,
--   check for missing values, and
 -   filter a row or column using simple as well as compound conditions.
 
 Sounds like a good start? Let's make sure everything is installed and then dive straight into our data analysis journey.
@@ -524,6 +523,14 @@ This was easy!
 Can you set the same series element back to 60 using the series' `iloc` property instead of `loc`?
 
 ```{python}
+#| echo: false
+# reason for this cell: ensure that cells in solution are not affected by
+# the previous change (durations_series.loc[0] = 120)
+# This cell is not shown in the resulting HTML/notebook.
+durations_series.loc[0] = 60
+```
+
+```{python}
 #| eval: false
 durations_series  # TODO
 ```
@@ -561,6 +568,14 @@ row_series
 Can you set the user ID and duration in `row_series` back to 42 and 60, respectively. Do this using a single assignment operation and using the series' `iloc` property instead of `loc`!
 
 ```{python}
+#| echo: false
+# reason for this cell: ensure that cells in solution are not affected by
+# the previous change (row_series.loc[["User ID", "Activity Duration"]] = [22, 120])
+# This cell is not shown in the resulting HTML/notebook.
+row_series.loc[["User ID", "Activity Duration"]] = [42, 60]
+```
+
+```{python}
 #| eval: false
 row_series  # TODO
 ```
@@ -595,7 +610,7 @@ durations_series > 60
 ### Solution to @sec-exercise-series-loc-with-Boolean-series-1-same-series {#sec-solution-series-loc-with-Boolean-series-1-same-series}
 
 ```{python}
-durations_series.loc[durations_series > 60]
+durations_series.loc[durations_series >= 60]
 ```
 
 ### Solution to @sec-exercise-series-loc-with-Boolean-series-2-different-series {#sec-solution-series-loc-with-Boolean-series-2-different-series}
@@ -647,4 +662,3 @@ durations_series.loc[durations_series > 180] = 180
 
 durations_series
 ```
-
