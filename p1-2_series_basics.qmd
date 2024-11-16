@@ -35,7 +35,7 @@ Sounds like a good start? Let's make sure everything is installed and then dive 
 
 ## Starting our Pandas Journey
 
-We start by ensuring that we have Pandas installed on our computer. You can find the installation guide in Section \[TODO\].
+We start by ensuring that we have Pandas installed on our computer. You can find the installation guide in @sec-appendix-env.
 
 Once Pandas is installed, we are ready to use it. If we want to access the classes and functions offered by Pandas in a Python file or Jupyter notebook, we need to import it.
 
@@ -263,7 +263,7 @@ Now, we have learned how to access elements using `loc` and index labels 🎉️
 
 ## Getting Elements of a Series Using `.iloc` and Positions {#sec-series-get-elements-iloc-positions}
 
-### **Getting a Single Element**
+### **Getting a Single Element**  {#sec-series-elements-iloc-positions-get-single-element}
 
 Imagine, that we want to index the `row_series` series by the *position* of the elements rather than by the index *label*. We can do that using `iloc` instead of `loc`.
 

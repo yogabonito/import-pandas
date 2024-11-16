@@ -34,9 +34,9 @@ book:
   #  - part: p2_the_fun_stuff.qmd
   #    chapters:
   #      - p2-1_visualization.qmd
-  # appendices:
-  #   - p99-appendix-a-installation.qmd
-  #   - p99-appendix-b-solutions-to-exercises.qmd
+  appendices:
+    - p99-appendix-a-installation.qmd
+    # - p99-appendix-b-jupyterlab.qmd
 
 bibliography: references.bib
 

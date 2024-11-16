@@ -1,3 +1,223 @@
-# Installing Pandas
+# Setting Up our Working Environment {#sec-appendix-env}
 
-...
+## Software Versions
+
+Python and Pandas are well established in the world of data analysis. Nonetheless, the developers of these projects aim to implement further improvements. Thus, they keep releasing new versions of their software. Sometimes, new versions involve breaking changes. Such changes require users to adjust their existing code if they wish to upgrade to a new version of Python or Pandas.
+
+In this chapter, we will set up an environment which includes the same versions of Python and Pandas that were used in this book. This ensures that your code works as expected while you follow this book. You can think of this (virtual) environment as a crafting room which accomodates all the tools you need to accomplish a project. These tools are the Python packages, which we will install in @sec-appendix-env-installing-packages. Before installing the packages, we will learn how to create and use virtual environments – an indispensible skill for any Python programmer.
+
+::: callout-note
+The code of this book has been tested with the following Python and Pandas versions.
+
+-   Python 3.11 & Pandas 2.1
+-   Python 3.12 & Pandas 2.2
+-   Python 3.13 & Pandas 2.2
+
+For each of these combinations of software versions, the code in this book produced the same results. This shows that despite ongoing improvements to Python and Pandas, both software projects are very stable from a user perspective. This also means that what you learn in this book will remain valuable in future.
+:::
+
+::: {.alert .alert-danger}
+TODO (for the author of the book and not for students): actually test the code with different versions.
+:::
+
+## Installing Python
+
+The first thing you need for coding along with this book is a Python 3 interpreter. This program runs our Python code and on most computers, it's already pre-installed. Let's check if we have it. To this end, we run the command
+
+``` {#lst-appendix-env-python-version-attempt-1 .bash lst-cap="Looking for the version of Python."}
+python3 --version
+```
+
+in the terminal. For my (very old) computer, this command returns `Python 3.8.10`. At this point, the exact version does not matter as long as it starts with `Python 3.`. This will allow us to set up a virtual environment with a specific Python version later in this chapter. So if the output produced by @lst-appendix-env-python-version-attempt-1 on your computer also starts with `Python 3.`, move to @sec-installing-miniconda.
+
+If the command above produced an error message including a text similar to `Der Befehl 'python3' wurde nicht gefunden`, then you can try to run
+
+::: {.alert .alert-danger}
+TODO (for the author of the book and not for students): translate error message on a fresh Linux installation. (It should be something like "command 'python3' not found".)
+:::
+
+``` {#lst-appendix-env-python-version-attempt-2 .bash lst-cap="Another attempt to find the version of Python."}
+python --version
+```
+
+instead. If the output now starts with `Python 3.`, move to @sec-installing-miniconda.
+
+Otherwise, it looks as if you don't have a Python 3 interpreter installed. You can fix that by [downloading](https://www.python.org/downloads/) and installing it. Once Python is installed and one of the commands in @lst-appendix-env-python-version-attempt-1 or @lst-appendix-env-python-version-attempt-2 outputs text starting with `Python 3.`, you can move to @sec-installing-miniconda.
+
+## Installing Miniconda {#sec-installing-miniconda}
+
+To ensure a working environment with the correct versions, we will now create a virtual environment using a program called Miniconda. Let's install Miniconda. You can find the installation instructions for your operating system at <https://docs.anaconda.com/free/miniconda/miniconda-install/>. Installing Miniconda gives us the `conda` command in the terminal which allows us to manage virtual environments.
+
+## Creating a Virtual Environment {#sec-appendix-env-create-env}
+
+Once Miniconda is installed, let's make use of the `conda` comand. By executing the following command in the terminal, we create a new virtual Python environment called `pandas_env` with version 3.13 of Python.
+
+``` {#lst-appendix-env-create-env .bash lst-cap="Creating our virtual environment."}
+conda create --name pandas_env python=3.13
+```
+
+If you start working on a different project, you can create a separate environment for that as well. Just use a different name and the desired Python version. The following command serves as a template for this step where angle brackets indicate a place holder.
+
+``` {#lst-appendix-env-create-env-general .bash lst-cap="Template for creating a virtual environment."}
+conda create --name <ENVIRONMENT_NAME> python=<PYTHON_VERSION>
+```
+
+## Deleting A Virtual Environment
+
+A virual environment occupies disk space. So if we create a virtual environment by accident or if we no longer need a virtual environment, we may want to remove it. We achieve this by running
+
+``` {#lst-appendix-env-remove-env-general .bash lst-cap="Deleting a virtual environment."}
+conda remove --name <ENVIRONMENT_NAME> --all
+```
+
+in the terminal. Again, the word in angle brackets indicates a place holder for the name of a virtual environment.
+
+If you plan to work through this book, you will want to keep your newly created virtual environment. But if you do not want to use your virtual environment anymore or want to recreate it from scratch, you can easily remove it by runnding the following command in the terminal.
+
+``` {#lst-appendix-env-remove-env .bash lst-cap="Deleting our virtual environment."}
+conda remove --name pandas_env --all
+```
+
+Note that deleting an active virtual environment will fail. So, if the virtual environment to be deleted is active, we first have to deactivate it. We deal with activating and deactivating a virtual environment next.
+
+## Entering (Activating) and Exiting (Deactivating) Our Virtual Environment
+
+### Entering the Environment {#sec-appendix-env-entering-env}
+
+Let's finally use our new Python environment, shall we? Using a virtual environment means using its Python interpreter or its Python package manager `pip`. However, if we were to open our terminal and start the Python interpreter using `python3` or `python`, this would not use our virtual environment, but the system-wide Python installation instead. In the same way, running the `pip` command in the terminal starts the system-wide package management program.
+
+To use the Python interpreter or package manager of a virtual environment, we need to activate the environment first. We achieve this by running the following command.
+
+``` {#lst-appendix-env-activate-env-general .bash lst-cap="Activating a virtual environment."}
+conda activate <ENVIRONMENT_NAME>
+```
+
+In our case, with the virtual environment being named `pandas_env`, we activate it by running
+
+``` {#lst-appendix-env-activate-env .bash lst-cap="Activating our virtual environment."}
+conda activate pandas_env
+```
+
+in the terminal. We can immediately see whether entering a virtual environment was successful: An activated virutal environment will always display its name in parentheses as the first part of the command line prompt. The following two lines of my terminal illustrate this effect.
+
+<div class="sourceCode">
+<pre class="sourceCode"><code><span style="color: green">aleks:</span><span style="color: blue">~/pandas_book$</span> conda activate pandas_env
+(pandas_env) <span style="color: green">aleks:</span><span style="color: blue">~/pandas_book$</span></code></pre></div>
+
+The first line above has my usual prompt (i.e., <code><span style="color: green">aleks:</span><span style="color: blue">~/pandas_book$</span></code>) consisting of my computer's name, a colon, and the current working directory followed by a dollar sign. After activating our virtual environment, its name in parentheses (i.e., `(pandas_env)`) becomes part of the prompt. If your prompt is altered in the same way, you have entered your crafting room. Congratulations and welcome to your own virtual environment! 🎉️ Running `python --version` will return the Python version we chose when creating the virtual environment in @lst-appendix-env-create-env.
+
+### Exiting the Environment
+
+Our terminal window will stay in a virtual environment until we exit the virtual environment or change to a different one. To exit our virtual environment, we need to deactivate it by running
+
+``` {#lst-appendix-env-deactivate-env .bash lst-cap="Deactivating our virtual environment."}
+conda deactivate
+```
+
+in the terminal. Deactivating a virtual environment removes its name from the prompt, indicating that we are no longer in our crafting room. Now, the path environment variable is reset, meaning that commands, such as `python` or `pip`, will use the system-wide installations again. Note that when deactivating a virtual environment (as in @lst-appendix-env-deactivate-env), we do not specify its name.
+
+## Installing Python Packages {#sec-appendix-env-installing-packages}
+
+In @sec-appendix-env-create-env, we created our crafting room. In @sec-appendix-env-entering-env, we learned how to enter this room which shall contain all the tools we need for a project. However, we have never put tools (i.e., Python packages) into our crafting room. Let's do this now!
+
+### Step 1: List the Packages to Install
+
+We collect all the packages required for our project in a file called `requirements.txt`. In this book, our requirements will comprise
+
+- JupyterLab as our development environment for interactive programming,
+- Pandas for working with data (the main topic of this book), and
+- Plotly for visualizing data.
+
+Our `requirements.txt` file shall look as follows with each dependency on its own line.
+
+``` {.python filename="requirements.txt"}
+jupyterlab~=4.3.0
+pandas~=2.2.0
+plotly~=5.24.0
+```
+
+::: {.callout-tip collapse="true"}
+### `requirements.txt` for courses at CUAS
+
+To equip your virtual environment for my courses at CUAS, use a different `requirements.txt`.
+
+For **Data Sources and Data Quality** (in the bachelor's degree program Information Technologies), use
+
+``` {filename="requirements.txt"}
+jupyterlab~=4.3.0
+pandas~=2.1.0
+scikit-learn~=1.5.0
+ydata-profiling~=4.10.0
+ipywidgets~=8.1.0
+great-expectations~=1.1.0
+plotly~=5.24.0
+streamlit~=1.39.0
+```
+
+and note that great-expectations in version 1.1 requires Python 3.12.
+
+For **Unsupervised Learning** and **Supervised Learning** (in the master's degree program Applied Data Science), use
+
+``` {filename="requirements.txt"}
+jupyterlab~=4.3.0
+pandas~=2.2.0
+scikit-learn~=1.5.0
+plotly~=5.24.0
+```
+:::
+
+
+::: {.callout-note collapse="true"}
+### What does `~=` mean?
+
+You may wonder what `~=` means in the file above. For instance, imagine that the following Pandas versions starting with `2.2` exist:
+
+- `2.2.0`,
+- `2.2.1`,
+- `2.2.2`, and
+- `2.2.3`.
+
+If the package manager `pip` is instructed to install `pandas~=2.2.0`, it will install the latest Pandas version starting with `2.2`. In our example, this is Pandas `2.2.3`.
+
+It is very common that software versions consist of three numbers and follow semantic versioning ^[[https://semver.org/](https://semver.org/)]. If a new version is released where only the third number – the so-called *patch version* – is updated (as in the update from `2.2.2` to `2.2.3`), then this indicates that the changes from one version to the next are non-braking. This means that if your code worked with the old version (e.g., `2.2.2`), it will continue working when you start using the new version (e.g., `2.2.3`). An incremented patch version also indicates that the new version includes bug-fixes. Thus, among versions where the first two components match, you will always prefer the version with the latest patch version. Installing with `~=` ensures that the latest patch version is used. This is why I recommend using `~=` in requirements files.
+:::
+
+### Step 2: Starting the Installation
+
+If we open our terminal in the directory which contains our `requirements.txt` file and ensure our virtual environment is *active* (see @sec-appendix-env-entering-env), we can run the following command to install all packages.
+
+```{#lst-appendix-env-install-packages .bash lst-cap="Installing the required packages from within the directory containing `requirements.txt`."}
+pip install -r requirements.txt
+```
+
+If your current working directory in the terminal is not the directory containing the `requirements.txt` file, then you can run the following command instaed of @lst-appendix-env-install-packages and replace the place holder in angle brackets by the correct path of your `requirements.txt` file.
+
+```{#lst-appendix-env-install-packages-general .bash lst-cap="Installing the required packages."}
+pip install -r <PATH/TO/requirements.txt>
+```
+
+::: {.alert .alert-danger}
+TODO (for the author of the book and not for students): try everything out once again on a fresh Linux installation or inside a container.
+:::
+
+### Step 3: Checking our Installation
+
+Let's check whether our desired packages were installed in the correct version. To this end, let's inspect the packages from within the Python read-eval-print loop as shown in the following snippet of my terminal.
+
+<div class="sourceCode">
+<pre class="sourceCode"><code>(pandas_env) <span style="color: green">aleks:</span><span style="color: blue">~/pandas_book$</span> python
+Python 3.13.0 | packaged by Anaconda, Inc. | (main, Oct  1 2024, 08:00:00) [GCC 11.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+<span style="color: purple">>>></span> import jupyterlab
+<span style="color: purple">>>></span> jupyterlab.__version__
+'4.3.0'
+<span style="color: purple">>>></span> import pandas
+<span style="color: purple">>>></span> pandas.__version__
+'2.2.3'
+<span style="color: purple">>>></span> import plotly
+<span style="color: purple">>>></span> plotly.__version__
+'5.24.1'
+<span style="color: purple">>>></span> quit
+(pandas_env) <span style="color: green">aleks:</span><span style="color: blue">~/pandas_book$</code></pre></div>
+
+If you get the same output (or the same output but with higher patch versions), then you have successfully set up your environment. Congratulations! 🎉️🎉️
