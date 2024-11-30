@@ -1,0 +1,1029 @@
+---
+code-annotations: hover
+# format:
+#   html:
+#     other-links:
+#       - text: Notebook
+#         href: p99-appendix-c-python.ipynb
+# TODO: comment in lines above
+---
+
+# Python Crash Course
+
+## Our Deep Dive into Python
+
+### The Project
+
+Python is an extremely popular programming language. One reason why Python became ubiquitous is that it allows us to write code that is clear and easy to understand. Today, Python is used in many different fields including web development and data science.
+
+If you are new to Python, then welcome! This chapter is for you, as it does not assume any prior programming-related knowledge. Learning something new always involves challenges. However, if we *really* want to learn something, we will overcome *any* obstacle.
+
+We will work within JupyterLab, so make sure you know the JupyterLab basics shown in @sec-appendix-jupyter and we will work from there.
+
+::: {.alert .alert-danger}
+TODO (for the author, not for students): finish and upload the JupyterLab chapter and then reference it in the paragraph above.
+:::
+
+Many introductions to a programming language teach the most important language concepts in isolation and as a result, they are boring. We, on the other hand, will combine the concepts as we learn to form something meaningful: the Game of Life. You can see a demo of this game in @fig-game-of-life-example.
+
+![An infinite Game of Life animation (taken from [Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#/media/File:Game_of_life_pulsar.gif)).](https://upload.wikimedia.org/wikipedia/commons/0/07/Game_of_life_pulsar.gif){#fig-game-of-life-example}
+
+In this demo, we can see a grid of cells which are either filled (that is, alive) or unfilled (that is, dead). The states of the cells are animated and we can see cells emerging and vanishing. If we look (very, very) closely and pay attention to a cells neighbors, we might find a pattern which determines the animation.
+
+### The Rules of the Game
+
+A cell's neighbors are the eight cells surrounding it. A **filled cell** with two or three neighbors always stays alive in the next time step. However, filled cells in lonely places (that is, fewer than 2 neighbors) or crowded places (that is, more than 3 neighbors) will vanish. An **empty cell** with exactly three neighbors comes to live in the next time step. With any different number of neighbors, an empty cell will remain empty. These are all the rules defining the animation.
+
+Now, the only missing specification concerns the initial distribution of filled cells. This is something we can choose arbitrarily and the Game of Life will generate a different animations depending on this initial grid of cells.
+
+<!-- ::: {.alert .alert-danger}
+TODO: maybe replace emerging and disappearing cells with shy and bored pandas 🐼️. If their place is too crowded, they will hide from the crowd and if there are less than two neighbors they will also hide because it is boring. A hidden panda 🐼️ will only come out of its den, if there are exactly three neighbors.
+::: -->
+
+## Producing an Output
+
+One major requirement of our Game of Life program is to output the cells. This output can be an image, but in this introduction, we will represent the cells as text. So how can we print some text? For this task, Python offers the `print` function. The way we use it, is to write `print` followed by parentheses (`()`). Within these parentheses, we provide the text we want to print enclosed in single quotes (`'hello'`) or double quotes (`"world!"`).
+
+```{python}
+#| lst-label: lst-appendix-c-python-our-first-print
+#| lst-cap: Printing our first output.
+print('hello')
+print("world!")
+```
+
+Great! While both single and double quotes work, it is recommended to consistently use one version to make the code easier to read. We will use double quotes here.
+
+So how can we represent a grid of cells using text? One way would be to represent an empty cell with a space character and a filled cell with an arbitrary character (for instance, `"X"` or `"#"`). Let's print one line of the grid this way.
+
+```{python}
+print("#  # ")
+```
+
+This approach would work, but it also comes with a downside: With spaces representing empty cells, we can't see the border of the grid, if there are no filled cells there. We could solve this by printing characters such as `-` and `|` at the edges, but this complicates the printing logic. Let's instead use better characters to represent the cells. One cool thing about Python is that it supports Unicode characters out of the box. So you can also print, for instance, Chinese characters, emojis, and many special characters. We will use Unicode's [block elements](https://en.wikipedia.org/wiki/Block_Elements) which allows us to represent filled and empty cells as `"█"` and `"░"`, respectively. So let's again print a line of our grid.
+
+```{python}
+print("█░░█░")
+```
+
+How cool is that? 🤯️
+
+## Variables
+
+Printing the cells' state is not enough. We also have to remember it in order to calculate the cells' state in the next time step. To this end, we store the cells in a *variable* using the assignment operator `=` like so:
+
+```{python}
+cells = "█░░█░"
+```
+
+This stores the string of characters `"█░░█░"` somewhere in our computer's memory. Thankfully, we don't need to search the memory to find `"█░░█░"` again. Instead, we simply use the name of the variable we just created (`cells`). Let's print these cells using our variable instead of writing the characters literally.
+
+```{python}
+print(cells)
+```
+
+::: {.callout-note collapse="true" title="What would happen if we wrote `print(\"cells\")` instead of `print(cells)`? (Note the additional quotes.)"}
+`print("cells")` prints the text `cells`, whereas `print(cells)` prints the data that is stored inside the variable `cells`. So remember: text enclosed in quotes is just the string of characters between the quotes.
+:::
+
+Why is a variable called a variable? Because it can vary! Let's say that there are no more cells in the next time step. We can overwrite the current state stored in the `cells` variable using the assignment operator `=` again.
+
+```{python}
+#| lst-label: lst-appendix-c-python-reassigning-a-variable
+#| lst-cap: We can assign a new value to a variable.
+cells = "░░░░░"
+```
+
+If we now print the data the `cells` variable refers to, then we will see the new state.
+
+```{python}
+print(cells)
+```
+
+Et voilà!
+
+::: callout-note
+Choose variable names carefully! In the example above, we called the variable `cells` because it refers to cells. Whoever reads the variable name will understand this. However, if we had called our variable `pizza` instead, then readers of our code would be rather confused! We don't want to confuse readers of our code. After all, *we* might be the readers weeks or even months from now. So always choose a variable name that describes the variable's purpose!
+:::
+
+## Literals
+
+If we call `cells` in @lst-appendix-c-python-reassigning-a-variable a variable, how do we call the string of characters `"█░░█░"`? It is a *literal* because we are literally typing its value. (In the case of the variable `cells`, we do not literally write its value, but only the variable name. We let Python determine what the current value of this variable is.)
+
+## Indentation {#sec-appendix-c-python-indentation}
+
+Let's take another look at @lst-appendix-c-python-our-first-print where we wrote two lines of code. None of them started with whitespace. If one of the two lines were indented, Python would refuse to run the code and report an error instead. In other words, Python forces us to be consistent with indentation.
+
+```{python}
+#| lst-label: lst-appendix-c-python-indentation-error
+#| lst-cap: Receiving an error message due to wrong indentation.
+#| error: true
+print("█░░█░")
+    print("██░░█")
+```
+
+::: {.callout-note collapse="true" title="A note on errors"}
+Beginning Python programmers often consider error messages intimidating, but we can be grateful for them! In the example above, the error message clearly tells us that our error is located in the second line of code. A caret (`^`) even points us to the exact location of the error. The really great thing about the error message in @lst-appendix-c-python-indentation-error, however, is its last part (`unexpected indent`). This points us to the solution: removing the indentation. So whenever you receive such an error, don’t freak out! Error messages are extremely valuable and help us fix our mistakes. If you don't understand an error message, this is fine, too. In this case, just search the internet for the error message. You can be sure that millions of people have already experienced the same error. Hence, the internet is full of solutions for the issue in your code.
+
+To summarize: don’t be afraid of making mistakes! Falling into as many traps as possible is probably the best way to improve as a programmer.
+:::
+
+If all our code is indented by the same amount of space characters, it will will work as shown in the following cell.
+
+```{python}
+    print("█░░█░")
+    print("██░░█")
+```
+
+Later, we will also learn about situations in which Python forces us to indent certain parts of our code. As we will see, this ensures the code is easy to read.
+
+## Comments
+
+Let's say we are writing some complicated piece of code – so complicated that the next person reading it will struggle to understand it. Some people enjoy writing complex code because it makes them feel clever. Don't be one of them! Always try to write the code in the most simple way because the next person trying to understand your code could be you one year from today. (You have seen the same argument in connection with descriptive varialbe names.)
+
+But what if the prolem we are solving requires a complicated piece of code? Well, then we should at least annotate our code with explanations. We can do this using *comments*. A comment is some text in our code which is completely ignored by Python. So we can write comments in plain English. We only have to indicate which part of our code is a comment using a hash sign (`#`, also known as pound sign); everything to the right of `#` is ignored, as shown in the following lines of code.
+
+```{python}
+# Trying out comments # <1>
+# print("Python is really hard") # <2>
+print("I can learn anything")  # this line prints # <3>
+print("# is not ignored in a string of characters") # <4>
+```
+
+1.  The first line starts with `#` followed by text that is English rather than Python code. This is OK, because the `#` tells Python to ignore the whole line.
+2.  The second line does contain valid Python code, but since it also starts with `#`, it is ignored, too.
+3.  The third line contains Python code followed by a comment (`# this line prints`). The Python code is executed as usual and again the comment has no effect on our program.
+4.  The fourth line shows that a hash sign inside a string of characters does *not* mark the beginning of a comment. Instead, it is part of the text between quotes.
+
+## Types
+
+### What is a Data Type?
+
+So far we have only worked with strings of characters, but Python knows a lot more types of data such as numbers. Under the hood, all types of data are represented in the same way: as sequences of zeros and ones. If we asked Python what the pattern `00101010` means then it would reply: "What type of data is it?" If we specify that the pattern of zeros and ones represent a whole number, Python would tell us that this number is 42. For us, it is important to know different data types because each is useful for solving different tasks.
+
+We can check the type of any literal or variable using `type()` as follows.
+
+```{python}
+print(type("█░░█░"))  # type of a literal
+cells = "█░░█░"
+print(type(cells))  # type of a variable
+```
+
+In the example above, the literal `"█░░█░"` and the variable `cells` share the same data type. Both are strings of characters. In Python, we call this data type a string or `str`. Let's see what else we can do with strings.
+
+### Strings
+
+#### What can go inside a string?
+
+Strings can contain arbitrary text, numbers, punctuation marks, and – as we have seen – Unicode such as `"蟒"`, `"🐍"`, or `"█"`. We have seen that we define strnigs by writing their content between quotes – either double or single quotes. But what if we wanted to define a string which *contains* double quotes? We cannot write
+
+```{python}
+#| error: true
+print("The answer is "42".")
+```
+
+We can see that this does not work and instead produces an error message. But even before we run the code and see the error, we should notice that something looks weird. The text that comes after the second double quote is colored differently because this quote is ending the string. The Python interpreter tries to understand what follows the second quote, but `42"."` is not valid Python code. To make it clear the the second quote is *part of* the string rather than ending it, we can put a backslash (`\`) in front of quotes inside the string like so.
+
+```{python}
+#| lst-label: lst-appendix-c-pyton-escaping-quotes
+#| lst-cap: Resolving the problem of quotes inside a stirng by adding a backslash.
+print("The answer is \"42\".")
+```
+
+Of course we could also have simply enclosed the string in a type of quotes which avoids the problem alltogether, as in the following example.
+
+```{python}
+print('The answer is "42".')  # string in single quotes
+```
+
+A very important character is the newline character, which separates two lines. The easiest way to insert a line break, is to type `\n`. (Windows users might want to use `\r\n` instead of `\n`.) As with `\"` in @lst-appendix-c-pyton-escaping-quotes, the backslash and the letter `n` together form a single character. So, to draw two rows with five cells each, we could do the following.
+
+```{python}
+#| lst-label: lst-appendix-c-pyton-newline
+#| lst-cap: Using a newline character (`\n`).
+grid = "█░░█░\n██░░█"
+print(grid)
+```
+
+Just pressing the enter key instead of typing `\n` would not have worked here, as we see in the following example.
+
+```{python}
+#| error: true
+#| lst-label: lst-appendix-c-pyton-string-must-end-on-same-line
+#| lst-cap: The wrong way of adding a newline.
+grid = "█░░█░
+██░░█"
+```
+
+As explained by the error message, Python is expecting the string to end in the first line. To tell Python that the current expression continues on the next line, we can add a backslash to the very end of the line like so.
+
+```{python}
+#| lst-label: lst-appendix-c-pyton-line-continuation
+#| lst-cap: Line continuation using a backslash (`\`).
+grid = "█░░█░\
+██░░█"
+print(grid)
+```
+
+This code runs, but as we can see the result does not contain a line break. This is because we did not insert `\n`. With all the special meanings of a backslash (e.g., `\"` in @lst-appendix-c-pyton-escaping-quotes, `\n` in @lst-appendix-c-pyton-newline, and `\` in @lst-appendix-c-pyton-line-continuation), you may wonder how we can represent a backslash in a string. The answer is to use another backslash.
+
+```{python}
+print("To write a \\, we need to write \\\\.")
+```
+
+#### String concatenation {#sec-appendix-c-pyton-string-concat}
+
+Strings are very powerful, because they allow us to perform many types of operations. One operation is to glue two strings together. This is performed using the `+` operator.
+
+```{python}
+row_1 = "█░░█░"
+row_2 = "██░░█"
+print(row_1 + "\n" + row_2)
+```
+
+We call this operation *concatenation*. Note that when concatenating string literals (that is, no variables are involved), we can leave out the `+` operator.
+
+```{python}
+print("█░░█░"   "\n"   "██░░█")
+```
+
+Now you may ask: "Why would I ever concatenate string literals?" After all, we could have written the above string as one by typing `"█░░█░\n██░░█"`. This is true, but splitting a string into separate parts allows us to write each part of a string on its own line, which can make the code easier to read. In our example it shows the pattern of the cell grid more clearly.
+
+```{python}
+#| lst-label: lst-appendix-c-pyton-implicit-line-continuation-and-string-concatenation
+#| lst-cap: Spreading string literals over multiple lines.
+print("█░░█░\n"
+      "██░░█")
+```
+
+Now you may wonder, why we can spread this piece of code across two lines, while @lst-appendix-c-pyton-line-continuation showed that this is not possible. It was not possible in @lst-appendix-c-pyton-line-continuation because we need to end a string on the same line it begins<!-- (see @sec-appendix-c-python-multiline-strings for the exception to this rule)-->. This is one requirement, but it's not enough as the following example shows.
+
+```{python}
+#| error: true
+grid = "█░░█░\n"
+       "██░░█"
+print(grid)
+```
+
+Instead of a grid we see an error message. This is because Python assigns `"█░░█░\n"` to the `grid` variable. Only after the assignment does it look at the next line and there, it sees a string which is indented by a few space characters. This is not allowed, as we know from @sec-appendix-c-python-indentation. To make Python consider the first two lines of code for the assignment, we need to tell it that the expression in the first line continues on the next line. We can achieve this by adding a backslash (`\`) to the end of the first line (as we did in @lst-appendix-c-pyton-line-continuation). Another way is to enclose what needs to be continued in parentheses (`()`).
+
+```{python}
+grid = (
+    "█░░█░\n"
+    "██░░█"
+)
+print(grid)
+```
+
+Now Python will continue reading the current expression until it sees the closing parenthesis. In between parentheses, indentation does not matter at all. Personally, I like to add indentation to emphasize that the indented code is part of a statement that started earlier. The parentheses are also the reason why @lst-appendix-c-pyton-implicit-line-continuation-and-string-concatenation worked. The official Python style guide[^p99-appendix-c-python-1] recommends parentheses over the backslash for continuing a statement on the next line.
+
+[^p99-appendix-c-python-1]: You can find PEP 8, the official Python style guide, at <https://peps.python.org/pep-0008/>. You don't have to study the style guide, though, as this document is difficult to read for beginning Python programmers. Many programmers simply use a tool which takes care of formatting the code such that it conforms to PEP 8.
+
+#### Multi-Line Strings
+
+Usually, strings have to start and end on the same line, as we have seen in the error message of @lst-appendix-c-pyton-string-must-end-on-same-line. And usually, newline characters must be written as `\n`. There is, however, an exception to these rules: multi-line strings. By repeating single or double quotes for three times, we tell Python that we want to type a string which may spread over multiple lines. In such strings, we can simply press enter for a new line instead of typing `\n`.
+
+```{python}
+grid = """█░░█░
+██░░█"""
+print(grid)
+```
+
+#### f-Strings {#sec-appendix-c-pyton-f-string}
+
+One of the coolest string features in Python is that we can insert variables directly in a string.
+
+```{python}
+#| lst-label: lst-appendix-c-pyton-f-string
+#| lst-cap: Pasting the contents of a variable into an f-string.
+row_1 = "█░░█░"
+row_2 = "██░░█"
+print(f"{row_1}\n{row_2}")
+```
+
+For this to work, we have to start the string (before the initial quote) with an `f`. The value of a variable is inserted whenever we enclose the variable name by curly braces (`{}`) inside the f-string. In the example above, the f-string separates two variables with a newline character. Laying out the content of variables within a string is also called *formatting*. This is what the f in f-string stands for.
+
+#### Calculations
+
+OK, let's move to the next operation. Aren't computers supposed to perform calculations? Yes, they are! So let's try to sum a cell's neighbors. The leftmost cell in the second row in @lst-appendix-c-pyton-f-string has one neighbor in the first row and another neighbor in the second row. Let's add the neighbors of these two rows.
+
+```{python}
+print("1 + 1")
+```
+
+Oh right, printing a string just shows its content. 😅️ Let's try something else.
+
+```{python}
+print("1" + "1")
+```
+
+Yikes! 😬️ The plus operator concatenates strings, but does not calculate the sum. How shall we do math then? Strings don't seem to help here. We need a different data type!
+
+### Numbers
+
+#### Integers
+
+Working with numbers is easy in Python. Let's try to perform the calculation where strings failed us.
+
+```{python}
+print(1 + 1)
+```
+
+So we just need to write the numbers we want to use without any quotes. The data type for representing whole numbers (that is, numbers without a decimal point) is called *integer* or `int`.
+
+```{python}
+type(1 + 1)
+```
+
+#### Floats
+
+We are not restricted to perform calculations with whole numbers. Python understands decimal numbers just fine.
+
+```{python}
+#| lst-label: lst-appendix-c-python-using-integers
+#| lst-cap: Working with whole numbers
+1.0 + 1.0
+```
+
+Such numbers are called *floating point numbers* or `float`.
+
+```{python}
+type(1.5)
+```
+
+When using such numbers we need to consider that we are working with a computer. Internally, computers are working with binary numbers. Thus, our machines are able to exactly represent fractions involving 1/2, 1/4, 1/8, 1/16, and so on.
+
+```{python}
+0.25 + 0.25 + 0.25 + 0.25
+```
+
+Other fractions cannot be represented exactly and may lead to rounding errors.
+
+```{python}
+0.1 + 0.2
+```
+
+### `None`
+
+Some expressions lack a real value. One example is `print("█░░█░")`. This expression outputs the string within its parentheses, but does not really have a value itself. Or to be more precise, such expressions have a very special value: `None`. This value can, for instance, be used to represent missing data. `None` is so important that it has a its own dedicated data type.
+
+```{python}
+type(None)
+```
+
+Note that JupyterLab doesn't treat `None` in the same way as other values. For instance, if a cell's last expression evaluates to a number, the cell's result is displayed below the cell. An example for this behavior is @lst-appendix-c-python-using-integers. However, if a cell's last expression evaluates to `None`, Jupyter does not display it as the cell's result.
+
+```{python}
+None  # None will not be displayed below the cell
+```
+
+To check whether an expression is `None` we type the expression followed by `is None`.
+
+```{python}
+print("█░░█░") is None
+```
+
+As usual, the `print` expression produced some output. Below that output, we see the cell's result; it is `True`. With this English word, Python seems to tell us that the `print` expression indeed evaluates to `None`. Has Python learned the English language? Or is `True` part of this programming language?
+
+### Booleans
+
+#### `True` and `False`
+
+In Python, we can work with the values `True` and `False`. We call them Boolean values and their data type is called `bool` in Python.
+
+```{python}
+type(True)
+```
+
+`True` and `False` are the only two possible values of this data type. In our Game of Life, a cell's state can also have only one of two possible values at any point in time. Hence, Boolean values are almost an obvious choice for representing a cell's state within our program. `True` means that a cell is filled, whereas `False` indicates that a cell is empty. Boolean values will even allow us to count filled cells. To calculate how many Boolean values are `True`, we just sum them.
+
+```{python}
+True + False + True
+```
+
+The result is an integer. In this example there are two `True` values, which we would interpret as two filled cells.
+
+#### Relational Operators
+
+##### Equality
+
+Remember that an unfilled cell only comes to life if it has exactly three neighbors. For instance, let's assume that the neighbor count of a particular empty cell is `5`. How can we check whether this value is equal to three? For such a comparison, Python provides the equality operator (`==`).
+
+```{python}
+5 == 3
+```
+
+As we can see, the result is a Boolean value. Unfortunately, it is super-easy to confuse the equality operator (`==`) with the assignment operator (`=`). Don't do that! It might prevent your code from working.
+
+```{python}
+#| lst-label: lst-appendix-c-python-impossible-assignment-to-literal
+#| lst-cap: Error when trying to compare two numbers with the assignment operator (`=`) instead of the equality operator (`==`).
+#| error: true
+5 = 3
+```
+
+Again, the error message is here to save the day! With `cannot assign to literal`, it contains the problem description: We can assign values to variables, but we cannot assign a value to a literal value (a five is a five and we can't turn it into a three). The error message's second half (`Maybe you meant '==' instead of '='?`) is even more awesome, because it tells us how to solve the issue.
+
+The worst thing that can happen when we make a mistake is that we don't get an error message at all. Let's look at the following example where we again assume a neighbor count of five. This time, however, the value of five is used via a variable rather than a literal.
+
+```{python}
+#| lst-label: lst-appendix-c-python-unnoticed-assignment-instead-of-comparison
+#| lst-cap: Unfortunately, we don't get an error message when trying to compare a variable to a number using the assignment operator `=` instead of equality operator `==`.
+n_neighbors = 5
+n_neighbors = 3  # Oh no! We wanted to campare.
+```
+
+In the code cell above, we use the wrong operator when comparing the variable `n_neighbors` to three. What will happen? This time, we don't get an error! As we already know from @lst-appendix-c-python-reassigning-a-variable, it is legal to assign a new value to a variable. So Python has no way of knowing that we actually wanted to compare two values! The absence of an error message might give us a false sense of security. But now that the number of neighbors is overwritten with a `3`, all following calculations involving the neighbor count will probably be wrong! The best solution to spot such hidden problems is to test our code thoroughly.
+
+<!-- ::: {.alert .alert-danger}
+TODO? Maybe add a chapter on testing.
+::: -->
+
+Before moving on, let's fix the code in @lst-appendix-c-python-unnoticed-assignment-instead-of-comparison.
+
+```{python}
+n_neighbors = 5
+n_neighbors == 3  # Now we really have a comparison.
+```
+
+##### Inequality
+
+OK, we are able to check for equality. How about inequality? For this, Python provides the inequality operator (`!=`). Let's see it in action.
+
+```{python}
+n_neighbors = 5
+n_neighbors != 3
+```
+
+Similarly, we can check whether a value is
+
+-   less than (`<`),
+-   less than or equal to (`<=`),
+-   greater than (`>`), or
+-   greater than or equal to (`>=`)
+
+another value. Remember that a filled cell only remains filled if the number of its neighbors is either two or three. In other words, the neighbor count must be greater than or equal to two and less than or equal to three. Let's check the former condition.
+
+```{python}
+n_neighbors = 5
+n_neighbors >= 2
+```
+
+A really cool feature of Python is that we can use these relational operators to compare a number to both a lower and an upper bound of an interval – in a single expression. Let's combine both comparisons we need to determine whether a cell will remain filled.
+
+```{python}
+n_neighbors = 5
+2 <= n_neighbors <= 3
+```
+
+#### Logical Operators
+
+##### `not`
+
+As with numbers, we can perform operations on Boolean values. For instance, we can negate a Boolean value (that is, calculate the opposite value) using the `not` operator.
+
+```{python}
+n_neighbors = 5
+not (n_neighbors < 2)
+```
+
+##### `or`
+
+A filled cell in the Game of Life becomes empty, if it has
+
+-   less than two *or*
+-   more than three neighbors.
+
+So if any of these two conditions is fulfilled, the cell vanishes. To check whether at least one of two Boolean values is `True` we combine them with the `or` operator.
+
+```{python}
+n_neighbors = 5
+(n_neighbors < 2) or (n_neighbors > 3)
+```
+
+##### `and`
+
+To remain filled, a filled cell needs to have at least two *and* no more than three neighbors. For checking whether both of two Boolean values are `True`, we use Python's `and` operator.
+
+```{python}
+n_neighbors = 3
+(n_neighbors >= 2) and (n_neighbors <= 3)
+```
+
+### Lists
+
+With a string, we can represent the status of a particular cell (`"█"` or `"░"`). With a number, we can represent the neighbor count of a particular cell. That's nice, but what if we are dealing with *many* cells? Having a separate variable for each cell's status and neighbor count would make our program not only a pain to write, but also unreadable! Is there a way combine data of multiple entities? Enter lists.
+
+A list is a sequence of values. In the following snippet, we define a list of cell statuses using square brackets `[]`, separating individual values with a comma.
+
+```{python}
+cells = ["█", "░", "░", "█", "░"]
+```
+
+We could store our cells in this way, but this format is not very flexible. Image what would happen if we later decided to change `"█"` and `"░"` to `"🐼️"` and `" "`, respectively. This would mean that we have to search for all occurrences of `"█"` and `"░"` and perform the change. This is painful and error-prone. Hence, we want to represent the internal state of our program in a more abstract way. Let's use Boolean values! A filled cell is represented as `True`, whereas `False` indicates an empty cell.
+
+```{python}
+#| lst-label: lst-appendix-c-python-cell-row-as-list
+#| lst-cap: Status of cells stored as a list of Boolean values.
+cells = [True, False, False, True, False]
+```
+
+When defining state this way, we only have to deal with `"█"` and `"░"` in the code responsible for printing the grid. Replacing `"█"` with `"🐼️"` then only needs to happen in one single place. This simplifies experimenting with different emojis and other characters to find the most appealing style.
+
+Note that all the list elements in @lst-appendix-c-python-cell-row-as-list share the same data type. However, this is not required. When using lists, we can combine values with different data types. For instance, we could represent a single cell as a list of two values: the status (of type `bool`) and the neighbor count (of type `int`).
+
+```{python}
+cell = [True, 0]
+```
+
+To keep things simple, we will focus only on cells' status for now. In @lst-appendix-c-python-cell-row-as-list, we stored a single row of cells in a list. But in the Game of Life there will usually be multiple rows in the grid. Let's say we need to store the rows in the following cell.
+
+```{python}
+#   [True, False, False, True, False]
+#   [False, True, False, False, True]
+#   [False, False, True, False, False]
+#   [True, False, False, True, False]
+```
+
+How can we combine these rows? We put them into a list!
+
+```{python}
+#| lst-label: lst-appendix-c-python-2d-list
+#| lst-cap: Defining a grid as list of rows where each row is a list of Boolean values.
+cells = [
+    [True, False, False, True, False],
+    [False, True, False, False, True],
+    [False, False, True, False, False],
+    [True, True, False, True, True]
+]
+```
+
+This means, we have a list of lists! 🤯️
+
+You might have wondered why we are storing the game's state inside a list instead of using a string. The two-dimensional list in @lst-appendix-c-python-2d-list has one clear advantage over a long string when it comes to storing the cells' statuses: The two-dimensional list offers a simple way to access a specific cell's status using its row and column in the grid. But speaking of accessing a specific list element, how does this even work?
+
+#### Accessing Elements
+
+##### Indexing – the Usual Way
+
+We can access a list element using its position in the list. We write this position in square brackets immediately after the list as in the following snippet.
+
+```{python}
+#| lst-label: lst-appendix-c-python-index-second-list-element
+#| lst-cap: Accessing the element with index `1`.
+cells = [True, False, False, True, False]
+cells[1]
+```
+
+Here we access the element at position `1`. The first element in the `cells` list is `True`, but we got `False` as a result. Is our computer broken? 🤔️ No, everything's fine because `1` does not refer to the first element in the list, but the second! This is because the position of the first element is `0`. Let's verify this!
+
+```{python}
+#| lst-label: lst-appendix-c-python-index-first-list-element
+#| lst-cap: Accessing the element with index `0`.
+cells = [True, False, False, True, False]
+cells[0]
+```
+
+Note that programmers usually call the position in a sequence an *index*. Starting to count at index `0` may take some getting used to. Maybe it helps to think of the index differently; An index specifies an element's offset from the start of the list. So possible indices for the `cells` list are `0`, `1`, …, `4`. If we tried to access the fifth element using the index `5`, we would be greeted with an error message.
+
+```{python}
+#| lst-label: lst-appendix-c-python-list-index-out-of-range
+#| lst-cap: Trying to access the last element using the wrong index.
+#| error: true
+cells = [True, False, False, True, False]
+cells[5]
+```
+
+This message tells us that the index we used is illegal. This is great, as it gives us the opportunity to fix our mistake. However, when we tried accessing the first element using the wrong index in @lst-appendix-c-python-index-second-list-element, Python did not warn us. This is because the index we used there is perfectly fine. Python cannot know that we actually wanted to index first element instead of the second. This shows how important it is to get indexing right.
+
+##### Indexing from the Back
+
+To prevent the error in @lst-appendix-c-python-list-index-out-of-range, it would be easiest to provide an index counting from the back of the list. Python can do that! The last element cannot have index `0` because we learned that this index refers to the first list element. We can refer to the last element using the index `-1`, the second to last element by using the index `-2`, and so on.
+
+```{python}
+cells = [True, False, False, True, False]
+print(cells[-1])
+print(cells[-2])
+```
+
+##### Indexing in 2-Dimensional Lists
+
+Recall that the grid is a list of lists. Let's try to access the grid's elements. What happens if we access the grid's element with index `0`?
+
+```{python}
+cells = [
+    [True, False, False, True, False],
+    [False, True, False, False, True],
+    [False, False, True, False, False],
+    [True, True, False, True, True]
+]
+
+cells[0]
+```
+
+We get the first element! But this first element is again a list and represents the topmost row. So to get the state of the cell in the upper left corner of the grid, we have to index the row.
+
+```{python}
+first_row = cells[0]
+first_row[0]  # first cell in first row
+```
+
+Indexing the row and then the column can be done in the same line of code. Let's try this when accessing the state of the second row and third column.
+
+::: callout-note
+Recall that the second row has index `1` and the third column has index `2` because indices start from `0` instead of `1`.
+:::
+
+```{python}
+cells[1][2]  # cell in 2nd row and 3rd column
+```
+
+According to the game's rules, a cell's future solely depends on its neighbors. So let's finally check a cell's neighbors on the grid! We continue to focus on the cell in the second row and the third column. How many live neighbors does it have?
+
+```{python}
+#| lst-label: lst-appendix-c-python-count-neighbors-of-cell-1-2
+#| lst-cap: Counting the neighbors of the cell in second row and the third column.
+row = 1  # second row
+column = 2  # third column
+
+neighbors_above = (
+    cells[row - 1][column - 1] + # above & left
+    cells[row - 1][column] +     # above
+    cells[row - 1][column + 1]   # above & right
+)
+neighbors_same_row = (
+    cells[row][column - 1] +     # left
+    cells[row][column + 1]       # right
+)
+neighbors_below = (
+    cells[row + 1][column - 1] + # below & left
+    cells[row + 1][column] +     # below
+    cells[row + 1][column + 1]   # below & right
+)
+n_neighbors = (
+  neighbors_above +
+  neighbors_same_row +
+  neighbors_below
+)
+
+print(f"The number of live neighbors is {n_neighbors}.")
+```
+
+Here, summing individual neighbors (as in the calculation of `neighbors_above`) was performed within parentheses (`()`) to be able to spread the code over multiple lines. For printing the result of @lst-appendix-c-python-count-neighbors-of-cell-1-2, we used an f-string (see @sec-appendix-c-pyton-f-string). The code – especially adding specific cells – may look tedious to write, but hopefully it's not hard to understand.
+
+#### Length of a List
+
+In @lst-appendix-c-python-count-neighbors-of-cell-1-2, we checked eight neighbors of a cell. However, cells on the egdges and corners of the grid don't have that many neighbors! So before counting a cell's filled neighbors, we need to know whether the cell is located on the border of the grid. To this end, we are using a cell's row and column index. If a cell's row index is `0`, then we know that there are no cells above it.
+
+But how do we know from a row index whether the corresponding cell is at the bottom of the grid? For this, we need to know the total number of rows or in other words, the length of the `cells` list in @lst-appendix-c-python-2d-list. Python will give us the number of list elements when using `len` as follows.
+
+```{python}
+len(cells)
+```
+
+So we are writing `len` followed by parentheses enclosing the actual list. The result is the number of rows in our grid. To get the number of columns, we need to ask for the length of a single row. Let's use the first row for that.
+
+::: {.callout-note title="Can you remember how to get the first row of the `cells` list?" collapse="true"}
+`cells[0]`
+:::
+
+Again we use `len` to get the length of a list. This time, the list represents a single row of the grid.
+
+```{python}
+len(cells[0])
+```
+
+As we can see, Python gives us the correct number of columns.
+
+<!-- <div class="alert alert-danger">TODO? Operator precedence</div> -->
+
+## Conditionals
+
+### `if`
+
+We've covered a lot of ground so far! We can represent a grid of cells as Boolean values and we know how to check the conditions determining the evolution of the game. Now it's time to make decisions based on these conditions!
+
+A filled cell requires two or three filled neighbors to remain unchanged. How can we act on the neighbors' states? We use Python's `if` statement. Let's say the number of filled neighbors is stored in the variable `n_neighbors` and we print some text if the requirement is fulfilled.
+
+```{python}
+n_neighbors = 2
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+```
+
+OK, we see the text, but would it have appeared if `n_neighbors` had been different?
+
+```{python}
+n_neighbors = 5
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+```
+
+Wow! The `if` statement evaluates the condition between the `if` and the colon (`:`). If the condition is `True`, then the indented code below the `if` will be executed. If the condition is `False`, then the indented code is not run. Please note that the code to be run based on the condition must be indented! If we forget the indentation, Python will provide us with a helpful error message.
+
+```{python}
+#| error: true
+n_neighbors = 2
+if 2 <= n_neighbors <= 3:
+print("Stayin' alive")
+```
+
+We are not restricted to a single line of code that is executed conditionally. We can also instruct the computer to perform multiple actions in case the `if` condition is fulfilled. The code describing all these actions must be indented in the same way. In the following example, we have two `print`s indented by four spaces and one `print` without indentation. What will happen?
+
+```{python}
+n_neighbors = 2
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+    print("This is also executed only in case "
+          "the condition is fulfilled.")
+print("This will always print.")
+```
+
+Python executed all three occurrences of `print`. Let's try the same with a condition which evaluates to `False`.
+
+```{python}
+n_neighbors = 5
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+    print("This is also executed only in case "
+          "the condition is fulfilled.")
+print("This will always print.")
+```
+
+Now, only the last `print` is run! So all the indented code belongs to the `if` statement and is only executed if the condition is `True`.
+
+As a general rule in Python, we always indent a block of code which follows a colon. This also makes it easy to see that both indented `print` statements above belong to the same `if`. The third `print`, however, does not belong to the `if` statement and is thus run independently of the neighbor count.
+
+::: callout-note
+A condition in an `if` statement may also be of some data type other than `bool`.
+
+-   `int`: `0` is considered falsy, any other integer is truthy.
+-   `float`: `0.0` is considered falsy, any other floating point number is truthy.
+-   `str`: An empty string is considered falsy, any other string is truthy.
+-   `list`: An empty list is considered falsy, any other list is truthy.
+-   `NoneType`: `None` is considered falsy.
+:::
+
+### `if - else`
+
+So far, we've used the `if` statement to react to a fulfilled condition. In case the condition was flasy, we didn't do anything. Is there a way to react to a falsy condition? Yes, we add an `else` statement like so:
+
+```{python}
+#| lst-label: lst-appendix-c-python-if-else
+#| lst-cap: The `if` statement with an `else` branch.
+n_neighbors = 5
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+else:
+    print("Bye, bye, bye!")
+```
+
+As we can see, `else` is written with the same level of indentation as the `if`. (In the snippet above, none of them is indented.) We also add a colon after `else` and indent the block of code that follows. This code block will only run if the `if` statement's condition is falsy.
+
+### `if - elif`
+
+What if we wanted to run the `else` code block only if some condition is met (of course, a different condition than in the `if` part). Let's say we wanted to keep the `if` condition from before, but only print something in the `else` block if the neighbor count was less than two. We could do the following.
+
+```{python}
+n_neighbors = 1
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+else:
+    if n_neighbors < 2:
+        print("Solitude")
+```
+
+Here, the `else` block is executed because the number of neighbors is not two or three. Inside the `else` block, the condition `n_neighbors < 2` is checked and since it's `True`, the last line of code is run. Nice. Python offers an even nicer way to write this code, though. We can combine the `else` and the `if` to `elif`.
+
+```{python}
+n_neighbors = 1
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+elif n_neighbors < 2:
+    print("Solitude")
+```
+
+What will the code above do if we change `n_neighbors` to `5`? Try it out! 🙂️
+
+What if we wanted to treat yet another case separately? Say we wanted to print different messages for a neighbor count of `0` and `1`. How could we achieve that? We can have an `elif` branch for each additional condition.
+
+```{python}
+n_neighbors = 1
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+elif n_neighbors == 0:
+    print("Solitude")
+elif n_neighbors == 1:
+    print("Just the two of us")
+```
+
+### `if - elif - else`
+
+The `if` statement above doesn't cover the case `n_neighbors > 3` yet. Let's change that.
+
+```{python}
+#| lst-label: lst-appendix-c-python-redundant-elif-condition
+#| lst-cap: Adding an `elif` for the remaining case of many neighbors.
+n_neighbors = 5
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+elif n_neighbors == 0:
+    print("Solitude")
+elif n_neighbors == 1:
+    print("Just the two of us")
+elif n_neighbors > 3:
+    print("Big City Life")
+```
+
+Adding the `elif` for more than three filled neighbors works, but the condition is kinda unnecessary. Think of it this way: If Python reaches the last `elif` in @lst-appendix-c-python-redundant-elif-condition, then only because the conditions before it were falsy. So in the last `elif` branch, we already know that `n_neighbors` is not `2`, `3`, `0`, or `1`. Thus, the variable must be greater than three because it also can't be less than zero (assuming that we didn't mess up our neighbor calculation). So conditioning the last `print` to the number of filled neighbors is redundant.
+
+Let's get rid of this condition and without the condition we don't use `elif` anymore. (No `if` without a condition!) As in @lst-appendix-c-python-if-else, we use `else` for the branch that should run in case no previous condition is met.
+
+```{python}
+#| lst-label: lst-appendix-c-python-redundant-elif-condition
+#| lst-cap: Adding an `elif` for the remaining case of many neighbors.
+n_neighbors = 5
+if 2 <= n_neighbors <= 3:
+    print("Stayin' alive")
+elif n_neighbors == 0:
+    print("Solitude")
+elif n_neighbors == 1:
+    print("Just the two of us")
+else:
+    print("Big City Life")
+```
+
+### Conditional Expression (`A if CONDITION else B`)
+
+Let's finally print a cell based on its state 😃️
+
+```{python}
+#| lst-label: lst-appendix-c-python-four-line-if-instead-of-one-liner
+#| lst-cap: Printing the a cell's state.
+cell = True
+if cell:
+    print("█")
+else:
+    print("░")
+```
+
+This works, but four lines of code in the `if` statement seems rather long for outputting a single character. This character is the only thing that differs between the `if` and the `else` branch in @lst-appendix-c-python-four-line-if-instead-of-one-liner. Python offers *conditional expressions* to shorten the code above.
+
+```{python}
+#| lst-label: lst-appendix-c-python-conditional-expression
+#| lst-cap: Using a conditional expression to obtain the correct character for representing a cell.
+cell = True
+symbol = "█" if cell else "░"
+print(symbol)
+```
+
+Here, we assign the desired character to the variable `symbol` based on the variable `cell`. If `cell` is truthy, then `symbol` will become `"█"`, otherwise it will become `"░"`. Actually, we don't even need the variable `symbol`. We can directly print the conditional expression and the corresponding symbol will be printed.
+
+```{python}
+cell = True
+print("█" if cell else "░")
+
+cell = False
+print("█" if cell else "░")
+```
+
+
+
+## Loops
+
+So we know how to print a specific cell. Great! How about printing *all* cells? To start simple, we'll focus on a single row at first.
+
+```{python}
+cells = [True, False]
+```
+
+We could print each cell by writing a dedicated line of code.
+
+```{python}
+print("█" if cells[0] else "░")
+print("█" if cells[1] else "░")
+```
+
+::: {.callout-note}
+You may have noticed that the cells don't display as a row, but rather look like a column. We won't bother about orientation of our output for now and fix it in the next section. So for now, let's focus on the fact that we were able to print all cells.
+:::
+
+There are two problems with this approach.
+
+1. With a large grid of cells, we would have to write many lines of code to display the grid. That's tedious and makes the program difficult to read. 😬️
+2. In case we want to change the grid size in our program, we would also have to adapt the code for printing. That's even worse! 😩️
+
+So instead of repeatedly typing code for printing a cell, we would like Python to repeat the printing automatically for each cell in our grid. Repeatedly running over a block of code is also called a *loop* and there are two kinds of loops in Python: the `for` loop and the `while` loop.
+
+### `for` Loop
+
+So we would like to write code that automatically steps through all cells. In our case, this means that Python should automatically go through all elements in the list of cells. Fortunately, Python can do this – with the `for` loop. Look at this!
+
+```{python}
+#| lst-label: lst-appendix-c-python-for-loop
+#| lst-cap: A for loop and another line of code after the for loop.
+for cell in cells:
+    print("█" if cell else "░")
+print("Done.")
+```
+
+Wow! What did just happen?
+
+The first line in the `for` statement translates to (and almost reads like) the English sentence "For each cell in the list of cells do something". This *something* is then specified in the indented block of code following the colon. So the `for` statement allows us to step through a list one element at a time. To be able to use the current list element, we give it a name. This is what we do immediately after writing `for`. So in our case, the current list element is called `cell`. Next, we have to tell Python from which list it should take the elements. This is what comes between `in` and the colon (`:`). After the colon, we write an indented block of code consisting of one or more lines of code. This block of code will be executed repeatedly – once with each list element as the current element.
+
+In @lst-appendix-c-python-for-loop, we print repeatedly. In the first step, the variable `cell` is the first element of the list `cells`. So we print the first cell in the indented line of code. In the second step, the variable `cell` becomes the second element of `cells`. So the indented line of code prints the second cell. After that, the `for` loop ends, since there are no more elements in the list `cells`. Code execution continues below the `for` statement, which is why we see the text `Done.` in the output.
+
+
+<!--
+#### looping over a 2-dimensional grid
+
+(verschachtelte for Schleife)
+
+#### Berechnung der Nachbarn im Loop
+
+Oh nein! Das funktioniert nicht, weil wir den Index dafür benötigen würden! Also machen wir händisch eine Liste mit allen Indices.
+
+### `while`
+
+Machen wir die Liste aller Indices jetzt automatisch. (Dazu sollte ich sicherstellen, dass ich bei Datentypen erklärt habe, was + mit zwei Listen macht, nämlich zusammenfügen)
+
+Motivation: man möchte das Spiel automatisch wiederholen, bis es aufhört. (Alternatives Horrorszenario: Code für jeden Timestep duplizieren. Dann würde das Spiel aber nach einer fixen Anzahl von Runden enden.)
+
+### `break`
+
+### `continue`
+
+## Functions
+
+### Parameters
+
+#### Multiple Parameters
+
+`print("hello", "world")`
+
+#### Keyword Parameters
+
+`print("hello", "world", sep=", ")`
+
+`print("hello", "world", sep=", ", end=" my program said")`
+
+#### Defining our own Functions
+
+#### `return`
+
+
+## Also Important
+
+### OOP
+
+### The real power of Strings
+
+#### Searching for a Substring
+
+##### … at the start or end of a string
+
+##### … anywhere in a string
+
+#### Splitting a string
+
+#### Converting to lower-case or upper-case
+
+### The real power of Lists
+
+#### Adding Elements to Lists
+
+Can we add values from such a collection of data?
+
+#### Deleting Elements from Lists
+
+Can we remove values from such a collection of data?
+
+#### List Comprehensions
+
+#### Slicing
+
+??? (seems deleted unfortunately) but also has some advantages, once we consider slices. Slices allow us to access a sublist between two indices. For example, let's take the first, second and third list element.
+
+```{python}
+cells = [True, False, False, True, False]
+cells[0:3]
+```
+
+In this example, we form a sublist starting at index `0` and ranging to the index `3` minus one. Again, this sounds very
+
+### Tuples
+
+### Sets
+
+### Dictionaries
+
+### `lambda` Functions
+
+## Playing the Game of Life
+
+Now let's talk about how to play the Game of Life. At this point, I have to tell you that with all interactions between cells implemented, we are actually already done. There are no interactions between the cells and players, as the Game of Life is a zero-player game.
+OK, game might be the wrong term, as it is a zero-player game.
+
+<div class="alert alert-danger">
+TODO: Remove this last section!
+</div>
+-->

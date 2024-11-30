@@ -37,6 +37,8 @@ book:
   appendices:
     - p99-appendix-a-installation.qmd
     # - p99-appendix-b-jupyterlab.qmd
+    - p99-appendix-c-python.qmd
+    # - p99-appendix-d-numpy.qmd
 
 bibliography: references.bib
 
