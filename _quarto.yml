@@ -4,6 +4,89 @@ project:
     port: 4848
     browser: false
 
+# 3
+
+# 3.5
+
+# - 
+# 4
+
+
+# 5
+# .loc[] & .iloc[]
+#   - reading elements
+#   - setting elements
+
+# 6
+# - Aggregations
+#   - .any(), .all()
+#   - .sum(), .min(), .max(), .mean(), …
+#   - .count(), .nunique()
+#   - len()
+
+
+# 7
+# Advanced operations
+# - 6.2 Count Values
+#   - sort=False
+#   - normalize=True
+# - 6.3 Sorting
+# - 6.4 Smallest/Largest Entries
+
+# ??? dtypes in depth, finding/filling/dropping <NA>/np.nan/pd.NaT values ???
+# - fillna vs replace
+#   - fillna works with np.nan/pd.NaT as well as the <NA> of some data types
+#   - fillna() is easier to read than replace(np.nan/pd.NaT/<NA>, ...)
+#   - replace() can replace non-NA/NaN/NaT values that someone put there because they, for example, thought that
+#     a missing value should be represented by, for example, 0 or "" or "missing"
+# ??? IO (reading from CSV, saving to CSV, …) ???
+
+# 8
+# Visualization
+
+# 9
+# DataFrame
+# - constructing
+# - head()/sample()
+# - shape
+# - count() ?
+# - dtypes
+# - info()
+# - describe()
+
+# 10
+# - .columns
+# - .rename() (e.g., to remove spaces in column names)
+#   - using a dict
+#   - using a (lambda) function
+
+# 11
+# - loc[], ilo[]
+# - [colname] and .colname to access columns
+# - reorder columns to have target at the left or right edge of the table and to keep similar columns close as in:
+# newcolorder = ['studentid', 'gradeperiod1',
+# ...   'gradeperiod2','gradeperiod3', 'school',
+# ...   'sex', 'age', 'famsize','mothereducation',
+# ...   'fathereducation', 'traveltime',
+# ...   'studytime', 'freetime', 'failures',
+# ...   'famrel','goout']
+# studentmath = studentmath[newcolorder]
+
+
+
+# 12
+# - apply a function to multiple columns: apply(pd.Series.value_counts, sort=False, normalize=True)
+
+# 13
+# .merge()
+
+# 14
+# .groupby()
+
+# 15
+# storing
+
+
 book:
   title: "`import pandas`"
   subtitle: "In Small Steps to Big Data Understanding"
@@ -25,18 +108,47 @@ book:
   # repo-actions: edit,source,issue
   chapters:
     - index.qmd
-    - part: "Introduction" # p1_intro.qmd [TODO: add back file instead of mere title]
+    - part: "Introduction"
       chapters:
-        #      - p1-1_intro.qmd
-        - p1-2_series_basics.qmd
-        # - p1-3_series_advanced.qmd
-  #      - p1-4_df.qmd
+        - p1-a_getting_started.qmd
+        - p1-b_data.qmd
+    - part: "`Series` – the Foundation of Pandas" # p1_intro.qmd [TODO: add back file instead of mere title]
+      chapters:
+        - p2-a_series_construction.qmd
+        - p2-b_series_sampling.qmd
+    - part: "`dtype`"
+      chapters:
+        - p3-a_dtypes_numeric.qmd
+        - p3-b_dtypes_string.qmd
+        - p3-c_dtypes_more.qmd
+    - part: "Elementwise Operations with Series"
+      chapters:
+        - p4-a_elementwise_operations_with_map.qmd
+        - p4-b_elementwise_operations_with_arithmetic_operators.qmd
+        - p4-c_elementwise_operations_with_relational_operators.qmd
+        - p4-d_elementwise_operations_with_logical_operators.qmd
+        - p4-e_elementwise_operations_with_isin_and_isna.qmd
+    - part: "Indexing a Series"
+      chapters:
+        - p5-a_series_indexing_label_and_position.qmd
+        - p5-b_series_indexing_boolean_series.qmd
+        - p5-c_series_indexing_setting_values.qmd
+    - part: "Advanced Series Operations"
+      chapters:
+        - p6-xxx_advanced_topics_missing_values.qmd
+        - p6-xxx_advanced_topics_changing_the_dtype.qmd
+        - p6-xxx_advanced_topics_string_operations.qmd
+        - p1-5_series_advanced.qmd
+        - p1-6_series_dtypes.qmd
+    - part: "Visualization"
+    - part: "`DataFrame` – Pandas' Most Important Data Type"
+  #  - p1-4_df.qmd
   #  - part: p2_the_fun_stuff.qmd
   #    chapters:
   #      - p2-1_visualization.qmd
   appendices:
     - p99-appendix-a-installation.qmd
-    # - p99-appendix-b-jupyterlab.qmd
+    - p99-appendix-b-jupyterlab.qmd
     - p99-appendix-c-python.qmd
     # - p99-appendix-d-numpy.qmd
 

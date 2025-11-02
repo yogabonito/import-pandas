@@ -1,0 +1,112 @@
+# Elementwise Operations with Relational Operators {#sec-series-relational-operators}
+
+```{python}
+import pandas as pd
+```
+
+## Relational Operations involving a Series and a Scalar
+
+In the last chapter, we argued that activities cost money with longer activity durations causing more costs. The activity durations are once again stored in the `durations_series` variable.
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+durations_series
+```
+
+We might be interested which activities are the expensive ones. So, let's find those that last for more than one hour. Again, we could use `.map()`,
+
+```{python}
+durations_series.map(lambda minutes: minutes > 60)
+```
+
+but it turns out that we can use relational operators (`==`, `!=`, `<`, `<=`, `>=`, and `>`) with series, leading to a more concise solution.
+
+```{python}
+durations_series > 60
+```
+
+The relational operation is applied to each element in `durations_series`. The returned series has `True` in place of durations longer than one hour and `False` elsewhere. Because only `True` and `False` are present as elements, this series has the dtype `bool` – so we obtained a Boolean series. It turns out that using a relational operator with a series and a scalar always yields a Boolean series. As discussed in @sec-series-boolean-series, such series are very useful.
+
+<!-- TODO: ensure references exist AND make references precise (e.g., prefer sections instead of chapters) -->
+
+Let's check another condition! Which activities involve running?
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+```
+
+To this end, we compare the `activities_series` variable to the string `"run"`.
+
+```{python}
+#| lst-label: lst-series-equality
+#| lst-cap: Checking each element of a series for equality.
+activities_series == "run"
+```
+
+The resulting series has the same index as `activities_series` and its values – `True` or `False` – indicate whether the corresponding value in `activities_series` fulfills the condition of being equal to `"run"`.
+
+## Exercise {#sec-exercise-inequality-operation-with-series-and-scalar}
+
+Try to obtain a Boolean series indicating which activities are *not* running.
+
+```{python}
+#| eval: false
+activities_series  # TODO
+```
+
+You can find the solution in @sec-solution-inequality-operation-with-series-and-scalar.
+
+## Relational Operations involving two Series
+
+As with arithmetic operators, we can put a relational operator between two series. This will compare each element of one series with the corresponding element of the other series. The result is a Boolean series with the results of all comparisons.
+
+## Exercise {#sec-exercise-inequality-operation-with-two-series}
+
+Let's again try to find the long activities. This time, however, let's consider the type of activity when defining what a long activity is. For running, we consider a duration of at least one hour as long. For hiking and cycling, three hours are required to count as a long activity.
+
+```{python}
+#| eval: false
+# TODO
+```
+
+You can find the solution in @sec-solution-inequality-operation-with-two-series.
+
+## Solution to Exercises
+
+### Solution to [Exercise -@sec-exercise-inequality-operation-with-series-and-scalar] {#sec-solution-inequality-operation-with-series-and-scalar}
+
+```{python}
+activities_series != "run"
+```
+
+### Solution to [Exercise -@sec-exercise-inequality-operation-with-two-series] {#sec-solution-inequality-operation-with-two-series}
+
+```{python}
+durations_series >= activities_series.map({
+    "run": 60, "hike": 180, "bike": 180
+})
+```
+
+The first two activities (60 minutes of running and three and a half hours of hiking) are long. Hence, the first values in the result are `True`. The other activities (two hours of cycling and 45 minutes of running) don't qualify as long, so the corresponding values in the result are `False`.
+
+If you have trouble understanding the solution, perform an intermediary step as shown in the following. There, we define a series with the correct threshold for each duration in `durations_series`.
+
+```{python}
+threshold_series = activities_series.map({
+    "run": 60, "hike": 180, "bike": 180
+})
+
+threshold_series
+```
+
+In the next step, we compare `durations_series` with these thresholds.
+
+```{python}
+durations_series >= threshold_series
+```

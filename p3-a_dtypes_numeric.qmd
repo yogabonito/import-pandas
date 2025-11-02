@@ -1,0 +1,55 @@
+# Numeric `dtype`s {#sec-series-numeric-dtypes}
+
+```{python}
+import pandas as pd
+```
+
+The dtype of a series is the data type of its individual values. This data type determines which calculations we can perform, whether missing values can be represented, and how we can plot the data contained in a series.
+
+A series comprising numbers can be used in calculations and may power various kinds of plots.
+
+Many of the dtypes Pandas supports stem from NumPy – a Python package supporting calculations with vectors, matrices, and multidimensional arrays. One of these dtypes,  `int64`, was used in @lst-series-show-durations_series, which we show once again in the following.
+
+```{python}
+durations_series = pd.Series([60, 210, 120, 45])
+
+durations_series
+```
+
+Note that this dtype can only represent whole numbers. An attempt to construct a series holding non-integer numbers would result in a dtype for floating-point numbers, as shown in the following.
+
+```{python}
+pd.Series([60.25, 210, 120, 45.5])
+```
+
+In practice, some activity durations will be unknown, for instance, because no time was measured or because an activity is not finished yet. In NumPy, we can represent missing values as `np.nan` – **n**ot **a** **n**umber. However, since `np.nan` is a floating-point value in NumPy, any attempt to construct a series of integers with `np.nan` values will result in a dtype for floating-point numbers.
+
+```{python}
+import numpy as np
+
+pd.Series([60, 210, np.nan, 45])
+```
+
+The Pandas developers introduced additional dtypes to overcome NumPy's limitations. For instance, they created an integer dtype which uses `pd.NA` – **n**ot **a**vailable – to represent missing values. The name of NumPy's `"int64"` dtype differs from Pandas' nullable integer dtype `"Int64"` only in the first letter. Let's reuse the code from above @............. and enforce Pandas' nullable integer dtype using the `dtype` attribute at initialization.
+
+```{python}
+import numpy as np
+
+pd.Series([60, 210, np.nan, 45],
+    dtype="Int64"
+)
+```
+
+Note that in the code above, we could have written `pd.NA` instead of `np.nan` and we would have obtained the same result.
+
+Even if there were no missing values at initialization time, we could explicitly set the dtype as the nullable integer dtype.
+
+```{python}
+pd.Series(
+    [60, 210, 120, 45],
+    dtype="Int64"
+)
+```
+
+
+

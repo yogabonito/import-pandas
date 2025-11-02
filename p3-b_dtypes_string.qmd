@@ -1,0 +1,62 @@
+# `dtype`s for Strings and Categories
+
+```{python}
+import pandas as pd
+```
+
+## Series with String Elements
+
+Remember @lst-series-series-with-non-numeric-dtype? This example demonstrated that a series can also consist of non-numeric elements.
+
+```{python}
+activities_series = pd.Series(["run", "hike", "bike", "run"])
+
+activities_series
+```
+
+The variable `activities_series` only contains strings and the output above shows that this series has the dtype `object`. In @lst-series-show-row_series, we have seen that the dtype `object` also supports a mixture of string and non-string elements. This is why, [the Pandas developers recommend](https://pandas.pydata.org/pandas-docs/version/2.3/user_guide/text.html) to use a more explicit dtype – called `"string"` – for series consisting of strings only. So let's do this for our series of activities.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    dtype="string"
+)
+
+activities_series
+```
+
+Now the output is clear about what type of values we can expect as part of `activities_series`.
+
+Similar to Python's `str` class, Pandas provides many methods for working with strings, such as matching or manipulating strings. We will take a closer look at this feature later.
+
+<!-- TODO: do not forget to describe some string features later -->
+
+## Categorical Data
+
+Note that the elements of `activities_series` represent different categories of activities: running, hiking, biking. Since the series has the dtype `"string"`, there is nothing stopping us from changing these strings arbitrarily. To enforce `"run"`, `"hike"`, and `"bike"` as the only allowed values, we can use the `"category"` dtype.
+
+```{python}
+#| lst-label: lst-series-categorical-dtype-default
+#| lst-cap: Initializing a series with categorical dtype.
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    dtype="category"
+)
+
+activities_series
+```
+
+From now on, Pandas will validate this constraint on the series' elements and ensure it is fulfilled. Setting one of the values, for instance, to `"swim"` or to `"running"` would result in a `TypeError`, thus, preventing values that are not consistent with the allowed categories.
+
+To determine the set of allowed categories, Pandas collected all unique values used to initialize the series' elements. But what if not all allowed categories are present when initializing a series? For instance, let's say we would like to use the code in @lst-series-categorical-dtype-default, however, we would like to allow the `"swim"` activity in addition to `"run"`, `"hike"`, and `"bike"`. To this end, we can initialize a series with a `pd.Categorical` object. This object specifies both the allowed categories and the elements in the series.
+
+```{python}
+activities_series = pd.Series(
+    pd.Categorical(
+        ["run", "hike", "bike", "run"],
+        categories=["run", "hike", "bike", "swim"],
+    )
+)
+
+activities_series
+```

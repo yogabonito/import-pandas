@@ -1,0 +1,13 @@
+# More `dtype`s
+
+So far, we have seen dtypes for integers, floating-point numbers, objects, strings, and categories. Pandas provides more dtypes.
+
+## Boolean Series {#sec-series-boolean-series}
+
+Especially Boolean series – that is series comprising only `True` and `False` values – will prove invaluable later. They will naturally emerge when we perform checks on our data. In @sec-series-counting, we will see how useful these series are for counting, for instance, counting long activities or activity types. Furthermore, we will use Boolean series for filtering series in @sec-series-indexing and whole tables in @todo.
+
+## Series with Temporal `dtypes`
+
+Furthermore, Pandas provides temporal dtypes for dates and times as well as durations. So, actually, the integer dtype for our series of activity durations was not the ideal choice. Instead, a dtype for time deltas would have been a better fit for our activity durations. Often, temporal dtypes are also used as index of a series or table. To learn more about these dtypes, check out the Pandas' user guide on [time series](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html) and [time deltas](https://pandas.pydata.org/pandas-docs/stable/user_guide/timedeltas.html).
+
+Here, we will move to the next chapter where we finally start doing something with our data 😃

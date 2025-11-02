@@ -1,0 +1,24 @@
+# Getting Started
+
+Pandas is one of the most popular Python packages – for good reason. It equips us with data-wrangling super-powers, allowing us to process data with ease.<!-- TODO: mit kleinem Tooltip das Wort data-wrangling erklären --> In this book, we will learn how to tap into these super-powers.<!-- end goal erwähnen: making data analysis a breeze and also a bit fun 😉 -->
+
+We start by ensuring that we have Pandas installed on our computer. You can find the installation guide in @sec-appendix-env. If, however, you prefer to jump right into coding without installing anything, I prepared a playground for you [here](https://jupyter-playground.netlify.app/notebooks/index.html?path=playground.ipynb).
+
+Once Pandas is installed, we are ready to put it to use 🎉
+
+If you are new to Jupyter or Python, make sure to go to @sec-appendix-jupyter and @sec-appendix-python first.
+
+::: callout-warning
+TODO (for the author): finish appendices on Jupyter and Python.
+:::
+
+If we want to access the classes and functions offered by Pandas in a Python file or Jupyter notebook, we first need to import it.
+
+```{python}
+#| lst-label: lst-import-pandas
+#| lst-cap: Code for importing the Pandas package.
+import pandas as pd
+```
+
+You can name the imported module anything you like, but people usually call it `pd`. This means we can access Pandas' functionality via this name. As we will use the Pandas heavily, almost all chapters will start with @lst-import-pandas as their first line.
+

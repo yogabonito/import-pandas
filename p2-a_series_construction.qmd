@@ -1,0 +1,107 @@
+# Constructing a Series {#sec-series}
+
+For representing a one-dimensional data structure, such as a row or a column in a table, Pandas provides a data type called `Series`. To use it, we first import Pandas.
+
+```{python}
+import pandas as pd
+```
+
+## Constructing a Series with the Default Index {#sec-construct-series-with-list}
+
+Let's try to represent the *Duration in Minutes* column from @tbl-chapter-1-example-table with a `Series` object. We can construct this object by providing a Python list containing the activity durations measured in minutes.
+
+```{python}
+durations_series = pd.Series([60, 210, 120, 45])
+```
+
+Let's take a closer look at this object.
+
+```{python}
+#| lst-label: lst-series-show-durations_series
+#| lst-cap: Inspecting the series object containing durations.
+durations_series
+```
+
+In the right column of the output above, we see that all the durations are now stored in the `Series` object. The left column in the result of @lst-series-show-durations_series represents the index of each value. We can think of indices as row numbers. Since we did not specify a custom index for our series, the default index was used, which simply numbers the rows starting with `0`.
+
+The final piece of information in @lst-series-show-durations_series indicates the data type of the series' elements, which is also known as the *dtype* of a series. The output above tells us that all values in this `Series` object have the data type `int64`. This means, they are integers (i.e., whole numbers).
+
+::: {.callout-important}
+The *data type* of the `durations_series` variable is the `Series` class. The *dtype* of `durations_series` (i.e., the data type of the series' entries) is `int64`.
+
+```{python}
+type(durations_series), durations_series.dtype
+```
+
+Understanding the distinction between data type and dtype is important for understanding Pandas.
+:::
+
+We can also construct `Series` objects which contain non-integer elements, for instance, strings. Let's represent the *Activity Type* column in @tbl-chapter-1-example-table as a `Series` object.<!--  So this series should contain strings specifying categories of activities. These activities correspond to the durations in `durations_series`. -->
+
+```{python}
+#| lst-label: lst-series-series-with-non-numeric-dtype
+#| lst-cap: Constructing a series with non-numeric dtype.
+activities_series = pd.Series(["run", "hike", "bike", "run"])
+
+activities_series
+```
+
+As before, we have row indices in the left column of the output. The right column, however, now contains text instead of numbers and Pandas can handle that as well. As shown in the output, the data type of this series is `object`. This means that the series may hold any types of values. For instance, the `object` data type would also allow a mix of strings and numbers as values. Later, we will see how to specify a more suitable dtype for `Series` objects which hold names of categories.
+
+<!-- TODO: link to the section which talks about the dtype "category" (instead of just writing "Later, we will see...") -->
+
+<!-- TODO: Quiz question: What's the data type and what's the dtype of activities_series? -->
+
+## Constructing a Series with a Custom Index {#sec-series-non-numeric-index}
+
+So, we know how to represent a *column* in a table – great! While inspecting our first series objects `durations_series` and `activities_series`, we have seen that each value in a column corresponds to a different row. The row indices of our series variables consisted of numbers (0, 1, 2, and 3).
+
+But what about representing a single *row*? Each value in a row belongs to a different column. Ideally, a column has a descriptive name. Hence, the index of a row should consist of column labels which are strings rather than numbers. To achieve that, we initialize the series passing the desired index elements as `index` argument in addition to the actual values.
+
+```{python}
+#| lst-label: lst-series-show-row_series
+#| lst-cap: Defining a series representing a row.
+row_series = pd.Series(
+    [1, 42, "run", 60],
+    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+)
+
+row_series
+```
+
+So, we also know how to provide a custom index when constructing a `Series` object – awesome! 🎉️ Let's fix one more tiny thing.
+
+## The Name of a Series
+
+Our series examples comprise the values from @tbl-chapter-1-example-table, however, they still lack one piece of information: the name. Note how the columns in @tbl-chapter-1-example-table have names, such as *Activity Type* or *Duration in Minutes*. These names are missing in our `Series` objects.
+
+Why bother storing a name in a series when, for instance, the variable name `durations_series` already describes the series' contents? Once you pass a series to a function, this name is lost. (In a function, the parameter name is used instead.) If a function needs to access the column name, we have to pass it to the function. The simplest way is to store this column name in the series object itself. So let's add a name to the series stored in `durations_series`.<!-- TODO: maybe give more motivation for naming a series. -->
+
+```{python}
+durations_series.name = "Duration in Minutes"
+```
+
+When we now output the series, the name is included.
+
+```{python}
+durations_series
+```
+
+And if we (or any function that receives our series) need to access the series' name, we can do so using the `name` property.
+
+```{python}
+durations_series.name
+```
+
+We have successfully added a name to the `durations_series` series. Alternatively, we could have assigned a name to a series when constructing it. Let's see this in action when constructing our series of activity types again.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+
+activities_series
+```
+
+Awesome, we now know how to define a `Series` object 🎉️ <!-- Let’s find out what we can actually *do* with series next! -->

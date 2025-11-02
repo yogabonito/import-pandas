@@ -1,0 +1,188 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+<!-- TODO: in the frontmatter, fix notebook download and link to notebook -->
+
+# Getting Elements Using a Boolean Series {#sec-series-indexing-boolean-series}
+
+```{python}
+import pandas as pd
+```
+
+
+<!-- 
+```{python}
+row_series = pd.Series(
+    [1, 42, "run", 60],
+    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+)
+```
+
+Additionally, we will use a series representing the *User ID* column of @tbl-chapter-1-example-table.
+
+```{python}
+user_series = pd.Series(
+    [42, 22, 1, 42],
+    name="User ID"
+)
+```
+-->
+
+After our first steps with accessing parts of a series, we will now finally acquire filtering super powers. So far (@sec-series-get-elements-loc-labels), we have used `loc` with a single index label or a list or slice of index labels. However, we can also use a *Boolean array* instead. By Boolean array we mean a list whose elements are either `True` or `False`. (If you know the NumPy package, you can think of a NumPy array consisting of only `True` and `False` values as Boolean array, too.) If we index a series using a Boolean array, we only keep those series elements which correspond to the `True` values in the Boolean array. For instance, to get the first two elements of a series, we can use a Boolean array with `True` in the first two positions and False in the remaining positions.
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+
+durations_series.loc[
+    [True, True, False, False]
+]
+```
+
+Why is this so powerful? Because we can also use a Boolean series instead of a Boolean array! It's great that we already know many different ways to translate conditions and checks on our data into Boolean series (see chapters [-@sec-series-relational-operators], [-@sec-series-logical-operators], and [-@sec-series-isin-isna]).
+
+Let's apply this knowledge using our `activities_series` variable.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+```
+
+In @lst-series-equality, we have generated a Boolean series that indicates which activities involve running. Let's use this Boolean series to obtain only the running activities of `activities_series`.
+
+```{python}
+#| lst-label: lst-series-loc-Boolean-series
+#| lst-cap: Filtering for running activities in `activities_series`.
+activities_series.loc[
+    activities_series == "run"
+]
+```
+
+The index labels of this result indicate that the elements with labels `1` and `2` have been filtered out.
+
+## Exercise Time
+
+### Exercise {#sec-exercise-series-loc-with-Boolean-series-1-same-series}
+
+For this exercise, let's take a look at the `durations_series` variable again. Generate a series which contains only those elements of `durations_series` which are greater than or equal to 60 minutes.
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can find the solution in @sec-solution-series-loc-with-Boolean-series-1-same-series.
+
+### Exercise {#sec-exercise-series-loc-with-Boolean-series-2-different-series}
+
+In the previous exercise and in @lst-series-loc-Boolean-series, we used the series we wanted to filter in order to construct a Boolean series for filtering. However, it is also possible to construct a Boolean series from one series and to use it for filtering a different series. Let's assume that the durations in `durations_series` correspond to the activities in `activities_series`. Let's generate a series which consists of activities which lasted for longer than 60 minutes!
+
+```{python}
+#| eval: false
+  # TODO
+```
+
+You can find the solution in @sec-solution-series-loc-with-Boolean-series-2-different-series.
+
+### Exercise {#sec-exercise-series-loc-with-Boolean-series-resulting-from-logical-and}
+
+Let's make our filtering conditions more complex. Try to get a subseries of `activities_series` which only includes long activities. Long activities are running sessions lasting for at least 60 minutes and hiking and biking activities which lasted for three hours or longer.
+
+```{python}
+# TODO
+```
+
+You can find the solution in @sec-solution-series-loc-with-Boolean-series-resulting-from-logical-and.
+
+<!-- 
+::: {#exr-series-loc-with-Boolean-series-resulting-from-logical-and}
+Let's make our filtering conditions more complex. Try to get a subseries of `activities_series` which only includes long activities. Long activities are running sessions lasting for at least 60 minutes and hiking and biking activities which lasted for three hours or longer.
+
+```{python}
+# TODO
+```
+
+You can find the solution in @sol-series-loc-with-Boolean-series-resulting-from-logical-and.
+
+:::
+-->
+
+Awesome! Now, we know how to use Boolean series to filter a series, applying even complex filtering conditions 🎉️ <!-- Now we have seen many ways to get specific elements of a `Series` object. Next, let's find out how to set them! --> <!-- TODO: comment in again the two previous sentences. -->
+
+## Solutions to Exercises
+
+### Solution to [Exercise -@sec-exercise-series-loc-with-Boolean-series-1-same-series] {#sec-solution-series-loc-with-Boolean-series-1-same-series}
+
+```{python}
+durations_series.loc[durations_series >= 60]
+```
+
+### Solution to [Exercise -@sec-exercise-series-loc-with-Boolean-series-2-different-series] {#sec-solution-series-loc-with-Boolean-series-2-different-series}
+
+```{python}
+activities_series.loc[
+    durations_series > 60
+]
+```
+
+<!--
+### Solution to [Exercise -@sec-exercise-series-loc-or-Boolean-series] {#sec-solution-series-loc-or-Boolean-series}
+
+```{python}
+activities_series.loc[
+    (durations_series < 60) | (durations_series > 3 * 60)
+]
+```
+-->
+
+<!--
+### Solution to [Exercise -@sec-exercise-series-loc-and-Boolean-series] {#sec-solution-series-loc-and-Boolean-series}
+
+```{python}
+durations_series.loc[
+    (activities_series == "run") & (durations_series > 45)
+]
+```
+-->
+
+### Solution to [Exercise -@sec-exercise-series-loc-with-Boolean-series-resulting-from-logical-and] {#sec-solution-series-loc-with-Boolean-series-resulting-from-logical-and}
+
+To define our Boolean series representing the conditions, we can reuse our code from any of the solutions [-@sec-solution-inequality-operation-with-two-series], [-@sec-solution-logical-operators], or [-@sec-solution-isin-operator].
+
+```{python}
+is_long_activity = durations_series >= activities_series.map({
+    "run": 60, "hike": 180, "bike": 180
+})
+
+activities_series.loc[is_long_activity]
+```
+
+<!-- 
+::: {#sol-series-loc-with-Boolean-series-resulting-from-logical-and}
+
+[{{< iconify line-md arrow-up >}}](#exr-series-loc-with-Boolean-series-resulting-from-logical-and) To define our Boolean series representing the conditions, we can reuse our code from any of the solutions [-@sec-solution-inequality-operation-with-two-series], [-@sec-solution-logical-operators], or [-@sec-solution-isin-operator].
+
+```{python}
+is_long_activity = durations_series >= activities_series.map({
+    "run": 60, "hike": 180, "bike": 180
+})
+
+activities_series.loc[is_long_activity]
+```
+:::
+ -->
+<!-- 
+TODO:
+- automate link creation from solution to exercise using a post processor or something like that
+- change exercises and solutions so far from sec-... to exr-... and sol-...
+- publish for students!!!
+ -->

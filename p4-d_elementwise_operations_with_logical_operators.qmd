@@ -1,0 +1,142 @@
+# Elementwise Operations with Logical Operators {#sec-series-logical-operators}
+
+```{python}
+import pandas as pd
+```
+
+As we heard in @sec-series-boolean-series, Boolean series are very important. We can use them in logical operations to obtain new Boolean series which represent new checks on our data. <!-- Note, however, that with Pandas data structures, we do *not* use Python's usual logical operators `not`, `or`, and `and`. Instead, we use `~`, `|`, and `&` which usually perform bitwise logical operations in Python. -->
+
+## Inversion operator `~` {#sec-series-boolean-series-inversion-operator}
+
+The tilde (`~`) inverts all values in a Boolean series. Let's revisit [Exercise -@sec-exercise-inequality-operation-with-series-and-scalar] to see how we can apply this operator. There, we used our series of activities.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+
+activities_series
+```
+
+We can solve the task of finding non-running activities using a logical operator.
+
+```{python}
+#| lst-label: lst-series-invert-Boolean-series
+#| lst-cap: Inverting a Boolean series.
+~(activities_series == "run")
+```
+
+Here, each element of `activities_series` is first compared to the string `"run"`. The resulting Boolean series is then inverted by `~`, leading to `True` values in the same positions as the non-running activities in `activities_series`.
+
+<!-- ::: {.callout-important}
+## Important
+
+Note that for inverting a Boolean series, we are *not* using `not` – the usual Python operator for inverting a Boolean value.
+::: -->
+
+::: callout-note
+While this example is solved more elegantly using a relational operator (as shown in @sec-solution-inequality-operation-with-series-and-scalar), inverting will prove invaluable once we build Boolean series without relational operators in later chapters. <!-- TODO: maybe mention the later chapters (one of them should be the next chapter if we still discuss .isin() and .isna() there) -->
+:::
+
+Let's see what happens if we omit the parentheses in @lst-series-invert-Boolean-series.
+
+```{python}
+#| error: true
+~activities_series == "run"
+```
+
+To understand this error, we need to consider Python's operator precedence; the tilde has a higher precedence in Python than the equality operator. Thus, Python applies the `~` operator to `activities_series`, but this operation is not defined, since `activities_series` is not a Boolean series. (This is also the gist of the long error message. As in this example, the last line of an error message often hints at the actual problem.) To ensure that we first build a Boolean series and *then* invert it with the tilde, we use parentheses.
+
+It might seem strange that we use the `~` operator rather than the `not` operator to invert a series. What would happen if we chose `not`.
+
+```{python}
+#| error: true
+not (activities_series == "run")
+```
+
+OK, this does not work. The Pandas developers chose to prevent evaluating a `Series` object in a Boolean context. After all, to what Boolean value should a series evaluate? Hence, the `not` operator is incompatible with series.
+
+## Combining two Boolean Series with the Logical OR Operator `|`
+
+Let's say, we are interested in activities which involve running or hiking. To this end, we can generate two Boolean series – one for running and one for hiking – and combine them by performing an elementwise OR operation using the `|` operator.
+
+```{python}
+#| lst-label: lst-series-combine-logical-or
+#| lst-cap: Using the logical OR operator to find which activities are either `\"run\"` or `\"hike\"`.
+(activities_series == "run") | (activities_series == "hike")
+```
+
+Cool! We, indeed, get the series resulting from the elementwise OR operation. But doesn't Python offer the `or` operator for this kind operation?
+
+```{python}
+#| error: true
+#| lst-label: lst-series-combine-wrong-logical-or
+#| lst-cap: Using the wrong operator for the elementwise OR operation.
+(activities_series == "run") or (activities_series == "hike")
+```
+
+As with the `not` operator, we get an error, so let's remember to use the `|` operator instead.
+
+Furthermore, mind the parentheses in @lst-series-combine-logical-or! Again, the bitwise Python operator – this time it is `|` – is stronger than relational operators.
+
+
+
+
+
+
+## Combining two Boolean Series with the Logical AND Operator
+
+We can also combine Boolean series using the AND operator, which is written as ampersand (`&`) in Pandas. We will demonstrate its use in connection with the `durations_series` variable which comprises durations of activities.
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+durations_series
+```
+
+Let's say, we wanted to find out which activity durations ranged between one and a half hours and three hours. 
+
+```{python}
+#| lst-label: lst-series-combine-logical-and
+#| lst-cap: Using the logical AND operator to check which activities last between one and a half hours and three hours.
+(durations_series > 90) & (durations_series < 180)
+```
+
+The resulting series has `False` in the first and the last position, as the corresponding activities are shorter than the desired interval. The second duration exceeds the upper bound of the specified range, so this explains the remaining `False` value. Only the third entry in `durations_series` fulfills both conditions in @lst-series-combine-logical-and.
+
+## Exercise {#sec-exercise-logical-operators}
+
+Let's revisit @sec-exercise-inequality-operation-with-two-series and solve it using relational and logical operators (but without the `.map()` as it was done in the corresponding solution in @sec-solution-inequality-operation-with-two-series).
+
+```{python}
+#| eval: false
+# TODO
+```
+
+You can find the solution in @sec-solution-logical-operators.
+
+## Summary
+
+We invert a Boolean series using the `~` operator. The logical OR and AND operators for combining two Boolean series are `|` and `&`, respectivley. Never use the `not`, `or`, and `and` operators to perform logical operations involving Boolean series!
+
+The operators `~`, `|`, and `&` have a higher precedence than relational operators (`==`, `!=`, `<`, `<=`, `>=`, `>`). Beginners may find these precedence rules confusing. To make the order of operations clear, it is advisable to use parentheses (`()`) generously. Failing to place necessary parenteses may lead to exceptions being raised or – much worse – logical errors staying under the radar.
+
+<!-- 
+::: callout-warning
+As with NOT (`~`) and the OR (`|`) operator, we need to enclose the comparisons for generating Boolean series with parentheses (`()`). Without parentheses, `60 & durations_series` (which probably gives an unexpected result) would be evaluated first. In summary, all logical operators in Pandas (`~`, `&`, `|`) have a higher operator precedence than relational operators (`==`, `!=`, `<`, `<=`, `>=`, `>`). That's why we must not forget to use parentheses.
+::: -->
+
+## Solution to [Exercise -@sec-exercise-logical-operators] {#sec-solution-logical-operators}
+
+```{python}
+(
+    (durations_series >= 60) & (activities_series == "run") |
+    (durations_series >= 180) & (activities_series == "hike") |
+    (durations_series >= 180) & (activities_series == "bike")
+)
+```
+
+In this solution, we placed parentheses around each comparison to avoid problems with operator precedence. Note that no parentheses around the logical AND operation are required, as the `&` operator binds more strongly than the OR operator `~` anyway. We have, however, enclosed the whole statement in a pair of parenthes, because this way, we can break the statement across multiple lines without needing to write an explicit line continuation marker.

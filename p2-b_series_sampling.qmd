@@ -1,0 +1,93 @@
+# Sampling
+
+```{python}
+import pandas as pd
+
+# the following variables will be used throughout this chapter
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+```
+
+## Inspecting a Few Elements
+
+When we receive a Pandas `Series` object for the first time, we usually want to get a quick overview of the data it contains. In practice, it rarely makes sense to output all entries of a series, because series often have overwhelmingly many elements. So, we might want to display only a few elements to get a feel for the data. The methods `.head()` and `.tail()` return a new series with the first few and the last few entries, respectively. By default, we get five elements, however, we can specify the desired number of entries as an argument. In the following code, we ask for the first three elements of the `durations_series` variable.
+
+```{python}
+durations_series.head(3)
+```
+
+The `Series` class provides one more method to get a small sample of a series' elements. This method is called – you may have guessed it – `.sample()`. Just like `.head()` and `.tail()`, it can be passed the desired number of elements. However, unlike `.head()` and `.tail()`, we may get different results when calling this method repeatedly.
+
+```{python}
+sample_1 = durations_series.sample(3)
+sample_1
+```
+
+```{python}
+sample_2 = durations_series.sample(3)
+sample_2
+```
+
+The difference between `sample_1` and `sample_2` above highlights that the `.sample()` method selects elements randomly. If we want a random sample, but need reproducibility, we can pass a random seed to the method. To this end, we use the method's `random_state` parameter. Calls with the same `random_state` argument are guaranteed to yield the same result.
+
+```{python}
+sample_3 = durations_series.sample(3, random_state=42)
+sample_3
+```
+
+```{python}
+sample_4 = durations_series.sample(3, random_state=42)
+sample_4
+```
+
+The variables `sample_3` and `sample_4` indeed contain the same data ✅
+
+## Exercise Time
+
+### Exercise {#sec-exercise-head-tail}
+
+Use the methods we learned about in this chapter to show the first and the last two elements of the `activities_series` variable, respectively.
+
+```{python}
+#| eval: false
+first_few_elements = # TODO
+last_few_elements = # TODO
+first_few_elements, last_few_elements
+```
+
+You can find the solution in @sec-solution-head-tail.
+
+### Exercise {#sec-exercise-random-sample}
+
+Use the methods we learned about in this chapter to show a random sample of `activities_series`. Make sure the sample consists of two elements and that rerunning your code will yield the same result.
+
+```{python}
+#| eval: false
+random_sample = # TODO
+random_sample
+```
+
+You can find the solution in @sec-solution-random-sample.
+
+## Solutions to Exercises
+
+### Solution to [Exercise -@sec-exercise-head-tail] {#sec-solution-head-tail}
+
+```{python}
+first_few_elements = activities_series.head(2)
+last_few_elements = activities_series.tail(2)
+first_few_elements, last_few_elements
+```
+
+### Solution to [Exercise -@sec-exercise-random-sample] {#sec-solution-random-sample}
+
+```{python}
+random_sample = activities_series.sample(2, random_state=123)
+random_sample
+```

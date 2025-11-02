@@ -1,0 +1,103 @@
+# Elementwise Operations with Arithmetic Operators
+
+```{python}
+import pandas as pd
+```
+
+## Arithmetic Operations involving a Series and a Scalar
+
+The data we looked at so far stems from a fitness platform. Let's imagine that we run this platform. What if the users recording the activities so far were actually employees trying out the platform's functionality? We would have to pay them! How much? This depends on the duration of activities. These are – again – stored in the `durations_series` variable.
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+durations_series
+```
+
+Let's say every employee receives 5 bucks per hour for doing sports. How much is every activity worth? We could use the `.map()` method here.
+
+```{python}
+durations_series.map(lambda minutes: 5 * minutes / 60)
+```
+
+This works, however, there is a much simpler way to solve this task: just use arithmetic operators and Pandas will automatically perform the calculations elementwise.
+
+```{python}
+5 * durations_series / 60
+```
+
+## Exercise {#sec-exercise-map-minutes-to-cost-with-operators}
+
+Let's calculate the cost for the activities again, but this time considering that employees do not only get paid for the activities themselves, but also for the time it takes to get ready for sports. The company assumes that it takes an employee 15 minutes to prepare.
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can find a solution in @sec-solution-map-minutes-to-cost-with-operators.
+
+## Arithmetic Operations involving two Series
+
+Let's assume that employees indicate the actual preparation times of each activity. These durations are stored in the `preparation_series` variable:
+
+```{python}
+preparation_series = pd.Series(
+    [15, 180, 20, 10],
+    name="Preparation Time in Minutes"
+)
+preparation_series
+```
+
+We can add these preparation times elementwise to the activity durations using the `+` operator.
+
+```{python}
+durations_series + preparation_series
+```
+
+As we can see, it can often be useful to combine two series with arithmetic operators.
+
+## Exercise {#sec-exercise-add-preparation-time-to-durations-using-plus-operator}
+
+The management of the fitness platform realizes that some employees enter unrealistically large preparation times – maybe to get a higher compensation. Hence, standardized preparation times shall be introduced: 15 minutes for running and 20 minutes for cycling and hiking. Calculate the activity durations including the preparation time.
+
+```{python}
+#| eval: false
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+
+durations_series  # TODO
+```
+
+You can find a solution in @sec-solution-add-preparation-time-to-durations-using-plus-operator.
+
+
+
+## Solutions to Exercises
+
+### Solution to [Exercise -@sec-exercise-map-minutes-to-cost-with-operators] {#sec-solution-map-minutes-to-cost-with-operators}
+
+```{python}
+5 * (durations_series + 15) / 60
+```
+
+As we might have expected, `*` and `/` have a higher precedence than `+` and `-` also when series are involved. This is why we use parentheses when adding 15 minutes to the durations.
+
+### Solution to [Exercise -@sec-exercise-add-preparation-time-to-durations-using-plus-operator] {#sec-solution-add-preparation-time-to-durations-using-plus-operator}
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+
+durations_series + activities_series.map({
+    "run": 15, "hike": 20, "bike": 20
+})
+```
+
+In the solution above, we map the activity types to their corresponding preparation durations using a dictionary. The obtained preparation times are then added to the activity durations. 

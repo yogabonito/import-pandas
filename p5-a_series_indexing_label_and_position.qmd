@@ -1,0 +1,218 @@
+<!-- TODO: in the frontmatter, fix notebook download and link to notebook -->
+
+# Getting Elements of a Series by Label and by Position {#sec-series-indexing-label-and-position}
+
+```{python}
+import pandas as pd
+```
+
+## Getting Elements of a Series Using `.loc` and Index Labels {#sec-series-get-elements-loc-labels}
+
+### Getting a Single Element of a Series Using `.loc`
+
+To obtain a specific element of a series, we can use the element's index label and pass it to the series' `.loc` property using square brackets (`[]`). We will see this in action using the `durations_series` once again.
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+durations_series
+```
+
+As we can see, the first element in `durations_series` has the index label `0`. Let's use this index to access the element!
+
+```{python}
+#| lst-label: lst-series-loc-single-label
+#| lst-cap: Accessing a single value in a series.
+durations_series.loc[0]
+```
+
+In @sec-series-non-numeric-index, we discussed that index labels are not necessarily numeric.
+
+```{python}
+row_series = pd.Series(
+    [1, 42, "run", 60],
+    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+)
+```
+
+The `row_series` variable has strings as index labels, but this does not change how we access an element of the series – we simply use the index label. Let's access the duration stored in `row_series`.
+
+```{python}
+row_series.loc["Activity Duration"]
+```
+
+### Getting Multiple Elements of a Series Using `.loc`
+
+#### Using a List
+
+We can also access multiple elements at once using `.loc[]`. To indicate that we want multiple elements of a series, we can use a list instead of a single index label. Let's have a look at the first two values stored in `durations_series`.
+
+```{python}
+durations_series.loc[[0, 1]]
+```
+
+Note that we now get a series as a result as opposed to @lst-series-loc-single-label where the result was just a single value. Let's try accessing multiple elements once more – this time with string indices.
+
+```{python}
+row_series.loc[
+    ["Activity Type", "Activity Duration"]
+]
+```
+
+#### Using a Slice
+
+Alternatively, we could use a slice to obtain multiple elements of a series.
+
+```{python}
+durations_series.loc[0:1]
+```
+
+::: callout-warning
+Note that slicing using `.loc[start:end]` will always result in all elements from `start` to `end`, including *both* ends of the range. This is in sharp contrast to Python's standard behavior, which does not include the index indicating the interval's upper bound.
+:::
+
+While including the upper bound of the slice may feel unpythonic at first, it starts to make more sense, once we consider an index consisting of strings. If we want all columns ranging from `"User ID"` to `"Activity Duration"`, we probably want to have the latter included in the result.
+
+```{python}
+row_series.loc[
+    "User ID":"Activity Duration"
+]
+```
+
+To keep the behavior between integer and string indices consistent, indexing using `.loc` includes the upper bound of the slice irrespective of the index labels' data type.
+
+Now, we have learned how to access elements using `.loc` and index labels 🎉️ Let's check out an alternative way to access series elements.
+
+## Getting Elements of a Series Using `.iloc` and Positions {#sec-series-get-elements-iloc-positions}
+
+### Getting a Single Element of a Series Using `.iloc` {#sec-series-elements-iloc-positions-get-single-element}
+
+Imagine, that we want to index the `row_series` series by the *position* of the elements rather than by the index *label*. We can do so using `.iloc` instead of `.loc`.
+
+```{python}
+row_series.iloc[3]
+```
+
+::: callout-note
+The first element of a series always has the position `0` (not `1`). So position `3` is held by the *fourth* series element.
+:::
+
+Often, the index labels of series elements match their position in the series, as is the case for the elements in `durations_series`. Hence, it does not matter whether we use `.loc` or `.iloc` in this case.
+
+```{python}
+durations_series.loc[0] == durations_series.iloc[0]
+```
+
+However, `.iloc` can be useful even when dealing with series with a numeric index. Just imagine the following series.
+
+```{python}
+user_series = pd.Series({
+    42: "Aleks", 22: "Barbara", 1: "Carl"
+})
+```
+
+<!-- TODO: mention in chapter on series construction that a series can be constructed using a dictionary, because we are using this in the code above! -->
+
+To get the first element, we can write
+
+```{python}
+user_series.iloc[0]
+```
+
+without caring about the index labels. If we used `.loc` in this example, we would have to use the label `42`.
+
+```{python}
+user_series.iloc[0] == user_series.loc[42]
+```
+
+### Getting Multiple Elements of a Series Using `.iloc`
+
+#### Using a List
+
+Just as `.loc`, the `.iloc` property allows us to access multiple elements at once. Again, we can use a list for this purpose. To get the third and fourth element of `row_series` we can write the following.
+
+```{python}
+row_series.iloc[[2, 3]]
+```
+
+For `durations_series`, the `.loc` and `.iloc` methods yield the same result again because the labels match the elements' position.
+
+```{python}
+durations_series.loc[[0, 1]] == durations_series.iloc[[0, 1]]
+```
+
+#### Using a Slice
+
+The `.iloc` also supports slicing, however, it differs from slicing with `.loc`. Can you spot the difference when looking at the following two snippets?
+
+```{python}
+durations_series.iloc[0:1]
+```
+
+```{python}
+row_series.iloc[1:3]
+```
+
+Exactly! The upper bound of the slice is not included when using `.iloc`. Since `.iloc` works with positions, the Pandas developers decided it would be most intuitive if it works in the same way as standard Python where the element corresponding to the upper bound of a slice is not returned.
+
+Now we know how to access a single or multiple series elements using `.loc` and `.iloc` 🎉️ In the next chapter we'll revisit `.loc` to see what may be its most powerful ability. <!-- todo: ensure the next chapter is really about .loc (in connection with Boolean series) -->
+
+## Exercise Time
+
+### Exercise {#sec-exercise-series-loc-filter-with-list}
+
+Use indexing with labels to get a series containing only those elements of `row_series` whose index label starts with the word *Activity*. A list of all index labels fulfilling the condition is already defined in the following code cell. All that is left to do, is to filter `row_series` using these labels.
+
+```{python}
+#| eval: false
+labels = [
+    label for label in row_series.index
+    if label.startswith("Activity")
+]
+row_series  # TODO
+```
+
+<!-- TODO: make sure to mention that the index property can be simply accessed as done in the code cell above (using `series_variable.index`) -->
+
+You can find the solution in @sec-solution-series-loc-filter-with-list
+
+### Exercise {#sec-exercise-series-iloc-replicate-head}
+
+Use positional indexing to write a `head()` function that replicates the behavior of the `.head()` method.
+
+```{python}
+#| eval: false
+def head(series, number_of_elements_to_show=5):
+    return # TODO: finish return statement
+
+head(durations_series, 3)
+```
+
+You can find the solution in @sec-solution-series-iloc-replicate-head
+
+## Solutions to Exercises
+
+### Solution to [Exercise -@sec-exercise-series-loc-filter-with-list] {#sec-solution-series-loc-filter-with-list}
+
+```{python}
+labels = [
+    label for label in row_series.index
+    if label.startswith("Activity")
+]
+row_series.loc[labels]
+```
+
+### Solution to [Exercise -@sec-exercise-series-iloc-replicate-head] {#sec-solution-series-iloc-replicate-head}
+
+There are two equivalent solutions for this task with the latter being more elegant. The first solution uses `.isna()` and then inverts the result with `~`.
+
+```{python}
+def head(series, number_of_elements_to_show=5):
+    return series.iloc[:number_of_elements_to_show]
+
+head(durations_series, 3)
+```
+
+<!-- TODO: mention in a section in this chapter that we can omit start number or end number of a slice if we want the slice to start at the beginning or go till the end of the series, respectively -->
