@@ -1,3 +1,12 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
 <!-- TODO: in the frontmatter, fix notebook download and link to notebook -->
 
 # Getting Elements of a Series by Label and by Position {#sec-series-indexing-label-and-position}
@@ -161,7 +170,7 @@ Now we know how to access a single or multiple series elements using `.loc` and 
 
 ## Exercise Time
 
-### Exercise {#sec-exercise-series-loc-filter-with-list}
+::: {#exr-series-loc-filter-with-list}
 
 Use indexing with labels to get a series containing only those elements of `row_series` whose index label starts with the word *Activity*. A list of all index labels fulfilling the condition is already defined in the following code cell. All that is left to do, is to filter `row_series` using these labels.
 
@@ -176,9 +185,10 @@ row_series  # TODO
 
 <!-- TODO: make sure to mention that the index property can be simply accessed as done in the code cell above (using `series_variable.index`) -->
 
-You can find the solution in @sec-solution-series-loc-filter-with-list
+You can compare your solution to @sol-series-loc-filter-with-list.
+:::
 
-### Exercise {#sec-exercise-series-iloc-replicate-head}
+::: {#exr-series-iloc-replicate-head}
 
 Use positional indexing to write a `head()` function that replicates the behavior of the `.head()` method.
 
@@ -190,29 +200,5 @@ def head(series, number_of_elements_to_show=5):
 head(durations_series, 3)
 ```
 
-You can find the solution in @sec-solution-series-iloc-replicate-head
-
-## Solutions to Exercises
-
-### Solution to [Exercise -@sec-exercise-series-loc-filter-with-list] {#sec-solution-series-loc-filter-with-list}
-
-```{python}
-labels = [
-    label for label in row_series.index
-    if label.startswith("Activity")
-]
-row_series.loc[labels]
-```
-
-### Solution to [Exercise -@sec-exercise-series-iloc-replicate-head] {#sec-solution-series-iloc-replicate-head}
-
-There are two equivalent solutions for this task with the latter being more elegant. The first solution uses `.isna()` and then inverts the result with `~`.
-
-```{python}
-def head(series, number_of_elements_to_show=5):
-    return series.iloc[:number_of_elements_to_show]
-
-head(durations_series, 3)
-```
-
-<!-- TODO: mention in a section in this chapter that we can omit start number or end number of a slice if we want the slice to start at the beginning or go till the end of the series, respectively -->
+You can compare your solution to @sol-series-iloc-replicate-head.
+:::

@@ -1,4 +1,13 @@
-# Sampling
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Sampling {#sec-series-sampling}
 
 ```{python}
 import pandas as pd
@@ -48,9 +57,7 @@ sample_4
 
 The variables `sample_3` and `sample_4` indeed contain the same data ✅
 
-## Exercise Time
-
-### Exercise {#sec-exercise-head-tail}
+::: {#exr-head-tail}
 
 Use the methods we learned about in this chapter to show the first and the last two elements of the `activities_series` variable, respectively.
 
@@ -61,9 +68,10 @@ last_few_elements = # TODO
 first_few_elements, last_few_elements
 ```
 
-You can find the solution in @sec-solution-head-tail.
+You can compare your solution to @sol-head-tail.
+:::
 
-### Exercise {#sec-exercise-random-sample}
+::: {#exr-random-sample}
 
 Use the methods we learned about in this chapter to show a random sample of `activities_series`. Make sure the sample consists of two elements and that rerunning your code will yield the same result.
 
@@ -73,21 +81,5 @@ random_sample = # TODO
 random_sample
 ```
 
-You can find the solution in @sec-solution-random-sample.
-
-## Solutions to Exercises
-
-### Solution to [Exercise -@sec-exercise-head-tail] {#sec-solution-head-tail}
-
-```{python}
-first_few_elements = activities_series.head(2)
-last_few_elements = activities_series.tail(2)
-first_few_elements, last_few_elements
-```
-
-### Solution to [Exercise -@sec-exercise-random-sample] {#sec-solution-random-sample}
-
-```{python}
-random_sample = activities_series.sample(2, random_state=123)
-random_sample
-```
+You can compare your solution to @sol-random-sample.
+:::

@@ -3,6 +3,12 @@ project:
   preview:
     port: 4848
     browser: false
+  pre-render:
+    - scripts/fix_exr_and_sol_with_sol_in_appendix.py
+    - scripts/create_solutions_chapter.py
+
+crossref:
+  chapters: true
 
 # 3
 
@@ -132,16 +138,16 @@ book:
       chapters:
         - p5-a_series_indexing_label_and_position.qmd
         - p5-b_series_indexing_boolean_series.qmd
-        - p5-c_series_indexing_setting_values.qmd
-    - part: "Advanced Series Operations"
-      chapters:
-        - p6-xxx_advanced_topics_missing_values.qmd
-        - p6-xxx_advanced_topics_changing_the_dtype.qmd
-        - p6-xxx_advanced_topics_string_operations.qmd
-        - p1-5_series_advanced.qmd
-        - p1-6_series_dtypes.qmd
-    - part: "Visualization"
-    - part: "`DataFrame` – Pandas' Most Important Data Type"
+        # - p5-c_series_indexing_setting_values.qmd
+    # - part: "Advanced Series Operations"
+    #   chapters:
+    #     - p6-xxx_advanced_topics_missing_values.qmd
+    #     - p6-xxx_advanced_topics_changing_the_dtype.qmd
+    #     - p6-xxx_advanced_topics_string_operations.qmd
+        # - p1-5_series_advanced.qmd
+        # - p1-6_series_dtypes.qmd
+    # - part: "Visualization"
+    # - part: "`DataFrame` – Pandas' Most Important Data Type"
   #  - p1-4_df.qmd
   #  - part: p2_the_fun_stuff.qmd
   #    chapters:
@@ -150,6 +156,7 @@ book:
     - p99-appendix-a-installation.qmd
     - p99-appendix-b-jupyterlab.qmd
     - p99-appendix-c-python.qmd
+    - appendix-solutions.qmd
     # - p99-appendix-d-numpy.qmd
 
 bibliography: references.bib
@@ -158,10 +165,11 @@ format:
   html:
     #toc-depth: 3
     #number-depth: 3
+    highlight-style: nord
     code-annotations: select # [below|hover|select], default: below
     code-summary: "Show code"
     theme:
-      light: cosmo
-      dark: cyborg
+      light: flatly
+      dark: darkly
   #pdf:
   #  documentclass: scrreprt

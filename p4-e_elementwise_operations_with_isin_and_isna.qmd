@@ -1,11 +1,21 @@
-# Elementwise Operations with `.isin()` and `isna()` {#sec-series-isin-isna}
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Elementwise Operations with `.isin()` and `isna()` {#sec-series-elementwise-operations-isin-isna}
 
 ```{python}
 import pandas as pd
 import numpy as np
 ```
 
-## [`.isin()`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.isin.html)
+## `.isin()`
+<!-- ## [`.isin()`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.isin.html) -->
 
 Ready for a quality of life improvement? If so, let's first recall how we defined the `activities_series` variable.
 
@@ -36,9 +46,9 @@ What if we cared about all activities *but* running and hiking? We can use `.isi
 
 Notice how we use `.isin()` in Pandas to replicate Python's `in` operator. Python's `not in` operator has no direct Pandas counterpart, however, we can replicate it using `~` in connection with `.isin()`.
 
-### Exercise {#sec-exercise-isin-operator}
+::: {#exr-isin-operator}
 
-Remember @sec-exercise-inequality-operation-with-two-series? There, the task was to create a series of thresholds for defining long activities. Running activities count as long if they last for at least 60 minutes, whereas hiking and biking activities require three hours to be considered long. Here is the series of activity durations.
+Remember @exr-inequality-operation-with-two-series? There, the task was to create a series of thresholds for defining long activities. Running activities count as long if they last for at least 60 minutes, whereas hiking and biking activities require three hours to be considered long. Here is the series of activity durations.
 
 ```{python}
 durations_series = pd.Series(
@@ -48,7 +58,7 @@ durations_series = pd.Series(
 durations_series
 ```
 
-We have seen one solution to the task in @sec-exercise-logical-operators. Let's try to reuse the code from there and make it more concise using the `.isin()` method. To this end, we utilize the fact that both biking and hiking have the same threshold of 180 minutes.
+We have seen one solution to the task in @exr-logical-operators. Let's try to reuse the code from there and make it more concise using the `.isin()` method. To this end, we utilize the fact that both biking and hiking have the same threshold of 180 minutes.
 
 ```{python}
 #| eval: false
@@ -58,11 +68,12 @@ We have seen one solution to the task in @sec-exercise-logical-operators. Let's 
 )
 ```
 
-You can find the solution in @sec-solution-isin-operator.
+You can compare your solution to @sol-isin-operator.
+:::
 
 ## `.isna()`
 
-Recall from @sec-series-numeric-dtypes that Pandas series can represent missing values. Missing values are often represented by NumPy's `nan` or Pandas' `NA`. Sometimes, Python's `None` is used for this purpose. If we want to count missing values or filter a series or table accordingly, we first need a Boolean series indicating which positions of a series contain missing values. For this, the `Series` class offers the `.isna()` method.
+Recall from @sec-series-dtype-numeric that Pandas series can represent missing values. Missing values are often represented by NumPy's `nan` or Pandas' `NA`. Sometimes, Python's `None` is used for this purpose. If we want to count missing values or filter a series or table accordingly, we first need a Boolean series indicating which positions of a series contain missing values. For this, the `Series` class offers the `.isna()` method.
 
 ```{python}
 #| lst-label: lst-series-isna
@@ -76,7 +87,7 @@ durations_series.isna()
 
 The `durations_series` in @lst-series-isna contains missing values – maybe because the corresponding activities are not finished yet. The `.isna()` method identifies all missing values – regardless of whether they are indicated by `np.nan`, `pd.NA`, or `None`.
 
-### Exercise {#sec-exercise-isna-notna-operators}
+::: {#exr-isna-notna-operators}
 
 What if we are interested in values that are *not* missing? Can you construct a series where `True` corresponds to *existing* values in `durations_series`?
 
@@ -85,29 +96,5 @@ What if we are interested in values that are *not* missing? Can you construct a 
 durations_series  # TODO
 ```
 
-You can find the solution in @sec-solution-isna-notna-operators.
-
-## Solution to Exercises
-
-### Solution to [Exercise -@sec-exercise-isin-operator] {#sec-solution-isin-operator}
-
-```{python}
-(
-    (durations_series >= 60) & (activities_series == "run") |
-    (durations_series >= 180) & (activities_series.isin(["hike", "bike"]))
-)
-```
-
-### Solution to [Exercise -@sec-exercise-isna-notna-operators] {#sec-solution-isna-notna-operators}
-
-There are two equivalent solutions for this task with the latter being more elegant. The first solution uses `.isna()` and then inverts the result with `~`.
-
-```{python}
-~durations_series.isna()
-```
-
-Since finding non-missing values is a frequent task when working with data, Pandas offers a distinct method for it: `.notna()`. With this method, there is no need to invert a Boolean series to achieve the desired result.
-
-```{python}
-durations_series.notna()
-```
+You can compare your solution to @sol-isna-notna-operators.
+:::

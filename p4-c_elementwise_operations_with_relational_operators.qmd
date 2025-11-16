@@ -1,4 +1,13 @@
-# Elementwise Operations with Relational Operators {#sec-series-relational-operators}
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Elementwise Operations with Relational Operators {#sec-series-elementwise-operations-relational}
 
 ```{python}
 import pandas as pd
@@ -51,7 +60,7 @@ activities_series == "run"
 
 The resulting series has the same index as `activities_series` and its values – `True` or `False` – indicate whether the corresponding value in `activities_series` fulfills the condition of being equal to `"run"`.
 
-## Exercise {#sec-exercise-inequality-operation-with-series-and-scalar}
+::: {#exr-inequality-operation-with-series-and-scalar}
 
 Try to obtain a Boolean series indicating which activities are *not* running.
 
@@ -60,13 +69,14 @@ Try to obtain a Boolean series indicating which activities are *not* running.
 activities_series  # TODO
 ```
 
-You can find the solution in @sec-solution-inequality-operation-with-series-and-scalar.
+You can compare your solution to @sol-inequality-operation-with-series-and-scalar.
+:::
 
 ## Relational Operations involving two Series
 
 As with arithmetic operators, we can put a relational operator between two series. This will compare each element of one series with the corresponding element of the other series. The result is a Boolean series with the results of all comparisons.
 
-## Exercise {#sec-exercise-inequality-operation-with-two-series}
+::: {#exr-inequality-operation-with-two-series}
 
 Let's again try to find the long activities. This time, however, let's consider the type of activity when defining what a long activity is. For running, we consider a duration of at least one hour as long. For hiking and cycling, three hours are required to count as a long activity.
 
@@ -75,38 +85,5 @@ Let's again try to find the long activities. This time, however, let's consider 
 # TODO
 ```
 
-You can find the solution in @sec-solution-inequality-operation-with-two-series.
-
-## Solution to Exercises
-
-### Solution to [Exercise -@sec-exercise-inequality-operation-with-series-and-scalar] {#sec-solution-inequality-operation-with-series-and-scalar}
-
-```{python}
-activities_series != "run"
-```
-
-### Solution to [Exercise -@sec-exercise-inequality-operation-with-two-series] {#sec-solution-inequality-operation-with-two-series}
-
-```{python}
-durations_series >= activities_series.map({
-    "run": 60, "hike": 180, "bike": 180
-})
-```
-
-The first two activities (60 minutes of running and three and a half hours of hiking) are long. Hence, the first values in the result are `True`. The other activities (two hours of cycling and 45 minutes of running) don't qualify as long, so the corresponding values in the result are `False`.
-
-If you have trouble understanding the solution, perform an intermediary step as shown in the following. There, we define a series with the correct threshold for each duration in `durations_series`.
-
-```{python}
-threshold_series = activities_series.map({
-    "run": 60, "hike": 180, "bike": 180
-})
-
-threshold_series
-```
-
-In the next step, we compare `durations_series` with these thresholds.
-
-```{python}
-durations_series >= threshold_series
-```
+You can compare your solution to @sol-inequality-operation-with-two-series.
+:::

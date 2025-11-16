@@ -1,4 +1,13 @@
-# Getting Started
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Getting Started {#sec-getting-started}
 
 Pandas is one of the most popular Python packages – for good reason. It equips us with data-wrangling super-powers, allowing us to process data with ease.<!-- TODO: mit kleinem Tooltip das Wort data-wrangling erklären --> In this book, we will learn how to tap into these super-powers.<!-- end goal erwähnen: making data analysis a breeze and also a bit fun 😉 -->
 

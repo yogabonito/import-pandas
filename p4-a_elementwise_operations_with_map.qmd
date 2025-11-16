@@ -1,4 +1,13 @@
-# Elementwise Operations with `.map()`
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Elementwise Operations with `.map()` {#sec-series-elementwise-operations-map}
 
 ```{python}
 import pandas as pd
@@ -42,7 +51,7 @@ durations_series.map(minutes_to_hours_and_minutes)
 [minutes_to_hours_and_minutes(minutes) for minutes in durations_series]
 ``` -->
 
-### Exercise {#sec-exercise-map-user-ids-to-names}
+::: {#exr-map-user-ids-to-names}
 
 Can you apply a function to each of the elements of the following series?
 
@@ -60,7 +69,11 @@ The function should replace the user IDs 1, 22, and 42 with "Carl", "Barbara", a
 user_series  # TODO
 ```
 
-You can find two possible solutions in @sec-solution-map-user-ids-to-names.
+You can compare your solution to @sol-map-user-ids-to-names.
+:::
+
+
+
 
 
 
@@ -87,7 +100,7 @@ It works and the code is more concise now 😊
 [f"{minutes // 60}:{minutes - 60 * minutes // 60:02}" for minutes in durations_series]
 ``` -->
 
-### Exercise {#sec-exercise-map-user-ids-to-names-with-lambda}
+::: {#exr-map-user-ids-to-names-with-lambda}
 
 Can you map user IDs to names as in @sec-exercise-map-user-ids-to-names, but this time using a lambda function?
 
@@ -96,14 +109,8 @@ Can you map user IDs to names as in @sec-exercise-map-user-ids-to-names, but thi
 user_series  # TODO
 ```
 
-You can find a solution in @sec-solution-map-user-ids-to-names-with-lambda.
-
-
-
-
-
-
-
+You can compare your solution to @sol-map-user-ids-to-names-with-lambda.
+:::
 
 ## Mapping Elements with a Dictionary or Series
 
@@ -114,7 +121,7 @@ user_id_to_name_dict = {42: "Aleks", 22: "Barbara", 1: "Carl"}
 user_series.map(user_id_to_name_dict)
 ```
 
-### Exercise {#sec-exercise-map-user-ids-to-names-with-series}
+::: {#exr-map-user-ids-to-names-with-series}
 
 What if we had a series instead of a dictionary above with the series index and series elements corresponding to the dictionary keys and values, respectively? We can use it in place of the dictionary! Construct such a series and try it out 😉
 
@@ -124,49 +131,7 @@ user_id_to_names_series =  # TODO
 user_series.map(user_id_to_names_series)
 ```
 
-You can find a solution in @sec-solution-map-user-ids-to-names-with-lambda.
+You can compare your solution to @sol-map-user-ids-to-names-with-series.
+:::
 
 <!-- TODO? Maybe in a future version also discuss `.replace()` considering [this](https://stackoverflow.com/a/62947436) nice answer on stackoverflow -->
-
-## Solutions to Exercises
-
-### Solution to [Exercise -@sec-exercise-map-user-ids-to-names] {#sec-solution-map-user-ids-to-names}
-
-```{python}
-def user_id_to_names(user_id):    
-    if user_id == 1:
-        return "Carl"
-    if user_id == 22:
-        return "Barbara"
-    if user_id == 42:
-        return "Aleks"
-
-user_series.map(user_id_to_names)
-```
-
-Note that there are several other ways to solve this exercise. For example, we could have defined `user_id_to_names` using a dictionary.
-
-```{python}
-def user_id_to_names(user_id):  
-    return {1: "Carl", 22: "Barbara", 42: "Aleks"}[user_id]
-
-user_series.map(user_id_to_names)
-```
-
-### Solution to [Exercise -@sec-exercise-map-user-ids-to-names-with-lambda] {#sec-solution-map-user-ids-to-names-with-lambda}
-
-```{python}
-user_series.map(lambda user_id:
-    {1: "Carl", 22: "Barbara", 42: "Aleks"}[user_id]
-)
-```
-
-### Solution to [Exercise -@sec-exercise-map-user-ids-to-names-with-series] {#sec-solution-map-user-ids-to-names-with-series}
-
-```{python}
-user_id_to_names_series = pd.Series(
-    ["Carl", "Barbara", "Aleks"],
-    index=[1, 22, 42]
-)
-user_series.map(user_id_to_names_series)
-```

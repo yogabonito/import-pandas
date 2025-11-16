@@ -1,4 +1,13 @@
-# `dtype`s for Strings and Categories
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# `dtype`s for Strings and Categories {#sec-series-dtype-string-and-categorical}
 
 ```{python}
 import pandas as pd

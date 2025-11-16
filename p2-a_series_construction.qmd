@@ -1,3 +1,12 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
 # Constructing a Series {#sec-series}
 
 For representing a one-dimensional data structure, such as a row or a column in a table, Pandas provides a data type called `Series`. To use it, we first import Pandas.

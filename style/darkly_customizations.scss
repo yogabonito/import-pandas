@@ -1,0 +1,27 @@
+/*-- scss:defaults --*/
+
+$code-bg-color: #2e3440 !default;
+
+/*-- scss:rules --*/
+
+.sidebar-title {
+    color: $code-bg-color;
+}
+
+p code {
+    background-color: $code-bg-color !important;
+}
+
+figcaption code {
+    background-color: $code-bg-color;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code,
+.chapter-title code {
+    background-color: $code-bg-color;
+}

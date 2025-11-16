@@ -1,4 +1,13 @@
-# Elementwise Operations with Logical Operators {#sec-series-logical-operators}
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Elementwise Operations with Logical Operators {#sec-series-elementwise-operations-logical}
 
 ```{python}
 import pandas as pd
@@ -8,7 +17,7 @@ As we heard in @sec-series-boolean-series, Boolean series are very important. We
 
 ## Inversion operator `~` {#sec-series-boolean-series-inversion-operator}
 
-The tilde (`~`) inverts all values in a Boolean series. Let's revisit [Exercise -@sec-exercise-inequality-operation-with-series-and-scalar] to see how we can apply this operator. There, we used our series of activities.
+The tilde (`~`) inverts all values in a Boolean series. Let's revisit @exr-inequality-operation-with-series-and-scalar to see how we can apply this operator. There, we used our series of activities.
 
 ```{python}
 activities_series = pd.Series(
@@ -36,7 +45,7 @@ Note that for inverting a Boolean series, we are *not* using `not` – the usual
 ::: -->
 
 ::: callout-note
-While this example is solved more elegantly using a relational operator (as shown in @sec-solution-inequality-operation-with-series-and-scalar), inverting will prove invaluable once we build Boolean series without relational operators in later chapters. <!-- TODO: maybe mention the later chapters (one of them should be the next chapter if we still discuss .isin() and .isna() there) -->
+While this example is solved more elegantly using a relational operator (as shown in @sol-inequality-operation-with-series-and-scalar), inverting will prove invaluable once we build Boolean series without relational operators in later chapters. <!-- TODO: maybe mention the later chapters (one of them should be the next chapter if we still discuss .isin() and .isna() there) -->
 :::
 
 Let's see what happens if we omit the parentheses in @lst-series-invert-Boolean-series.
@@ -107,16 +116,17 @@ Let's say, we wanted to find out which activity durations ranged between one and
 
 The resulting series has `False` in the first and the last position, as the corresponding activities are shorter than the desired interval. The second duration exceeds the upper bound of the specified range, so this explains the remaining `False` value. Only the third entry in `durations_series` fulfills both conditions in @lst-series-combine-logical-and.
 
-## Exercise {#sec-exercise-logical-operators}
+::: {#exr-logical-operators}
 
-Let's revisit @sec-exercise-inequality-operation-with-two-series and solve it using relational and logical operators (but without the `.map()` as it was done in the corresponding solution in @sec-solution-inequality-operation-with-two-series).
+Let's revisit @exr-inequality-operation-with-two-series and solve it using relational and logical operators (but without the `.map()` as it was done in the corresponding @sol-inequality-operation-with-two-series).
 
 ```{python}
 #| eval: false
 # TODO
 ```
 
-You can find the solution in @sec-solution-logical-operators.
+You can compare your solution to @sol-logical-operators.
+:::
 
 ## Summary
 
@@ -124,19 +134,8 @@ We invert a Boolean series using the `~` operator. The logical OR and AND operat
 
 The operators `~`, `|`, and `&` have a higher precedence than relational operators (`==`, `!=`, `<`, `<=`, `>=`, `>`). Beginners may find these precedence rules confusing. To make the order of operations clear, it is advisable to use parentheses (`()`) generously. Failing to place necessary parenteses may lead to exceptions being raised or – much worse – logical errors staying under the radar.
 
-<!-- 
+
+<!--
 ::: callout-warning
 As with NOT (`~`) and the OR (`|`) operator, we need to enclose the comparisons for generating Boolean series with parentheses (`()`). Without parentheses, `60 & durations_series` (which probably gives an unexpected result) would be evaluated first. In summary, all logical operators in Pandas (`~`, `&`, `|`) have a higher operator precedence than relational operators (`==`, `!=`, `<`, `<=`, `>=`, `>`). That's why we must not forget to use parentheses.
 ::: -->
-
-## Solution to [Exercise -@sec-exercise-logical-operators] {#sec-solution-logical-operators}
-
-```{python}
-(
-    (durations_series >= 60) & (activities_series == "run") |
-    (durations_series >= 180) & (activities_series == "hike") |
-    (durations_series >= 180) & (activities_series == "bike")
-)
-```
-
-In this solution, we placed parentheses around each comparison to avoid problems with operator precedence. Note that no parentheses around the logical AND operation are required, as the `&` operator binds more strongly than the OR operator `~` anyway. We have, however, enclosed the whole statement in a pair of parenthes, because this way, we can break the statement across multiple lines without needing to write an explicit line continuation marker.

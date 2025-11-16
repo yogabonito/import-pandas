@@ -1,4 +1,13 @@
-# Data
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Data {#sec-data}
 
 We usually use Panads for handling data that is organized in tables. Tables are two-dimensional. In other words, they have a length (number of rows) and a width (number of columns). Each row represents an observation and each of the values in a row represents some property describing the corresponding observation.
 
@@ -22,115 +31,12 @@ pd.DataFrame(
 
 Usually, datasets with only four records are not that interesting. The `…` entries are there to indicate that more data exist, however, we don't show them in most of the cases to keep the tables concise.
 
-## Exercise {#sec-exercise-examples-for-data-in-tables}
+::: {#exr-examples-for-data-in-tables}
 
-We will often use the activity data described in table @tbl-chapter-1-example-table. Can you think of tables with other data? 🙃 What would the rows and columns represent in your dataset? You can find some examples in @sec-solution-examples-for-data-in-tables.
+We will often use the activity data described in table @tbl-chapter-1-example-table. Can you think of tables with other data? 🙃 What would the rows and columns represent in your dataset?
 
-## Possible Solutions to [Exercise -@sec-exercise-examples-for-data-in-tables] {#sec-solution-examples-for-data-in-tables}
-
-The activities dataset in @tbl-chapter-1-example-table is basically a collection of events, where each event is a pysical activity of a user. Other events could, for example, be
-
-<details>
-<summary>exams at a university</summary>
-```{python}
-#| echo: false
-#| label: tbl-chapter-1-exam-data
-#| tbl-cap: Example table with exam data
-pd.DataFrame(
-    {
-        "course_id": ["isp.2025.w", "isp.2025.w", "oop1.2026.s","oop1.2026.s", "…"],
-        "date": ["2026-02-02", "2026-02-02", "2026-07-02", "2026-07-02", "…"],
-        "time": ["15:00", "15:00", "16:00", "17:00", "…"],
-        "room": ["P1", "i13", "P1", "P1", "…"],
-        "…": ["…"] * 5
-    },
-    index=[0, 1, 2, 3, "…"]
-)
-```
-</details>
-
-<details>
-<summary>or a doctor's list of appointments with patients</summary>
-```{python}
-#| echo: false
-#| label: tbl-chapter-1-doctor-data
-#| tbl-cap: Example table with patient data
-pd.DataFrame(
-    {
-        "Social Security Number": ["409720011984", "183212111997", "007208032005", "183212111997", "…"],
-        "Appointment Time": ["2025-10-01 08:00", "2025-10-03 09:00", "2025-10-06 13:00", "2025-10-31 08:30", "…"],
-        "Weight": [68, 110, pd.NA, 108, "…"],
-        "Blood pressure": ["110-70", "155-100", "129-84", "140-92", "…"],
-        "…": ["…"] * 5
-    },
-    index=[0, 1, 2, 3, "…"]
-)
-```
-</details>
-
-or sensor measurements.
-```{python}
-#| echo: false
-#| label: tbl-chapter-1-sensor-data
-#| tbl-cap: Example table with data reported by heart rate and GPS sensors
-pd.DataFrame(
-    {
-        "Activity ID": [1, 1, "…", 101, 101],
-        "Time": ["2025-10-02 17:45:00", "2025-10-02 17:45:01", "…", "2025-10-31 18:09:47", "2025-10-31 18:09:48"],
-        "Heart Rate": ["62", "63", "…", "134", "134"],
-        "Longitude": ["13°53'01.5\"E", "13°53'01.9\"E", "…", pd.NA, pd.NA], 
-        "Latitude": ["46°36'41.7\"N", "46°36'41.8\"N", "…", pd.NA, pd.NA],
-        "…": ["…"] * 5
-    },
-    index=[0, 1, "…", 359802, 359803]
-)
-```
-
-Note that some pieces of information may be missing (`<NA>`), as in the *Longitude* and *Latitude* columns of @tbl-chapter-1-sensor-data.
-
-
-
-<!-- TODO: move the following into a chapter about data types.
-
-Each row contains information on an appointment with a patient who is identified by their social security number. Note that we will want to store such numbers as strings to prevent problems cuased by leading zeros. The column `Appointment Date` contains dates. While we could represent these dates using strings as well, it is recommended to use one of the temporal data types offered by Pandas. We will learn about these data types later. (**TODO: specify when temporal data types are discussed.**)
-
-Most of the time, the doctor measures a patient's weight. Note that one value is missing (`<NA>`), while the other values are integers. Pandas offers an integer data type which is capable of representing missing values.
-
-At each appointment, the doctor measures the patient's blood pressure, which consists of two values. In the table above, both values are stored in the same column only separated by a hyphen? This means that the values are stored as strings rather than integers.  -->
-
-<!-- 
-another example: events at CUAS
-
-```{python}
-#| echo: false
-#| tbl-cap: Example table with data on events
-pd.DataFrame(
-    {
-        "Event": ["Náboj", "Women in Data Science", "…"],
-        "Description": ["international math competition", "data science conference", "…"],
-        "Date": ["2026-03-13", pd.NA, "…"],
-        "Location": ["Villach", "Villach", "…"],
-        "…": ["…"] * 3
-    }
-)
-```
--->
-
-In contrast to the examples above, data can also describe entities that are not events. The following table lists the *users* who recorded the events in @tbl-chapter-1-example-table.
-
-```{python}
-#| echo: false
-#| tbl-cap: Example table with data on events
-pd.DataFrame(
-    {
-        "User ID": [1, 22, 42, "…"],
-        "Name": ["Carl", "Barbara", "Aleks", "…"],
-        "E-mail": ["charlie@example.com", "barbara@example.com", "aleks@example.com", "…"],
-        "Registered Since": ["2022-01-01 14:52", "2023-04-23 11:45", "2025-08-04 19:10", "…"]
-    },
-    index=[0, 1, 2, "…"]
-)
-```
+You can find some examples in @sol-examples-for-data-in-tables.
+:::
 
 ## Outlook
 

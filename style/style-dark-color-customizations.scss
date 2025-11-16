@@ -1,0 +1,10 @@
+/*-- scss:defaults --*/
+
+$code-bg-color: #2e3440 !default;
+
+/*-- scss:rules --*/
+
+.exercise,
+.solution {
+    border-color: $code-bg-color;
+}

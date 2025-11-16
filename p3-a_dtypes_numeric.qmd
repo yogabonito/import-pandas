@@ -1,4 +1,13 @@
-# Numeric `dtype`s {#sec-series-numeric-dtypes}
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Numeric `dtype`s {#sec-series-dtype-numeric}
 
 ```{python}
 import pandas as pd

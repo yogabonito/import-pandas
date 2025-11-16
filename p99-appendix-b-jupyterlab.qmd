@@ -1,0 +1,154 @@
+---
+include-after-body:
+  text: |
+    <script type="application/javascript" src="js/images-in-light-dark-theme.js"></script>
+---
+
+# Working with JupyterLab {#sec-appendix-jupyter}
+
+...
+
+![test figure](img/jupyter-01-start-light.png)
+
+...
+
+## Working in our Virtual Environment
+
+<div class="alert alert-danger">
+TODO: delete this section if possible
+</div>
+
+Creating the virtual environment was a *one-time step*. Installing the packages in our virtual environment was a *one-time step*. Each time we want to use the tools in our virtual environment from the terminal, we enter first enter our crafting room (see @sec-appendix-env-entering-env).
+
+<div class="alert alert-danger">TODO: explain that we work in jupyter lab. Refer to the next Appendix for infos on working with jupyter (start with "jupyterlab" or "jupyter-lab" or "jupyter lab" + additional basic infos about code cells and markdown cells + shortcuts (+ maybe later **workspaces**)) </div>
+
+## Code Along!
+
+If you want to get the most out of this book, you will write code yourself and contemplate the results it produces. If you're like me, writing code by hand (instead of copying-and-pasting) will result in quite a few mistakes. That's a good thing! In many cases, finding such a mistake will give you a precious aha moment and advance your understanding. In other cases, spotting an error will at least make you less likely to fall into the same trap again, thus saving you a lot of time when hunting down bugs in real-life projects.
+
+You might be hesitant to write code yourself. Some readers might even be afraid of the error messages their code will produce. Don't be one of them! Now is the best time to make mistakes. You can always compare your code to the code in this book. After working through this book, you will have honed your Pandas skills and you will be prepared for real-world challenges which don't come with solutions.
+
+## Where to Write Your Code
+
+Ready to write some code? Awesome! You can write your code in any code editor (e.g., Vim or Emacs) or integrated development environment (e.g., PyCharm or VS Code) you prefer. A particularly popular choice in the field of data analysis is JupyterLab. It offers code cells which can be repeatedly edited and executed. This interactive way of programming encourages us to run and edit pieces of code often and gives us immediate feedback. This is why this chapter will demonstrate how to work with JupyterLab.
+
+## How to Organize Your Files {#sec-appendix-jupyter-project-dir}
+
+Before we start coding, let's spend a minute or two thinking about our project files and folders. There are many ways to organize a project's files. Personally, I like to keep my data and code files separated. For a new project, I would, for instance, create a new project directory – let's call it `pandas_book`. In this directory, I would create other directories, as shown in the following directory structure.
+
+<!-- the directory tree was generated with the help of https://tree.nathanfriend.com/ -->
+<div class="sourceCode"><pre class="sourceCode"><code><span>pandas_book/</span>
+<span>├── data/</span>
+<span>├── ipynb/</span>
+<span>├── lib/</span>
+<span>└── requirements.txt</span></code></pre></div>
+
+- The `data` directory will hold files with data we want load and analyze.
+- The `ipynb` directory will contain Jupyter notebooks. Jupyter notebooks are files we use to code interactively in JupyterLab. The directory is named after the file extension of Jupyter notebooks (`ipynb`). You may wonder why these files end in `.ipynb`. While `nb` stands for notebook, `ipy` is a reference to the project Jupyter evolved from. This original project was called IPython, where the I stands for *interactive*, emphasizing the interactive way of coding which we will take advantage of.
+- The `lib` directory is intended to hold Python files which are not meant for interactive coding. There, we would place Python files which contain useful constants, functions, or classes we want to import in our notebooks.
+- The `requirements.txt` file we have seen in @sec-appendix-env-installing-packages contains all packages with their version numbers. This ensures that collaborators cloning the project directory can easily install the necessary dependencies.
+
+Let's create such a file structure for working through this book! If you find that this recommendation for a folder structure helps you keep things more organized, then don't thank me, but rather Joshua Cook^[Cook, Joshua. "Docker for Data Science: Building Scalable and Extensible Data Infrastructure around the Jupyter Notebook Server." (2017).] who I have this advice from 😉️
+
+## Starting JupyterLab
+
+We will start JupyterLab from the command line. Hence, open a terminal window in the project directory we created in @sec-appendix-jupyter-project-dir. Remember that we have installed JupyterLab as part of our virtual environment called `pandas_env` (see @sec-appendix-env). So, to start JupyterLab, we have to activate our virtual environment. In @lst-appendix-env-activate-env, you can see how this step is performed.
+
+Once we have entered our crafting room, we can start JupyterLab with the following command.
+
+``` {#lst-appendix-jupyter-start-jupyter .bash lst-cap="Starting JupyterLab."}
+jupyter lab
+```
+
+This will start a server running on your local machine. This server listens to requests on the default port. Furthermore, it will open a new browser window and go to the URL `localhost:9000/lab`.
+
+<div class="alert alert-danger">
+TODO: change 9000 in URL to default port
+</div>
+
+
+``` {#lst-appendix-jupyter-start-jupyter-at-specific-port .bash lst-cap="Starting JupyterLab at a specific port."}
+jupyter lab --port 9000
+```
+
+## Closing JupyterLab
+
+Open the terminal from which you started JupyterLab. There, press <kbd>CTRL</kbd> + <kbd>c</kbd> twice.
+
+
+
+
+## Creating a New Notebook
+
+## Opening an Existing Notebook
+
+## Edit Mode and Command Mode
+
+### Edit Mode
+
+- type text into cells
+
+### Command Mode
+
+- execute commands via keyboard shortcuts
+- move from one cell to the previous or next cell by pressing <kbd>&uarr;</kbd> and <kbd>&darr;</kbd>, respectively.
+
+### Switching Modes
+
+Switch from edit mode to command mode: <kbd>ESC</kbd>
+
+Switch from command mode to edit mode: <kbd>Enter</kbd>
+
+## Types of Cells
+
+There are three different types of cells in Jupyter:
+
+- code cells,
+- markdown cells, and
+- raw cells.
+
+### Code Cells
+
+Write code, execute code, input cell, printing area, output cell (TODO: terminology)
+
+To turn a cell into a code cell, we select the cell and (in command mode) we press the <kbd>y</kbd> key.
+
+
+### Markdown Cells
+
+To turn a cell into a markdown cell, we select the cell and (in command mode) we press the <kbd>m</kbd> key.
+
+### Raw Cells
+
+When starting out with JupyterLab, you will probably not need this raw cells. You can savely skip to @sec-appendix-jupyter-add-cells.
+
+If you still want to know more about this cell type, read on. 
+
+## Adding Cells {#sec-appendix-jupyter-add-cells}
+
+
+<kbd>a</kbd>
+
+<kbd>b</kbd>
+
+## Deleting Cells
+
+<kbd>dd</kbd>
+
+## Undo &amp; Redo
+
+<kbd>z</kbd>
+
+<kbd>SHIFT</kbd> + <kbd>z</kbd>
+
+## Copying and Pasting Cells
+
+<kbd>c</kbd> ... <kbd>v</kbd>
+
+## Saving a Notebook
+
+<kbd>CTRL</kbd> + <kbd>s</kbd>
+
+## Interrupting a Kernel
+
+## Restarting a Kernel

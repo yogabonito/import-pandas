@@ -8,7 +8,7 @@ code-annotations: hover
 # TODO: comment in lines above
 ---
 
-# Python Crash Course
+# Python Crash Course {#sec-appendix-python}
 
 ## Our Deep Dive into Python
 
@@ -940,7 +940,7 @@ In @lst-appendix-c-python-for-loop, we print repeatedly. In the first step, the 
 
 #### Berechnung der Nachbarn im Loop
 
-Oh nein! Das funktioniert nicht, weil wir den Index dafür benötigen würden! Also machen wir händisch eine Liste mit allen Indices.
+Oh nein! Das funktioniert nicht, weil wir den Index dafür benötigen würden! Also machen wir händisch eine Liste mit allen Indices und iterieren mit `for` über diese Liste von Indizes. Nun haben wir zwar nicht mehr den schönen Namen `cell`, jedoch können wir über den Index einfach auf die aktuelle Zelle zugreifen.
 
 ### `while`
 
