@@ -72,18 +72,6 @@ user_series  # TODO
 You can compare your solution to @sol-map-user-ids-to-names.
 :::
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## Mapping Elements with a Lambda Function
 
 Instead of passing a function defined with `def` to `.map()`, we can also pass a lambda function. Let's see this in action using the time format example again.

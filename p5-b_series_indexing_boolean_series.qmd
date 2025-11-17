@@ -18,7 +18,7 @@ import pandas as pd
 ```{python}
 row_series = pd.Series(
     [1, 42, "run", 60],
-    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+    index=["Activity ID", "User ID", "Activity Type", "Duration in Minutes"]
 )
 ```
 

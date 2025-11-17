@@ -72,7 +72,7 @@ But what about representing a single *row*? Each value in a row belongs to a dif
 #| lst-cap: Defining a series representing a row.
 row_series = pd.Series(
     [1, 42, "run", 60],
-    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+    index=["Activity ID", "User ID", "Activity Type", "Duration in Minutes"]
 )
 
 row_series

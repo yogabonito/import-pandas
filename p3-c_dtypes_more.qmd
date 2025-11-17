@@ -20,10 +20,3 @@ Especially Boolean series – that is series comprising only `True` and `False` 
 Furthermore, Pandas provides temporal dtypes for dates and times as well as durations. So, actually, the integer dtype for our series of activity durations was not the ideal choice. Instead, a dtype for time deltas would have been a better fit for our activity durations. Often, temporal dtypes are also used as index of a series or table. To learn more about these dtypes, check out the Pandas' user guide on [time series](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html) and [time deltas](https://pandas.pydata.org/pandas-docs/stable/user_guide/timedeltas.html).
 
 Here, we will move to the next chapter where we finally start doing something with our data 😃
-
-<script>
-const tooltipElements = document.getElementsByClassName("tt")
-for (const tooltipElement of tooltipElements) {
-  new bootstrap.Tooltip(tooltipElement)
-}
-</script>

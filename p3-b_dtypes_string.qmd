@@ -40,7 +40,7 @@ Similar to Python's `str` class, Pandas provides many methods for working with s
 
 <!-- TODO: do not forget to describe some string features later -->
 
-## Categorical Data
+## Categorical Data {#sec-series-dtype-category}
 
 Note that the elements of `activities_series` represent different categories of activities: running, hiking, biking. Since the series has the dtype `"string"`, there is nothing stopping us from changing these strings arbitrarily. To enforce `"run"`, `"hike"`, and `"bike"` as the only allowed values, we can use the `"category"` dtype.
 

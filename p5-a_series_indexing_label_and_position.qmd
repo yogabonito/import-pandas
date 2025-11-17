@@ -42,14 +42,14 @@ In @sec-series-non-numeric-index, we discussed that index labels are not necessa
 ```{python}
 row_series = pd.Series(
     [1, 42, "run", 60],
-    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+    index=["Activity ID", "User ID", "Activity Type", "Duration in Minutes"]
 )
 ```
 
 The `row_series` variable has strings as index labels, but this does not change how we access an element of the series – we simply use the index label. Let's access the duration stored in `row_series`.
 
 ```{python}
-row_series.loc["Activity Duration"]
+row_series.loc["Duration in Minutes"]
 ```
 
 ### Getting Multiple Elements of a Series Using `.loc`
@@ -66,7 +66,7 @@ Note that we now get a series as a result as opposed to @lst-series-loc-single-l
 
 ```{python}
 row_series.loc[
-    ["Activity Type", "Activity Duration"]
+    ["Activity Type", "Duration in Minutes"]
 ]
 ```
 
@@ -82,11 +82,11 @@ durations_series.loc[0:1]
 Note that slicing using `.loc[start:end]` will always result in all elements from `start` to `end`, including *both* ends of the range. This is in sharp contrast to Python's standard behavior, which does not include the index indicating the interval's upper bound.
 :::
 
-While including the upper bound of the slice may feel unpythonic at first, it starts to make more sense, once we consider an index consisting of strings. If we want all columns ranging from `"User ID"` to `"Activity Duration"`, we probably want to have the latter included in the result.
+While including the upper bound of the slice may feel unpythonic at first, it starts to make more sense, once we consider an index consisting of strings. If we want all columns ranging from `"User ID"` to `"Duration in Minutes"`, we probably want to have the latter included in the result.
 
 ```{python}
 row_series.loc[
-    "User ID":"Activity Duration"
+    "User ID":"Duration in Minutes"
 ]
 ```
 
