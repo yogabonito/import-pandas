@@ -1,16 +1,22 @@
 ---
-include-after-body:
-  text: |
-    <script type="application/javascript" src="js/images-in-light-dark-theme.js"></script>
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
 ---
 
 # Working with JupyterLab {#sec-appendix-jupyter}
 
-...
-
+::: {.light-content}
 ![test figure](img/jupyter-01-start-light.png)
+:::
 
-...
+::: {.dark-content}
+![test figure](img/jupyter-01-start-dark.png)
+:::
+
 
 ## Working in our Virtual Environment
 

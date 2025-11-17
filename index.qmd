@@ -1,3 +1,12 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
 # Preface {.unnumbered}
 
 This site is intended to offer information on `pandas`. The content is intended to grow over the next months.

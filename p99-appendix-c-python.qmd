@@ -1,11 +1,11 @@
 ---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
 code-annotations: hover
-# format:
-#   html:
-#     other-links:
-#       - text: Notebook
-#         href: p99-appendix-c-python.ipynb
-# TODO: comment in lines above
 ---
 
 # Python Crash Course {#sec-appendix-python}
