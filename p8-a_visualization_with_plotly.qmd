@@ -1,0 +1,157 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Visualizing our Data with Plotly {#sec-series-visualization-intro}
+
+Finally, we will learn how to bring our data to life by visualizing it. To this end, we will use Plotly–more precisely, its submodule called `express` which makes turning a data frame into an interactive plot a breeze. So, let's import `plotly.express`.
+
+```{python}
+import plotly.express as px
+```
+
+```{python}
+#| echo: false
+import plotly.io as pio
+```
+
+Which data shall we visualize? For now, let's go with a data set that is built into `plotly.express` (and in fact, many statistics and machine learning packages include it as well).
+
+```{python}
+iris_df = px.data.iris()
+iris_df.sample(5, random_state=123)
+```
+
+The dataset comprises measurements of 150 iris flowers with each row representing one flower. The measurements are contained in the columns *sepal_length*, *sepal_width*, *petal_length*, and *petal_width*. The column *species* describes which type of iris a flower is. Just as this column, the column *species_id* allows us to distinguish flowers according to their type. However, while the *species* column provides its information as strings, the flower type is encoded as an integer in the *species_id* column. Let's see how many types of irises we have.
+
+```{python}
+iris_df.species.unique()
+```
+
+OK, so it's only three types of flowers. Next, let's finally plot them. There are many different kinds of plots supported by Plotly. For now, let's use a scatter plot, where each flower will be represented by a dot. All we need to do is:
+
+::: light-content
+```{python}
+#| code-annotations: below
+px.scatter(           # <1>
+    iris_df,          # <2>
+    x="petal_width",  # <3>
+    y="petal_length"  # <4>
+)
+```
+
+1.  call a function from `plotly.express`
+2.  pass it the data frame holding the data we want to visualize
+3.  tell Plotly which column determines a flower's position on the x-axis
+4.  tell Plotly which column determines a flower's position on the y-axis
+:::
+
+::: dark-content
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly_dark"
+```
+
+```{python}
+#| code-annotations: below
+px.scatter(           # <1>
+    iris_df,          # <2>
+    x="petal_width",  # <3>
+    y="petal_length"  # <4>
+)
+```
+
+1.  call a function from `plotly.express`
+2.  pass it the data frame holding the data we want to visualize
+3.  tell Plotly which column determines a flower's position on the x-axis
+4.  tell Plotly which column determines a flower's position on the y-axis
+:::
+
+Did you notice that the graph is interactive? You can zoom in, pan, and if you hover any of the dots, you even get a tooltip with the exact patal width and length of the corresponding flower. Wow! 😃 However, there is one small issue with our graph.
+
+While there are 150 flowers, only 102 dots are visible! This is because some dots overlap, meaning that their corresponding flowers have the same petal widths and lengths. Let's reduce the opacity (i.e., increase the transparency) of the dots to visualize that some dots represent more than one flower. We do this by passing a value less than 1 to the `opacity` parameter.
+
+::: light-content
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly"
+```
+```{python}
+px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    opacity=0.5
+)
+```
+:::
+
+::: dark-content
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly_dark"
+```
+```{python}
+px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    opacity=0.5
+)
+```
+:::
+
+Much better! But it would be even nicer if the plot also informed us which type of iris each flower is. To this end, we tell Plotly to use the data in the *species* column to color each dot.
+
+::: light-content
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly"
+```
+```{python}
+px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+```
+:::
+::: dark-content
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly_dark"
+```
+```{python}
+px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+```
+:::
+
+Beautiful! 🤩 And it was just a tiny little bit of code!
+
+We might like to enhance the graph even more and in @sec-visualization-theme and @sec-visualization-layout we will see how to do that, but now, let's pause for a second and save our masterpiece.
+
+```{=html}
+<!-- ::: callout-note
+## Note
+
+In some environments, you might have have to call the `.show()` method of a Plolty figure. In this case, the code would be `px.scatter(iris_df, x="petal_width", y="petal_length").show()`.
+::: -->
+```

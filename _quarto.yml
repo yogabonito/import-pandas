@@ -136,11 +136,37 @@ book:
         - p4-e_elementwise_operations_with_isin_and_isna.qmd
     - part: "Indexing a Series"
       chapters:
-        - p5-a_series_indexing_label_and_position.qmd
-        - p5-b_series_indexing_boolean_series.qmd
-        # - p5-c_series_indexing_setting_values.qmd
-    # - part: "Advanced Series Operations"
+        - p5-a_series_indexing_label.qmd
+        - p5-b_series_indexing_position.qmd
+        - p5-c_series_indexing_boolean_series.qmd
+        - p5-d_series_indexing_setting_values.qmd
+    - part: "Advanced Series Features"
+      chapters:
+        - p6-a_advanced_topics_aggregation.qmd
+        - p6-b_advanced_topics_counting_values.qmd
+        - p6-c_advanced_topics_sorting.qmd
+        - p6-xxx_advanced_topics_changing_the_dtype.qmd
+        - p6-xxx_advanced_topics_string_operations.qmd
+    # - part: "`DataFrame` – the Pandas Data Type for Tables"
     #   chapters:
+    #     - p7-a_dataframes_intro.qmd
+    #     - p7-b_dataframes_construction.qmd
+    #     - p7-c_dataframes_accessing_columns.qmd
+    #     - p7-d_dataframes_accessing_rows.qmd
+    #     - p7-e_dataframes_accessing_rows_and_columns.qmd
+    #     - p7-f_dataframes_add_and_update_columns.qmd
+    #     - p7-g_dataframes_sorting.qmd
+    #     - p7-h_dataframes_missing_and_duplicated_values.qmd
+    #     - p7-j_dataframes_merge.qmd
+    #     - p7-k_dataframes_groupby.qmd
+    - part: "Visualization – Bringing our Data to Life"
+      chapters: 
+        - p8-a_visualization_with_plotly.qmd
+        - p8-b_visualization_saving_plots.qmd
+        - p8-c_visualization_theme.qmd
+        - p8-d_visualization_layout.qmd
+    # TODO: fix numbering in file names (e.g., replace xxx with a, b, or c)
+    # - part: "Advanced Series Operations"
     #     - p6-xxx_advanced_topics_missing_values.qmd
     #     - p6-xxx_advanced_topics_changing_the_dtype.qmd
     #     - p6-xxx_advanced_topics_string_operations.qmd
@@ -166,7 +192,7 @@ format:
     #toc-depth: 3
     #number-depth: 3
     highlight-style: nord
-    code-annotations: select # [below|hover|select], default: below
+    # code-annotations: select # [below|hover|select], default: below
     code-summary: "Show code"
     theme:
       light: flatly

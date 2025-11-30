@@ -1,0 +1,186 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Saving a Plot {#sec-series-visualization-saving-a-plot}
+
+```{python}
+import plotly.express as px
+```
+
+```{python}
+#| echo: false
+import plotly.io as pio
+```
+
+```{python}
+iris_df = px.data.iris()
+```
+
+We can easily save a plot by calling its `.write_image()` method. This method expects the path of the new file.
+
+```{python}
+#| eval: false
+#| lst-label: lst-plotly-save-plot
+#| lst-cap: Saving an image as SVG file.
+fig = px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+fig.write_image("path/to/my/plots/iris_figure.svg")
+```
+
+::: {.light-content}
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly"
+```
+```{python}
+#| echo: false
+fig = px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+fig.write_image("img/iris_figure_light.svg")
+```
+::: 
+::: {.dark-content}
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly_dark"
+```
+```{python}
+#| echo: false
+fig = px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+fig.write_image("img/iris_figure_dark.svg")
+```
+::: 
+
+
+
+This path can be absolute (i.e., starting at the root of your file system) or relative to the current working directory as in the example above.
+
+::: callout-note
+## Note
+
+In case you don't know what a directory is, it is just another word for *folder*.
+
+To find out what your current working directory is, we can run `import os` followed by `os.getcwd()`.
+
+<!-- TODO: show how to change the directory using os.chdir(/some/path/to/go/to) -->
+:::
+
+In @lst-plotly-save-plot, we save our plot to a file called *iris_figure.svg*. Since the file extension is `.svg`, Plotly will save the image as an SVG file. If the file name ended with `.pdf` instead, Plotly would save the image as a PDF file.
+
+::: callout-warning
+## Warning
+
+While Plotly also understands file extensions such as `.jpg` or `.png`, I strongly advise against doing that. With raster formats, such as JPG or PNG, the images will look pixelated if when zoomed-in. On the other hand, vector formats, such as SVG or PDF, will always look crisp no matter how much we zoom in.
+:::
+
+::: {.light-content}
+
+![The image saved in @lst-plotly-save-plot.](img/iris_figure_light.svg){#fig-plotly-saved-svg-file-light}
+
+::: 
+::: {.dark-content}
+
+![The image saved in @lst-plotly-save-plot.](img/iris_figure_dark.svg){#fig-plotly-saved-svg-file-dark}
+
+:::
+
+Sometimes, we might want to set the width and the height of the plot we are saving. This is especially important if we face restrictions related to the plot's aspect ratio. Let's say, we would like to produce a plot for a scientific paper and it must have an aspect ratio of 2:1.
+
+```{python}
+#| eval: false
+#| lst-label: lst-plotly-save-plot-fixed-size
+#| lst-cap: Specifying width and height when saving an image as SVG file.
+fig = px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+fig.write_image("path/to/my/plots/iris_figure.svg", width=500, height=250)
+```
+
+::: {.light-content}
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly"
+```
+```{python}
+#| echo: false
+fig = px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+fig.write_image("img/iris_figure_light_fixed_size.svg", width=500, height=250)
+```
+::: 
+::: {.dark-content}
+```{python}
+#| echo: false
+import plotly.io as pio
+pio.templates.default = "plotly_dark"
+```
+```{python}
+#| echo: false
+fig = px.scatter(
+    iris_df,
+    x="petal_width",
+    y="petal_length",
+    color="species",
+    opacity=0.5
+)
+fig.write_image("img/iris_figure_dark_fixed_size.svg", width=500, height=250)
+```
+::: 
+
+@lst-plotly-save-plot-fixed-size saved the following image.
+
+::: {.light-content}
+
+![The image saved in @lst-plotly-save-plot-fixed-size.](img/iris_figure_light_fixed_size.svg){#fig-plotly-saved-svg-file-light-fixed-size}
+
+::: 
+::: {.dark-content}
+
+![The image saved in @lst-plotly-save-plot-fixed-size.](img/iris_figure_dark_fixed_size.svg){#fig-plotly-saved-svg-file-dark-fixed-size}
+
+:::
+
+Setting the width and height clearly affected the size of the image. Note, however, that axes labels, legend items, the colored dots, etc. have the same size in both [@fig-plotly-saved-svg-file-light and @fig-plotly-saved-svg-file-light-fixed-size]{.light-content}[@fig-plotly-saved-svg-file-dark and @fig-plotly-saved-svg-file-dark-fixed-size]{.dark-content}.
+
+One drawback of saving a plot using `.write_image()` is that we lose tooltips and other interactivity features. To keep the plots interactivity, we save it as an HTML file using the `.write_html()` method.
+
+```{python}
+#| eval: false
+fig.write_html("path/to/my/plots/iris_figure.html")
+```
+
+Interactive plots can enhance dashboards. Personally, I like to embed them in presentations using a web-based presentation framework such as [reveal.js](https://revealjs.com/) or [Slidev](https://sli.dev/).

@@ -1,0 +1,101 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Theming a Plot {#sec-visualization-theme}
+
+```{python}
+import plotly.express as px
+iris_df = px.data.iris()
+```
+
+```{python}
+#| echo: false
+import plotly.io as pio
+```
+
+## Theming a Plot with the `template` Parameter
+
+While reading this book, you might have noticed that the plots' colors in the previous chapter depended on your theme setting. If you switched between light and dark theme, then the plots adapted accordingly. Some of your users will appreciate having the choice of a theme, too. Or maybe you would like your plots to look as if they were produced by another popular visualization package. Whatever your reason for theming is, with Plotly it is really easy to do.
+
+Let's again generate a scatter plot of our dataset using Plotly's default theme.<!-- We assign the plot to the `fig` variable, so we don't have to repeat the code snippet later. -->
+
+```{python}
+#| lst-label: lst-plotly-plot-with-default-theme
+#| lst-cap: Generating the plot with Plotly's default theme.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species")
+```
+
+To instruct Plotly to produce diagrams with a dark theme, we simply add the `template` parameter and set it to `"plotly_dark"`.
+
+```{python}
+#| lst-label: lst-plotly-plot-with-plotly_dark-theme
+#| lst-cap: Generating the plot with the `\"plotly_dark\"` theme.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species",
+           template="plotly_dark")
+```
+
+Besides Plotly's default theme called `"plotly"` and the dark theme `"plotly_dark"`, there is also `"plotly_white"` in case you prefer a white background in your chart.
+
+```{python}
+#| lst-label: lst-plotly-plot-with-plotly_white-theme
+#| lst-cap: Generating the plot with the `\"plotly_white\"` theme.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species",
+           template="plotly_white")
+```
+
+Furthermore, we can make our plots look as if they were created by the Python package [seaborn](https://seaborn.pydata.org/) or the R package [ggplot2](https://ggplot2.tidyverse.org/). To this end, we set the theme to `"seaborn"` or `"ggplot2"`, respectively.
+
+```{python}
+#| lst-label: lst-plotly-plot-with-seaborn-theme
+#| lst-cap: Generating the plot with the `\"seaborn\"` theme.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species",
+           template="seaborn")
+```
+
+```{python}
+#| lst-label: lst-plotly-plot-with-ggplot2-theme
+#| lst-cap: Generating the plot with the `\"ggplot2\"` theme.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species",
+           template="ggplot2")
+```
+
+
+## Theming a Plot Using a Default Theme
+
+If you are creating many plots, you probably do not like the idea of adding the `template` parameter to every function call. Hence, you may prefer to set the theme once, so it is applied every time a plot is created. To this end, we import `plotly.io`.
+
+```{python}
+import plotly.io as pio
+```
+
+Now, we can set a new default template, for instance, Plotly's dark theme using the following line.
+
+```{python}
+pio.templates.default = "plotly_dark"
+```
+
+Now the dark theme is the default, meaning that every plot that is generated from now on will have this theme.
+
+```{python}
+#| lst-label: lst-plotly-plot-with-plotly_dark-theme-default
+#| lst-cap: Generating the plot with the default theme which was set to `\"plotly_dark\"`.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species")
+```
+
+Whenever we want to change the theme, we can assign a new theme name to `pio.templates.default` before generating the desired plot. Alternatively, we can again use the `template` parameter to override the default theme.
+
+```{python}
+#| lst-label: lst-plotly-plot-with-ggplot2-theme-overrides-dark_theme
+#| lst-cap: Generating the plot using the `\"ggplot2\"`, overriding the the default theme which was set to `\"plotly_dark\"`.
+px.scatter(iris_df, x="petal_width", y="petal_length", color="species",
+           template="ggplot2")
+```
+
+
+So far, we have only tinkered with colors. How about other aspects of a plot, such as font sizes or margins? Let's find out in the next chapter! 🙂
