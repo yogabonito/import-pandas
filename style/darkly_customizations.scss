@@ -8,7 +8,8 @@ $code-bg-color: #2e3440 !default;
     color: $code-bg-color;
 }
 
-p code {
+p code,
+dl code {
     background-color: $code-bg-color !important;
 }
 
