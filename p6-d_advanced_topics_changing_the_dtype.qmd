@@ -1,0 +1,80 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Changing a Series' `dtype` {#sec-series-change-dtype}
+
+```{python}
+import pandas as pd
+```
+
+Sometimes we might want to change a series' `dtype` (or the `dtype` of a column in a table). This happens often when the default data type is not the one we would like to work with. For instance, let's take another look at our `activities_series`.
+
+```{python}
+activities_series = pd.Series(["run", "hike", "bike", "run"])
+
+activities_series
+```
+
+Each value in this series indicates an activity category. However, we won't obtain a series with categorical `dtype` if we don't specify the `dtype` when initializing the series (see @sec-series-dtype-category). To change the `dtype`, we ask for a series with the desired `dtype` using the `.astype()` method.
+
+```{python}
+activities_series.astype("category")
+```
+
+The result (i.e., the return value of `.astype()`) is a series with the desired `dtype`. However, note that the original series did not change!
+
+```{python}
+activities_series
+```
+
+To really change the `dtype` of a series, we need to assign the result of `.astype()` to the variable.
+
+```{python}
+activities_series = activities_series.astype("category")
+
+activities_series
+```
+
+Now, we have successfully adjusted the `dtype` 🙂
+
+::: {#exr-series-advanced-change-dtype}
+
+Let's have a look at the `durations_series` with `"int64"` as `dtype`.
+
+```{python}
+durations_series = pd.Series(
+    [60, 209, 119, 45],
+    name="Duration in Minutes",
+    dtype="int64"
+)
+```
+
+In the next step, we change two values of the series to `pd.NA`. Note, however, that missing values are not supported by the series' `dtype`, so it changes to `"float64"`.
+
+```{python}
+durations_series.loc[[1, 2]] = pd.NA
+durations_series
+```
+
+```{python}
+#| echo: false
+assert(str(durations_series.dtype) == "float64") # safety check for future Pandas versions (checks whether the dtype is still float64 after adding missing values to the series)
+```
+
+Change the `dtype` of `durations_series` to an integer `dtype` which supports missing values
+
+```{python}
+#| eval: false
+durations_series #TODO
+
+durations_series
+```
+
+Hint: @sec-series-dtype-numeric describes which `dtype` we need. You can compare your solution to @sol-series-advanced-change-dtype.
+:::

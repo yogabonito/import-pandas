@@ -55,9 +55,9 @@ activities_series = pd.Series(["run", "hike", "bike", "run"])
 activities_series
 ```
 
-As before, we have row indices in the left column of the output. The right column, however, now contains text instead of numbers and Pandas can handle that as well. As shown in the output, the data type of this series is `object`. This means that the series may hold any types of values. For instance, the `object` data type would also allow a mix of strings and numbers as values. Later, we will see how to specify a more suitable dtype for `Series` objects which hold names of categories.
+As before, we have row indices in the left column of the output. The right column, however, now contains text instead of numbers and Pandas can handle that as well. As shown in the output, the data type of this series is `object`. This means that the series may hold any types of values. For instance, the `object` data type would also allow a mix of strings and numbers as values. In @sec-series-dtype-category, we will see how to specify a more suitable dtype for `Series` objects which hold names of categories.
 
-<!-- TODO: link to the section which talks about the dtype "category" (instead of just writing "Later, we will see...") -->
+<!-- TODO: (with Pandas 3.0) check if we still get `object` as default dtype. (They announced that this behavior will change.) -->
 
 <!-- TODO: Quiz question: What's the data type and what's the dtype of activities_series? -->
 

@@ -1,0 +1,130 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# String Operations {#sec-series-advanced-topics-string-operations}
+
+```{python}
+import pandas as pd
+```
+
+In this lesson, we will take a look at Pandas' string methods, which are applied to each element in a series. These string methods only work if each element in the series is a string. <!-- Furthermore, we can achieve the result of any string method also by applying the `.map()` method instead. So why even bother learning about string methods? Because they allow us to write less code, which also makes our code easier to read. --> Let's assume the `activities_series` variable looks as follows.
+
+```{python}
+activities_series = pd.Series(
+    ["running", "hiking  ", "Bike", "  RUNNING  "],
+    name="Activity Type"
+)
+```
+
+## Checking the end of a string
+
+We expect all verbs to be stored in their base form–also known as the bare infinitive– such as *run* or *hike*. Sometimes, however, users might enter the present participle (i.e., verbs ending in *ing*), so we would like to recognize all occurrences of this inconsistency. To check in Python whether a string is ending in *ing*, we can do the following.
+
+```{python}
+"running".endswith("ing")
+```
+
+Hence, we might try to apply this check to all elements using the `.map()` method in the following way.
+
+```{python}
+activities_series.map(lambda activity: activity.endswith("ing"))
+```
+
+This result indeed signals that `"hiking"` has the wrong form. Can we achieve the same result with less typing? Yes!
+
+```{python}
+activities_series.str.endswith("ing")
+```
+
+Here, we make use of the `Series` class `.str` property which provides access to a lot of string methods. These methods are named just like the ones we already know from Python and they also work like the built-in string methods.
+
+## Removing Leading and Trailing White Space
+
+Our approach with the `.endswith()` method detected that the first element in `activities_series` has the wrong form, however, this method did not flag the second and last element as problematic. The reason for missing these *ing* suffixes is that these strings don't end in `"ing"`, but spaces instead. Thus, we need to remove the whitespace at the end of a string (i.e., the trailing white space). To remove trailing white space in Python, we use `.rstrip()`.
+
+```{python}
+"  RUNNING  ".rstrip()
+```
+
+And while we're at it, let's also remove leading white space using `.strip()`.
+
+```{python}
+"  RUNNING  ".strip()
+```
+
+To apply this operation to every element in the series, we will use the corresponding string method of the `Series` class again.
+
+```{python}
+activities_series.str.strip()
+```
+
+Great! Now all elements in the series are aligned.
+
+::: {#exr-series-advanced-strings-strip-and-endswith}
+
+Let's check how many activities with an *ing* suffix are detected after removing leading and trailing white space.
+
+```{python}
+#| eval: false
+activities_series  #TODO
+```
+
+You can compare your solution to @sol-series-advanced-strings-strip-and-endswith.
+:::
+
+## Making a String Lower-Case
+
+With the previous exercise, we successfully recognized that the first two series elements violate the rule of using the base form of a verb. However, the last element in the series, `"  RUNNING  "`, was not reported as wrong although we removed the trailing white space. The problem is that this string is still not ending in `"ing"`, but `"ING"` instead. One way to fix this issue would be to lowercase a string before checking its last three characters. In Python, lowercasing is done by the `.lower()` method.
+
+```{python}
+"  RUNNING  ".lower()
+```
+
+::: {#exr-series-advanced-strings-lower-and-strip-and-endswith}
+
+Let's check again how many activities there are with an *ing* suffix! This time, we not only remove leading and trailing white space, but also fix the issue resulting from upper-case letters.
+
+```{python}
+#| eval: false
+activities_series  #TODO
+```
+
+You can compare your solution to @sol-series-advanced-strings-lower-and-strip-and-endswith.
+:::
+
+## Fixing the Inconsistencies
+
+Awesome, We found all occurences of *ing* suffixes! 🎉 Of course, there are many more string methods in Pandas. Feel free to check them out in the official documentation. But now, let's try to actually fix the issues by
+
+- using the verbs' base form,
+- making activity names lower-case, and
+- removing unnecessary white space.
+
+The first of these three problems is challenging because the solution does not only involve removing the *ing* suffix. Removing `"ing"` from `"running"` leaves us with one excess letter (`"runn"`) and performing the same operation on `"hiking"` results in a word that is too short (`"hik"`). So, fixing this problem requires more than just a simple string method. But after what we have learned in this lesson, we can fix the other two problems easily.
+
+```{python}
+activities_series = activities_series.str.lower().str.strip()
+activities_series
+```
+
+If we really want to, we can also fix the first problem in an automated fashion. For this task, `nltk`, a popular package for natural language processing, proves to be very useful.
+
+```{python}
+#| lst-label: lst-series-map-nltk-wordnet-lemmatize
+#| lst-cap: Transforming verbs into their base form using the `nltk` package.
+import nltk
+nltk.download('wordnet')
+from nltk.stem.wordnet import WordNetLemmatizer
+activities_series = activities_series.map(
+    lambda word: WordNetLemmatizer().lemmatize(word, "v")
+)
+activities_series
+```
+
+In @lst-series-map-nltk-wordnet-lemmatize, we use the `.lemmatize()` method which, given any word, returns the same word in its base form. With the second parameter (`"v"`), we specify that we are interested in the base form of a verb, as many English words can be understood as both verbs and nouns.

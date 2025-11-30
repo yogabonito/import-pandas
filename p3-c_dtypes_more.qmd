@@ -13,7 +13,7 @@ So far, we have seen dtypes for integers, floating-point numbers, objects, strin
 
 ## Boolean Series {#sec-series-boolean-series}
 
-Especially Boolean series – that is series comprising only `True` and `False` values – will prove invaluable later. They will naturally emerge when we perform checks on our data. Later<!-- TODO: publisch aggregation chapter and reference it here -->, we will see how useful these series are for counting, for instance, counting long activities or activity types. Furthermore, we will use Boolean series for filtering series in @sec-series-indexing-boolean-series and whole tables in (not published yet). <!-- TODO: publish section on indexing dataframes and then reference it here -->
+Especially Boolean series – that is series comprising only `True` and `False` values – will prove invaluable later. They will naturally emerge when we perform checks on our data. In @sec-series-advanced-topics-counting-values-aggregation, we will see how useful these series are for counting, for instance, counting long activities or activity types. Furthermore, we will use Boolean series for filtering series in @sec-series-indexing-boolean-series and whole tables in. <!-- TODO: publish section on indexing dataframes and then reference it here -->
 
 ## Series with Temporal `dtypes`
 

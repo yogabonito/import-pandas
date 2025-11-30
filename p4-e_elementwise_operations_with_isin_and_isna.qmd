@@ -71,7 +71,7 @@ We have seen one solution to the task in @exr-logical-operators. Let's try to re
 You can compare your solution to @sol-isin-operator.
 :::
 
-## `.isna()`
+## `.isna()` {#sec-series-elementwise-operations-isna}
 
 Recall from @sec-series-dtype-numeric that Pandas series can represent missing values. Missing values are often represented by NumPy's `nan` or Pandas' `NA`. Sometimes, Python's `None` is used for this purpose. If we want to count missing values or filter a series or table accordingly, we first need a Boolean series indicating which positions of a series contain missing values. For this, the `Series` class offers the `.isna()` method.
 

@@ -376,7 +376,7 @@ durations_series.notna()
 
 :::
 
-<!-- chapter indexing by label and position -->
+<!-- chapter indexing by label -->
 
 ::: {#sol-series-loc-filter-with-list}
 
@@ -386,7 +386,7 @@ durations_series.notna()
 #| echo: false
 row_series = pd.Series(
     [1, 42, "run", 60],
-    index=["Activity ID", "User ID", "Activity Type", "Activity Duration"]
+    index=["Activity ID", "User ID", "Activity Type", "Duration in Minutes"]
 )
 ```
 
@@ -399,6 +399,8 @@ row_series.loc[labels]
 ```
 
 :::
+
+<!-- chapter indexing by position  -->
 
 ::: {#sol-series-iloc-replicate-head}
 
@@ -484,6 +486,271 @@ is_long_activity = durations_series >= activities_series.map({
 })
 
 activities_series.loc[is_long_activity]
+```
+
+:::
+
+<!-- chapter indexing to set values in a series  -->
+
+::: {#sol-series-indexing-setting-single-value}
+
+(for @exr-series-indexing-setting-single-value)
+
+```{python}
+#| echo: false
+row_series = pd.Series(
+    [1, 42, "run", pd.NA],
+    index=["Activity ID", "User ID", "Activity Type", "Duration in Minutes"]
+)
+```
+
+```{python}
+row_series.iloc[3] = 60
+
+row_series
+```
+
+:::
+
+::: {#sol-series-indexing-setting-multiple-values-using-labels}
+
+(for @exr-series-indexing-setting-multiple-values-using-labels)
+
+```{python}
+#| echo: false
+durations_series = pd.Series(
+    [60, pd.NA, pd.NA, 45],
+    name="Duration in Minutes",
+    dtype="Int64"
+)
+```
+
+```{python}
+durations_series.loc[[1, 2]] = [210, 120]
+
+durations_series
+```
+
+:::
+
+::: {#sol-series-indexing-setting-multiple-values-using-boolean-series}
+
+(for @exr-series-indexing-setting-multiple-values-using-boolean-series)
+
+```{python}
+durations_series.loc[durations_series > 180] = 180
+
+durations_series
+```
+
+:::
+
+<!-- chapter aggregation -->
+
+::: {#sol-series-advanced-sum-activity-durations-of-user-42}
+
+(for @exr-series-advanced-sum-activity-durations-of-user-42)
+
+```{python}
+#| echo: false
+users_series = pd.Series(
+    [42, 22, 1, 42],
+    name="User ID"
+)
+```
+
+```{python}
+user_42_durations_series = durations_series.loc[
+    users_series == 42
+]
+
+user_42_durations_series.sum()
+```
+
+To achieve a more concise solution, we can skip the assignment of the filtered series to a variable and call the `.sum()` method directly.
+
+```{python}
+durations_series.loc[
+    users_series == 42
+].sum()
+```
+
+:::
+
+::: {#sol-series-advanced-sum-activity-durations-of-running}
+
+(for @exr-series-advanced-sum-activity-durations-of-running)
+
+```{python}
+#| echo: false
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+```
+
+```{python}
+running_durations_series = durations_series.loc[
+    activities_series == "run"
+]
+running_durations_series.sum()
+```
+
+To achieve a more concise solution, we can skip the assignment of the filtered series to a variable and call the `.sum()` method directly.
+
+```{python}
+durations_series.loc[
+    activities_series == "run"
+].sum()
+```
+
+:::
+
+::: {#sol-series-advanced-mean-running-duration}
+
+(for @exr-series-advanced-mean-running-duration)
+
+```{python}
+durations_series.loc[
+    activities_series == "run"
+].mean()
+```
+
+:::
+
+::: {#sol-series-advanced-max-activity-duration}
+
+(for @exr-series-advanced-max-activity-duration)
+
+```{python}
+durations_series.max()
+```
+
+:::
+
+::: {#sol-series-advanced-aggregation-all}
+
+(for @exr-series-advanced-aggregation-all)
+
+```{python}
+(activities_series.loc[durations_series <= 60] == "run").all()
+```
+
+:::
+
+<!-- chapter counting values -->
+
+::: {#sol-series-advanced-sum-boolean-run-activities}
+
+(for @exr-series-advanced-sum-boolean-run-activities)
+
+```{python}
+is_run_series = activities_series == "run"
+is_run_series.sum()
+```
+
+To achieve a more concise solution, we can skip the assignment of the Boolean series to a variable and call the `.sum()` method directly.
+
+```{python}
+(activities_series == "run").sum()
+```
+
+:::
+
+::: {#sol-series-advanced-proportion-boolean-run-activities}
+
+(for @exr-series-advanced-proportion-boolean-run-activities)
+
+```{python}
+(activities_series == "run").sum()
+```
+
+:::
+
+::: {#sol-series-advanced-count-activities-per-user-value-counts-absolute}
+
+(for @exr-series-advanced-count-activities-per-user-value-counts-absolute)
+
+```{python}
+#| echo: false
+users_series = pd.Series(
+    [42, 22, 1, 42],
+    name="User ID"
+)
+```
+
+```{python}
+users_series.value_counts()
+```
+
+:::
+
+::: {#sol-series-advanced-count-activities-per-user-value-counts-relative}
+
+(for @exr-series-advanced-count-activities-per-user-value-counts-relative)
+
+```{python}
+activities_series.value_counts(normalize=True)
+```
+
+:::
+
+<!-- chapter sorting -->
+
+::: {#sol-series-advanced-sort-and-find-top-3}
+
+(for @exr-series-advanced-sort-and-find-top-3)
+
+```{python}
+durations_series.sort_values(ascending=False).iloc[:3]
+```
+
+:::
+
+::: {#sol-series-advanced-nlargest-to-find-top-3}
+
+(for @exr-series-advanced-nlargest-to-find-top-3)
+
+```{python}
+durations_series.nlargest(3)
+```
+
+:::
+
+<!-- chapter changing dtypes -->
+
+::: {#sol-series-advanced-change-dtype}
+
+(for @exr-series-advanced-change-dtype)
+
+```{python}
+durations_series = durations_series.astype("Int64")
+
+durations_series
+```
+
+:::
+
+<!-- chapter string methods -->
+
+::: {#sol-series-advanced-strings-strip-and-endswith}
+
+(for @exr-series-advanced-strings-strip-and-endswith)
+
+```{python}
+activities_series.str.strip().str.endswith("ing")
+```
+
+The first part of the solution (i.e., `activities_series.str.strip()`) returns a series of strings on which we can apply the `.endswith()` string method.
+
+:::
+
+::: {#sol-series-advanced-strings-lower-and-strip-and-endswith}
+
+(for @exr-series-advanced-strings-lower-and-strip-and-endswith)
+
+```{python}
+activities_series.str.lower().str.strip().str.endswith("ing")
 ```
 
 :::

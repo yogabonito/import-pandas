@@ -1,0 +1,94 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Setting Elements of a Series Using `.loc` and `.iloc` {#sec-series-indexing-setting}
+
+```{python}
+import pandas as pd
+```
+
+### Setting a Single Element
+
+So far, we have used indexing only to retrieve specific values from a series. But what if we wanted to *change* specific values in a series? For example, let's have a look at the following series describing an activity. 
+
+```{python}
+row_series = pd.Series(
+    [1, 42, "run", 59],
+    index=["Activity ID", "User ID", "Activity Type", "Duration in Minutes"]
+)
+```
+
+The duration value of 59 might suggest that this activity has finished after 59 minutes. Let's assume that, actually, the activity is still ongoing. To indicate this, let's overwrite the value of 59 with `pd.NA`. Thankfully, this task is very easy once we are familiar with indexing 🙂 We use indexing to select the value of interest and overwrite it using the assignment operator (`=`).
+<!-- Ŕeady for some good news? If we know which values we want to update in a series, then updating them is a matter of using correct indexing and the assignment operator (`=`). Let's have a look at an example series. -->
+
+```{python}
+row_series.loc["Duration in Minutes"] = pd.NA
+
+row_series
+```
+
+::: {#exr-series-indexing-setting-single-value}
+
+The activity described by the `row_series` variable has finished after 60 minutes. Update `row_series` accordingly, but this time using `.iloc` instead of `.loc`.
+
+```{python}
+#| eval: false
+row_series #TODO
+```
+
+You can compare your solution to @sol-series-indexing-setting-single-value.
+:::
+
+### Setting Multiple Elements
+
+We are not limited to updating a single series element at a time. Let's try to set multiple elements at once, this time using `durations_series` as an example.
+
+```{python}
+durations_series = pd.Series(
+    [60, 209, 119, 45],
+    name="Duration in Minutes",
+    dtype="Int64"
+)
+```
+
+Let's assume that the second and third activity are still ongoing. Hence, we will set their duration to `pd.NA`.
+
+```{python}
+durations_series.loc[[1, 2]] = pd.NA
+
+durations_series
+```
+
+To assign different values to the selected series elements, we can assign a list of values rather than a single value.
+
+::: {#exr-series-indexing-setting-multiple-values-using-labels}
+
+Let's try to set the durations of the second and third activity to 210 and 120 minutes, respectively – using only a single line of code.
+
+```{python}
+#| eval: false
+durations_series # TODO
+
+durations_series
+```
+
+You can compare your solution to @sol-series-indexing-setting-multiple-values-using-labels.
+:::
+
+::: {#exr-series-indexing-setting-multiple-values-using-boolean-series}
+
+Let's assume that we want to set an upper bound to the duration of activities. Change all activity durations in `durations_series` which exceed 180 minutes to 180!
+
+```{python}
+#| eval: false
+durations_series  # TODO
+```
+
+You can compare your solution to @sol-series-indexing-setting-multiple-values-using-boolean-series.
+:::

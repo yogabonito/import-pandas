@@ -1,0 +1,93 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Sorting {#sec-series-advanced-topics-sorting}
+
+```{python}
+import pandas as pd
+```
+
+## Sorting with `.sort_values()`
+
+Remember our `durations_series`?
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+```
+
+It is great that it comprises all activity durations, but sometimes&mdash;especially when handling larger datasets&mdash;it would be even greater if the information was also sorted. To obtain an ordered copy of a series, we can use the `.sort_values()` method. Let's use it and see what happens.
+
+```{python}
+durations_series.sort_values()
+```
+
+The values are clearly sorted, however, instead of the shortest durations we would prefer to see the longest activity durations on top. To sort in descending order, we set the `ascending` parameter to `False`.
+
+```{python}
+durations_series.sort_values(ascending=False)
+```
+
+::: {#exr-series-advanced-sort-and-find-top-3}
+
+Use the `.sort_values()` method and indexing to get the three longest activity durations.
+
+```{python}
+#| eval: false
+durations_series # TODO
+```
+
+You can compare your solution to @sol-series-advanced-sort-and-find-top-3.
+:::
+
+By inspecting the `durations_series` again, we can verify that `.sort_values()` indeed returns a copy of the series. In other words, the method does not change the original series.
+
+```{python}
+durations_series
+```
+
+What if we wanted to actually change the `durations_series` to its sorted version? We could assign the result of `.sort_values()` to the variable (i.e., `durations_series = durations_series.sort_values()`). Another possibility is to call `.sort_values()` with the `inplace` parameter set to `True`.
+
+```{python}
+durations_series.sort_values(inplace=True)
+```
+
+Note how this call to `.sort_values()` did not return a value! Instead the method only changed the series it was called on.
+
+```{python}
+durations_series
+```
+
+And indeed, we now see that `durations_series` is now sorted.
+
+::: {.callout-note}
+There are in fact several methods in the Pandas package which accept an `inplace` parameter and the effect of this parameter is always the same. A method call with `inplace=False` will return a copy of our data with the method's effect applied to it. Calling such a method with `inplace=True`, on the other hand, will not produce a return value and will apply the method's operations directly to the data.
+:::
+
+## $n$ Smallest/Largest Entries
+
+In @exr-series-advanced-sort-and-find-top-3, we used `.sort_values()` to find the three longest activity durations. However, there is actually an easier way to get the largest or smallest $n$ values of a series. We can simply use the `.nlargest()` or `.nsmallest()` method, respectively. Here is an example showing how to retrieve the three durations of the three shortest activities.
+
+```{python}
+durations_series.nsmallest(3)
+```
+
+::: {#exr-series-advanced-nlargest-to-find-top-3}
+
+Using the `.nlargest()` method, let's find the durations of the three longest activities. This means, we are replicating the result from @exr-series-advanced-sort-and-find-top-3 with less code.
+
+```{python}
+#| eval: false
+durations_series # TODO
+```
+
+You can compare your solution to @sol-series-advanced-nlargest-to-find-top-3.
+:::

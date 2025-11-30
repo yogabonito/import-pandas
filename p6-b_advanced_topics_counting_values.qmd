@@ -1,0 +1,101 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Counting Values {#sec-series-advanced-topics-counting-values}
+
+```{python}
+import pandas as pd
+```
+
+## Counting with Boolean Series and Aggregation {#sec-series-advanced-topics-counting-values-aggregation}
+
+We'll start this chapter with our `activities_series` variable and our goal will be to count values in this series.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+```
+
+It turns out that for counting we can utilize Boolean series and aggregation methods we learned about in @sec-series-advanced-topics-aggregation-numeric-series. The methods `.sum()` and `.mean()` interpret `True` values in a series as `1` and `False` values as `0`. Hence, `.sum()` is counting a Boolean series' `True` values.
+
+::: {#exr-series-advanced-sum-boolean-run-activities}
+
+Let's count the number of running activities!
+
+```{python}
+#| eval: false
+activities_series # TODO
+```
+
+Hint: Construct a Boolean series object from `activities_series` with `True` values in the positions of running activities (see @lst-series-equality)! Then, use `.sum()` to count the number of `True` values! You can compare your solution to @sol-series-advanced-sum-boolean-run-activities.
+:::
+
+The `.mean()` method devides the number of `True` values by the total number of elements in a Boolean series. Thus, this method gives us the proportion of `True` values.
+
+::: {#exr-series-advanced-proportion-boolean-run-activities}
+
+Let's calculate the proportion of running activities!
+
+```{python}
+#| eval: false
+activities_series # TODO
+```
+
+You can compare your solution to @sol-series-advanced-proportion-boolean-run-activities.
+:::
+
+<!-- TODO: if necessary, add exercises. E.g., what proportion of activities lasted for at least an hour. -->
+
+
+## Counting with `.value_counts()`
+
+What if were not only interested in running, but also wanted to count the occurences of all other activities? Pandas offers a method which does just that: `value_counts`. Let's calculate the popularity of each activity by counting how often it was performed.
+
+```{python}
+activities_series.value_counts()
+```
+
+That was easy! 🙂 Of course, it would also have been easy to run a command as in @exr-series-advanced-sum-boolean-run-activities once per activity category, but this clumsy approach leads to code that is unnecessarily long and thus, cumbersome to write and tedious to read. We would also have to touch this long piece of code every time we add a new acitivity type in future, for example swimming. With `.value_counts()`, any new activity types are considered automatically 🎉
+
+::: {#exr-series-advanced-count-activities-per-user-value-counts-absolute}
+
+The `users_series` tells us by which user each activity was performed.
+
+```{python}
+users_series = pd.Series(
+    [42, 22, 1, 42],
+    name="User ID"
+)
+```
+
+Let's use this series to count how often each user was active!
+
+```{python}
+#| eval: false
+users_series # TODO
+```
+
+You can compare your solution to @sol-series-advanced-count-activities-per-user-value-counts-absolute.
+:::
+
+If we are interested in relative (rather than absolute) frequencies, we can still use `.value_counts()` and pass `normalize=True` as an argument.
+
+::: {#exr-series-advanced-count-activities-per-user-value-counts-relative}
+
+Let's count how often each activity was performed, but this time as a proportion.
+
+```{python}
+#| eval: false
+activities_series # TODO
+```
+
+You can compare your solution to @sol-series-advanced-count-activities-per-user-value-counts-relative.
+:::

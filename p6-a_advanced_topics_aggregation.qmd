@@ -1,0 +1,174 @@
+---
+format:
+  html:
+    respect-user-color-scheme: true
+    theme:
+        light: ["style/flatly_customizations.scss", "style/style-light-color-customizations.scss", "style/style-customizations.scss"]
+        dark: ["style/darkly_customizations.scss", "style/style-dark-color-customizations.scss", "style/style-customizations.scss"]
+---
+
+# Aggregation {#sec-series-advanced-topics-aggregation}
+
+## Aggregation with Numeric Series {#sec-series-advanced-topics-aggregation-numeric-series}
+
+```{python}
+import pandas as pd
+```
+
+Remember our `durations_series`?
+
+```{python}
+durations_series = pd.Series(
+    [60, 210, 120, 45],
+    name="Duration in Minutes"
+)
+```
+
+There are times where we want to summarize a series like this into a single value. For instance, we might want to know the total number of minutes the users were active instead of the individual durations. Or we might be interested in the duration of the longest activity. With `.sum()`, `.min()`, `.max()`, `.mean()`, `.median()`, `.std()` and others, the `Series` class offers several methods to aggregate a series' elements into one.
+
+Let's now see how we can use an aggregation method to obtain the total duration of all activities.
+
+```{python}
+durations_series.sum()
+```
+
+So our users exercised for 435 minutes. <!-- TODO: verify this is still true in the final version -->
+
+::: {#exr-series-advanced-sum-activity-durations-of-user-42}
+
+The `user_series` variable defined in the following cell tells us for each activity by which user it was performed.
+
+```{python}
+users_series = pd.Series(
+    [42, 22, 1, 42],
+    name="User ID"
+)
+```
+
+Use the information in `users_series` and `durations_series` to find out how many minutes the user with the ID 42 was active!
+
+```{python}
+#| eval: false
+# TODO
+```
+
+You can compare your solution to @sol-series-advanced-sum-activity-durations-of-user-42.
+:::
+
+
+::: {#exr-series-advanced-sum-activity-durations-of-running}
+
+In this exercise, we will use the `activities_series` variable again.
+
+```{python}
+activities_series = pd.Series(
+    ["run", "hike", "bike", "run"],
+    name="Activity Type"
+)
+```
+
+Use it together with `durations_series` to find out for how many minutes the users were running in total! (Note that the result here will be the same as in @exr-series-advanced-sum-activity-durations-of-user-42, because user 42 was the only one who was running and this user did not perform any other activities.)
+
+```{python}
+#| eval: false
+# TODO
+```
+
+You can compare your solution to @sol-series-advanced-sum-activity-durations-of-running.
+:::
+
+
+::: {#exr-series-advanced-max-activity-duration}
+
+Find the maximum duration of all activities.
+
+```{python}
+#| eval: false
+durations_series # TODO
+```
+
+You can compare your solution to @sol-series-advanced-max-activity-duration.
+:::
+
+::: {#exr-series-advanced-mean-running-duration}
+
+Use `durations_series` and `activities_series` to find the mean duration of running activities.
+
+```{python}
+#| eval: false
+# TODO
+```
+
+You can compare your solution to @sol-series-advanced-mean-running-duration.
+:::
+
+By the way, we can get descriptive statistics, such as the maximum or the mean, also using the convenience method `.describe()`.
+
+```{python}
+durations_series.describe()
+```
+
+In the output above, `std` stands for the standard deviation, whereas `25%`, `50%`, and `75%` refer to the first, second, and third quartile, respectively.
+
+## Aggregation with Boolean Series  {#sec-series-advanced-topics-aggregation-with-boolean-series}
+
+How can we check whether there is a run in our `activities_series`? Of course, we could look at the output of @lst-series-equality. There, we will immediately see a `True` value. However, we don't want to search through a whole series – which in practice may be much, much longer – ourselves. For this purpose, there is the `.any()` method which we can call on the Boolean series.
+
+```{python}
+#| lst-label: lst-series-any
+#| lst-cap: Checking if at least one activity is a run.
+is_run_series = activities_series == "run"
+is_run_series.any()
+```
+
+This confirms that our activities include at least one run.
+
+How can we check whether *all* activities lasted for at least 60 minutes? To this end, we need to determine whether all values in a Boolean series are `True`. We can use the `.all()` method for that.
+
+```{python}
+#| lst-label: lst-series-all
+#| lst-cap: Checking if all activities lasted for at least one hour.
+(durations_series >= 60).all()
+```
+
+So, not all activities lasted for at least one hour.
+
+::: callout-note
+In contrast to @lst-series-any, we did not use an intermediary variable in @lst-series-all. For your own code, you can use either approach.
+:::
+
+::: {#exr-series-advanced-aggregation-all}
+
+Let's find out whether all activities lasting for up to 60 minutes were running activities!
+
+```{python}
+#TODO
+```
+
+You can compare your solution to @sol-series-advanced-aggregation-all.
+:::
+
+
+
+<!-- TODO: make a useful exercise here: check whether all activities up to 60 minutes are running activities
+
+```{python}
+((durations_series <= 60) == (activities_series == "run")).all()
+```
+
+ -->
+
+## Aggregation with Series of Strings
+
+The aggregation methods introduced above work in the context of numeric and Boolean data. However, for data consisting of strings&mdash;as in `activities_series`&mdash;calculating the sum or the mean does not make sense. Nonetheless, we can compute the mode (i.e., the value that appears most often in the series). To see which activity was performed most often, we call the `.mode()` method.
+
+```{python}
+activities_series.mode()
+```
+
+If there is a tie between multiple values occurring most often, they are all returned.
+
+```{python}
+activities_series.loc[2] = "hike" # hike now appearing twice
+activities_series.mode()
+```

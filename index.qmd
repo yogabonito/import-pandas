@@ -10,3 +10,16 @@ format:
 # Preface {.unnumbered}
 
 This site is intended to offer information on `pandas`. The content is intended to grow over the next months.
+
+<!--
+## TODOs
+
+::: callout-warning
+When combining two series, their indices must align.
+:::
+
+- ensure the Python environment includes nltk with Wordnet (`from nltk.stem.wordnet import WordNetLemmatizer`)
+- ensure Boolean is always written with a capital B
+- ensure that each lesson ends in a party popper
+- check solutions to exercises
+-->
