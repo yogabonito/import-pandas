@@ -94,7 +94,7 @@ In @lst-plotly-save-plot, we save our plot to a file called *iris_figure.svg*. S
 ::: callout-warning
 ## Warning
 
-While Plotly also understands file extensions such as `.jpg` or `.png`, I strongly advise against doing that. With raster formats, such as JPG or PNG, the images will look pixelated if when zoomed-in. On the other hand, vector formats, such as SVG or PDF, will always look crisp no matter how much we zoom in.
+While Plotly also understands file extensions such as `.jpg` or `.png`, I strongly advise against doing using JPG and PNG. With such raster formats, the images will look pixelated when zoomed-in. On the other hand, vector formats, such as SVG or PDF, will always look crisp no matter how much we zoom in.
 :::
 
 ::: {.light-content}

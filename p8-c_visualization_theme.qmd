@@ -21,7 +21,7 @@ import plotly.io as pio
 
 ## Theming a Plot with the `template` Parameter
 
-While reading this book, you might have noticed that the plots' colors in the previous chapter depended on your theme setting. If you switched between light and dark theme, then the plots adapted accordingly. Some of your users will appreciate having the choice of a theme, too. Or maybe you would like your plots to look as if they were produced by another popular visualization package. Whatever your reason for theming is, with Plotly it is really easy to do.
+While reading this book, you might have noticed that the plots' colors in the previous chapter depended on your theme setting. When you switched between light and dark theme, the plots adapted accordingly. Some of your users will appreciate having the choice of a theme, too. Or maybe you would like your plots to look as if they were produced by another popular visualization package. Whatever your reason for theming is, with Plotly it is really easy to do.
 
 Let's again generate a scatter plot of our dataset using Plotly's default theme.<!-- We assign the plot to the `fig` variable, so we don't have to repeat the code snippet later. -->
 

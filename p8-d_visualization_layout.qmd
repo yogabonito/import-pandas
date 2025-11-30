@@ -53,7 +53,7 @@ fig
 ```
 :::
 
-However, sometimes we might want to adjust the layout a bit. For instance, a good rule of thumb is to add a title to a plot. This helps the reader understand the depicted information more easily. For any layout-related changes, we use a figure's `update_layout` method.
+However, sometimes we might want to adjust the layout a bit. For instance, a good rule of thumb is to add a title to a plot. A title may help the reader understand the depicted information more easily. For any layout-related changes, we use a figure's `update_layout` method.
 
 ```{python}
 fig.update_layout(
@@ -78,8 +78,8 @@ In the code snippet above, both the `xaxis` and the `yaxis` parameter were passe
 ```{python}
 fig.update_layout(
   title_text="Comparison of petals of different Iris species",
-  xaxis_title="petal width",
-  yaxis_title="petal length"
+  xaxis_title_text="petal width",
+  yaxis_title_text="petal length"
 )
 ```
 
@@ -93,9 +93,9 @@ Next, let's increase the font size used for the title and the axis labels.
 fig.update_layout(
   title_text="Comparison of petals of different Iris species",
   title_font_size=24,
-  xaxis_title="petal width",
+  xaxis_title_text="petal width",
   xaxis_title_font_size=16,
-  yaxis_title="petal length",
+  yaxis_title_text="petal length",
   yaxis_title_font_size=16
 )
 ```
@@ -110,9 +110,9 @@ Let's fix that by increasing the top margin. And while we're at it, let's also i
 fig.update_layout(
   title_text="Comparison of petals of different Iris species",
   title_font_size=24,
-  xaxis_title="petal width",
+  xaxis_title_text="petal width",
   xaxis_title_font_size=16,
-  yaxis_title="petal length",
+  yaxis_title_text="petal length",
   yaxis_title_font_size=16,
   margin_t=80,  # top margin
   margin_r=60,  # right margin
@@ -121,15 +121,15 @@ fig.update_layout(
 )
 ```
 
-This way, when we place the plot on a slide next to other information, it allows the slide to *breathe* a little more. With such short names for the property we aim to adjust (`t`, `r`, `b`, and `l` in the `margin` category), we might as well go for the layout specification using a dictionary. The following code snippet shows how this would look like.
+This way, when we place the plot on a slide next to other information, it allows the slide to *breathe* a little more. With such short names for the property we aim to adjust (`t`, `r`, `b`, and `l` in the `margin` category), we might as well go with the layout specification using a dictionary. The following code snippet shows how this would look like.
 
 ```{python}
 fig.update_layout(
   title_text="Comparison of petals of different Iris species",
   title_font_size=24,
-  xaxis_title="petal width",
+  xaxis_title_text="petal width",
   xaxis_title_font_size=16,
-  yaxis_title="petal length",
+  yaxis_title_text="petal length",
   yaxis_title_font_size=16,
   margin={"t": 80, "r": 60, "b": 60, "l": 60}
 )
@@ -140,7 +140,7 @@ This concludes our quest to hone our plots 🙂 Note that there are many other p
 - axes (e.g., set the ranges of axes)
 - markers (e.g., dots, stars, and triangles depending on the category instead of dots for all categories)
 - fonts (font families, sizes and colors)
-- the legend (e.g., placing the legend or hiding it alltogether)
+- the legend (e.g., placing the legend or hiding it altogether)
 - the grid in the background of the chart
 - and so on …
 
