@@ -145,8 +145,8 @@ book:
         - p6-a_advanced_topics_aggregation.qmd
         - p6-b_advanced_topics_counting_values.qmd
         - p6-c_advanced_topics_sorting.qmd
-        - p6-xxx_advanced_topics_changing_the_dtype.qmd
-        - p6-xxx_advanced_topics_string_operations.qmd
+        - p6-d_advanced_topics_changing_the_dtype.qmd
+        - p6-e_advanced_topics_string_operations.qmd
     # - part: "`DataFrame` – the Pandas Data Type for Tables"
     #   chapters:
     #     - p7-a_dataframes_intro.qmd
